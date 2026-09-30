@@ -44,10 +44,23 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 
 ### 2. CleanDeps CLI
 
-- Links: npm https://www.npmjs.com/package/cleandeps-cli · repo (add URL)
+- Links: npm https://www.npmjs.com/package/cleandeps-cli · repo https://github.com/rishnegi7711/cleandeps-cli
 - What: one cross-platform command that safely wipes node_modules and reinstalls.
 - Details: validates package.json is present; supports npm, yarn and bun.
 - Stack: Node.js, npm
+- Why: got tired of typing `rm -rf node_modules && npm i` several times a week, so made it
+  one command — and used it as a reason to learn how Node CLIs work from scratch.
+- Engineering story (case-study angles):
+  - Detects the package manager from the lockfile: package-lock.json, bun.lock, bun.lockb,
+    then yarn.lock; first match wins.
+  - Package managers live in one array, so supporting a new one means adding one object.
+  - Safety: refuses to run without a package.json, so it can't delete anything in the wrong
+    folder.
+  - If node_modules doesn't exist, it skips the delete and just installs instead of crashing.
+  - Cross-platform: uses Node's fs and path modules instead of shell commands like rm -rf, so
+    it behaves the same on macOS, Linux and Windows.
+- Terminal replay (signature motion moment) should show two scenarios: a normal run, and a
+  "wrong folder" run where it refuses because there's no package.json.
 
 ## Selected work (professional)
 
