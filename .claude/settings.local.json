@@ -1,5 +1,10 @@
 {
-  "description": "Impeccable design detector: immediate-tier checks after Edit/Write on UI files, full-rule deep pass on Stop.",
+  "permissions": {
+    "allow": [
+      "Bash(.claude/skills/impeccable/scripts/impeccable context *)",
+      "Bash(git add *)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -7,7 +12,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" ] || \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "command": "\"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
             "timeout": 5,
             "statusMessage": "Checking UI changes"
           }
@@ -19,12 +24,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" ] || \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "command": "\"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
             "timeout": 30,
             "statusMessage": "Design deep pass"
           }
         ]
       }
     ]
-  }
+  },
+  "description": "Impeccable design detector: immediate-tier checks after Edit/Write on UI files, full-rule deep pass on Stop."
 }

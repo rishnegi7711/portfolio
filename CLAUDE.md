@@ -23,6 +23,8 @@ If something is missing, ask me.
 - `react-icons` (Simple Icons set, `react-icons/si`) for tech logos
 - Single page with anchor navigation; no router unless we add case-study pages
 - Deployed on Vercel (`*.vercel.app` to start)
+- Bun is the package manager and script runner — never npm/yarn/pnpm. Use `bun add`,
+  `bun run`, `bunx`. Keep `bun.lock` committed.
 
 ## Design direction: "engineer's notebook"
 
@@ -66,4 +68,4 @@ generic "Let's build something amazing together" CTAs, skill percentage bars.
 - Lighthouse 90+ on all categories. Optimise images (WebP/AVIF, explicit width/height).
 - Components small and named clearly in `src/components/`, content kept out of JSX where
   practical (`src/content.ts`).
-- Run `npm run build` and `npm run lint` before saying a task is done.
+- Run `bun run build` and `bun run lint` before saying a task is done.
