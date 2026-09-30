@@ -3,8 +3,12 @@
 Personal portfolio for junior frontend / full-stack roles in London. The site is itself a
 work sample: recruiters and engineers will judge the code and the craft, not just the content.
 
-All copy, facts and links live in `content.md`. Never invent facts, metrics or projects.
-If something is missing, ask me.
+All copy, facts and links originate in `content.md` — never invent facts, metrics or
+projects; if something is missing, ask me. Once `src/content.ts` exists, it is the working
+source of truth for on-site copy (components read from it, not from JSX literals);
+`content.md` stays the original brief and source of record for facts, and the two are not
+kept in lockstep — update `content.ts` directly for copy changes, and only touch
+`content.md` when the underlying facts change.
 
 ## Working with me
 
@@ -41,6 +45,20 @@ template, not a dark neon dev site.
   scribble fonts for body text.
 - Tech-stack icons: monochrome, tinted in the ink colour, always with a text label; brand colour
   only on hover/focus. Never a wall of full-colour logos.
+- Typefaces: Newsreader (display/headings), Source Sans 3 (body), Fragment Mono (annotations,
+  labels, mono text) — self-hosted via `@fontsource-variable/newsreader`,
+  `@fontsource-variable/source-sans-3`, `@fontsource/fragment-mono`.
+- Accent colour: deep teal-green `--color-accent` (#3E6259). `--color-accent-muted` is
+  decorative only (lines, fills, underline strokes) — never text; text always uses
+  `--color-accent` itself for sufficient contrast.
+- Margin notes: mono text with a small hand-drawn arrow, never a left-border/side-tab stripe
+  (Impeccable's design-review hook flags side-tab borders as an AI-slop tell).
+- Links are always underlined, not colour-only (colour alone isn't an accessible link signal).
+  On hover, darken or thicken the underline rather than lightening it — lightening reads as a
+  wash-out, not emphasis.
+- Headings use `text-wrap: balance` (already set globally in `index.css` for h1–h3). Compound
+  words like "full-stack" use a non-breaking hyphen (U+2011 `‑`) in copy so they don't break
+  mid-word at odd viewport widths.
 
 ## Motion principles
 

@@ -5,5 +5,20 @@
       "maxFindings": 5,
       "maxChars": 8000
     }
+  },
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/Specimen.tsx"
+        ],
+        "createdAt": "2026-09-30T11:12:38.996Z",
+        "reason": "temporary font/accent specimen tool, deleted before real build; the left-border margin-note is deliberately simulating this project's margin-annotation motif per CLAUDE.md, not a real site card"
+      }
+    ]
   }
 }
