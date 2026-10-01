@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Personal notes, not part of the site
+notes/
+
 .claude/settings.local.json
 
 # Editor directories and files

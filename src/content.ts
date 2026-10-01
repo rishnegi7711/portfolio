@@ -4,7 +4,10 @@
 
 export type Identity = {
   name: string
+  /** full role line, used outside the hero (e.g. a future About section) */
   roleHeadline: string
+  /** short role line sized for the hero's large display type */
+  heroRole: string
   location: string
   rightToWork: string
   email: string
@@ -13,18 +16,24 @@ export type Identity = {
   /** null until a CV PDF is added to /public */
   cvUrl: string | null
   photo: string
+  /** first-person copy for the hero's signature margin annotation */
+  heroAnnotation: string
 }
 
 export const identity: Identity = {
   name: 'Rishi Negi',
   roleHeadline: 'Frontend engineer (React + TypeScript), growing into full‑stack',
+  heroRole: 'Frontend engineer, growing into full‑stack',
   location: 'London, UK',
-  rightToWork: 'Graduate Visa, valid until September 2027',
+  rightToWork: 'Right to work in the UK (Graduate Visa, to Sep 2027)',
   email: 'rishnegi28@gmail.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
   cvUrl: null,
   photo: '/Rishi.jpeg',
+  heroAnnotation:
+    'Taught myself Node + Express to see the other side of the API, then shipped a ' +
+    'full‑stack app with it.',
 }
 
 export const story =
