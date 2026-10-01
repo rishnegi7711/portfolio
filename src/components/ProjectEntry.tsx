@@ -1,47 +1,12 @@
 import type { Figure, Project } from '../content'
 import ArchitectureDiagram from './ArchitectureDiagram'
+import MarginNote from './MarginNote'
 
 const linkStyle =
   'inline-block py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
   'transition-colors hover:text-ink hover:decoration-accent focus-visible:outline ' +
   'focus-visible:outline-2 focus-visible:outline-accent'
 
-const strokeProps = {
-  stroke: 'currentColor',
-  strokeWidth: '1.5',
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
-  fill: 'none',
-}
-
-// Two hand-authored pen arrows, each one path: a slightly bent line, then an open
-// arrowhead (wing → tip → wing) angled off the line's direction at the tip, like the hero's.
-const ARROW_UP = 'M 6 38 C 4 26, 14 12, 22 3 M 15.5 5.7 L 22 3 L 20.1 9.7'
-const ARROW_LEFT = 'M 38 6 C 28 2, 14 16, 3 14 M 8.6 18.1 L 3 14 L 9.7 12.1'
-
-/** Mono margin note with a small drawn arrow. "up" points at the figure above it (on
- *  every width, since the note sits right under the figures); "left" points across the
- *  column gap at the text beside it, so it only shows once the note is in the margin. */
-function MarginNote({ text, pointsTo }: { text: string; pointsTo: 'up' | 'left' }) {
-  return (
-    <p className="relative font-mono text-sm leading-snug text-accent">
-      {pointsTo === 'up' ? (
-        <svg viewBox="0 0 32 40" aria-hidden="true" className="mb-1 ml-2 h-10 w-8 text-accent-muted">
-          <path d={ARROW_UP} {...strokeProps} />
-        </svg>
-      ) : (
-        <svg
-          viewBox="0 0 40 24"
-          aria-hidden="true"
-          className="absolute top-0.5 -left-11 hidden h-6 w-10 text-accent-muted md:block"
-        >
-          <path d={ARROW_LEFT} {...strokeProps} />
-        </svg>
-      )}
-      {text}
-    </p>
-  )
-}
 
 /** One project as a notebook entry: what it is, the evidence (figures), then how it
  *  works, with a margin note glossing the mechanism. */

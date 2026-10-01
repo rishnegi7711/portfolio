@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState, type RefObject } from 'react'
-import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
+import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
 import type { Architecture, ArchitectureNode } from '../content'
 
 type Point = { x: number; y: number }
@@ -160,7 +160,6 @@ function useDiagramGeometry() {
 }
 
 const STEP = 0.45 // s from one path node to the next
-const WATCHDOG_SLACK = 1 // s past the timeline's own length before it's forced to the end
 
 function byStep(_index: number, target: Element) {
   return Number((target as HTMLElement | SVGElement).dataset.step) * STEP
@@ -181,7 +180,7 @@ function useDiagramTimeline(figureRef: RefObject<HTMLElement | null>, ready: boo
         const drawn = { strokeDashoffset: 0, autoRound: false }
         const reveal = 1.15 // when the shared schemas start
 
-        // Paused: built now, played by the ScrollTrigger below. from()/fromTo() apply
+        // Paused: built now, played by playOnceInView below. from()/fromTo() apply
         // their start state straight away, so everything is hidden here, from JS.
         const tl = gsap.timeline({ paused: true })
         tl.from('.arch-path-node', { autoAlpha: 0, y: 8, duration: 0.4, ease: 'power3.out', stagger: STEP }, 0)
@@ -195,19 +194,7 @@ function useDiagramTimeline(figureRef: RefObject<HTMLElement | null>, ready: boo
           .fromTo('.arch-shared-head', hidden, { ...drawn, duration: 0.12, ease: 'power2.out' }, reveal + 0.6)
           .from('.arch-shared-label', { autoAlpha: 0, duration: 0.25, ease: 'power2.out' }, reveal + 0.4)
 
-        let watchdog = 0
-        ScrollTrigger.create({
-          trigger: figureRef.current,
-          start: 'top 75%', // when the diagram's top passes 75% down the viewport
-          once: true,
-          onEnter: () => {
-            tl.play()
-            // If playback is ever stalled, jump to the end rather than leave it hidden.
-            watchdog = window.setTimeout(() => tl.progress(1), (tl.duration() + WATCHDOG_SLACK) * 1000)
-          },
-        })
-
-        return () => window.clearTimeout(watchdog)
+        return playOnceInView(figureRef.current, tl)
       })
     },
     { scope: figureRef, dependencies: [ready] },

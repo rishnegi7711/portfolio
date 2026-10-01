@@ -205,8 +205,9 @@ export const projects: Project[] = [
     summary:
       'One cross-platform command that safely wipes node_modules and reinstalls. ' +
       'Validates package.json is present; supports npm, yarn and bun.',
+    // "rm\u00A0‑rf": a non-breaking space and a non-breaking hyphen keep the command on one line.
     annotation:
-      'Got tired of typing rm ‑rf node_modules && npm i several times a week, so made ' +
+      'Got tired of typing rm\u00A0‑rf node_modules && npm i several times a week, so made ' +
       'it one command — and used it as a reason to learn how Node CLIs work from scratch.',
     stack: [{ label: 'Built with', items: ['Node.js', 'npm'] }],
     engineeringStory: [
@@ -216,7 +217,7 @@ export const projects: Project[] = [
       "Safety: refuses to run without a package.json, so it can't delete anything in the wrong folder.",
       "If node_modules doesn't exist, it skips the delete and just installs instead of crashing.",
       "Cross-platform: uses Node's fs and path modules instead of shell commands like " +
-        'rm ‑rf, so it behaves the same on macOS, Linux and Windows.',
+        'rm\u00A0‑rf, so it behaves the same on macOS, Linux and Windows.',
     ],
     links: [
       { label: 'npm', url: 'https://www.npmjs.com/package/cleandeps-cli' },
