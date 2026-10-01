@@ -27,3 +27,6 @@ notes/
 *.njsproj
 *.sln
 *.sw?
+
+# Impeccable critique snapshots (local working notes)
+.impeccable/critique/
