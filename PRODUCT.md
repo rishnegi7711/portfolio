@@ -41,9 +41,9 @@ they look, and he is looking for a high-autonomy, technically deep team.
   `@gsap/react`) for animation, `react-icons/si` for tech logos. No new dependency without asking why.
 - The user is learning Claude Code and must be able to explain every line; work proceeds
   one section at a time with the approach proposed and approved before building.
-- Featured projects: Job Application Tracker (full-stack, live) and CleanDeps CLI (npm
+- Featured projects: Applyd, a job application tracker (full-stack, live), and CleanDeps CLI (npm
   package). Their signature motion moments (SVG annotation draw-ins, an animated CLI replay
-  for CleanDeps, a scroll-driven architecture diagram for the Job Tracker) are committed
+  for CleanDeps, a scroll-driven architecture diagram for Applyd) are committed
   product facts, not open design choices.
 
 ## Brand Commitments
@@ -63,10 +63,11 @@ they look, and he is looking for a high-autonomy, technically deep team.
   `content.md` — treat as the single source of truth for all facts.
 - CV PDF and a profile photo are referenced in `content.md` as "to add" — not yet available;
   do not fabricate placeholders that look like real content.
-- Job Application Tracker: live at https://job-tracker-steel-ten.vercel.app, repo at
-  https://github.com/rishnegi7711/job-tracker. Screenshots/recording not yet added.
-- CleanDeps CLI: published at https://www.npmjs.com/package/cleandeps-cli; repo URL not yet
-  added.
+- Applyd (job application tracker): live at https://job-tracker-steel-ten.vercel.app, repo at
+  https://github.com/rishnegi7711/job-tracker. Screenshots (board, detail, validation;
+  WebP) are in `/public/job-tracker/`.
+- CleanDeps CLI (v0.2.0): published at https://www.npmjs.com/package/cleandeps-cli; repo at
+  https://github.com/rishnegi7711/cleandeps-cli.
 
 ## Product Principles
 

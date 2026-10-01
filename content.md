@@ -47,22 +47,39 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 ### 2. CleanDeps CLI
 
 - Links: npm https://www.npmjs.com/package/cleandeps-cli · repo https://github.com/rishnegi7711/cleandeps-cli
+- Version: 0.2.0 · requires Node 18.3 or later
+- Install: `npm install -g cleandeps-cli` (or run once with `npx cleandeps-cli`)
 - What: one cross-platform command that safely wipes node_modules and reinstalls.
 - Details: validates package.json is present; supports npm, yarn and bun.
+- Options (all opt-in):
+  - `-l, --lock`: also deletes the lockfile, so versions are resolved again (they may change).
+  - `-c, --cache`: clears the package manager's cache before installing
+    (`npm cache clean --force`, `bun pm cache rm` or `yarn cache clean`).
+  - `-r, --run <script>`: runs a package.json script once the install finishes, e.g. `--run dev`.
+  - `-v, --version`, `-h, --help`.
+  - Full reset example: `cleandeps --lock --cache --run dev`
 - Stack: Node.js, npm
 - Why: got tired of typing `rm -rf node_modules && npm i` several times a week, so made it
   one command — and used it as a reason to learn how Node CLIs work from scratch.
 - Engineering story (case-study angles):
   - Detects the package manager from the lockfile: package-lock.json, bun.lock, bun.lockb,
-    then yarn.lock; first match wins.
+    then yarn.lock; first match wins. With no lockfile it stops instead of guessing.
   - Package managers live in one array, so supporting a new one means adding one object.
-  - Safety: refuses to run without a package.json, so it can't delete anything in the wrong
-    folder.
+  - Checks before deleting: package.json exists and is valid JSON, a lockfile exists, and
+    the `--run` script is defined. If any check fails, nothing is touched.
+  - New flags are opt-in, so plain `cleandeps` behaves exactly as before.
   - If node_modules doesn't exist, it skips the delete and just installs instead of crashing.
   - Cross-platform: uses Node's fs and path modules instead of shell commands like rm -rf, so
     it behaves the same on macOS, Linux and Windows.
 - Terminal replay (signature motion moment) should show two scenarios: a normal run, and a
-  "wrong folder" run where it refuses because there's no package.json.
+  "wrong folder" run where it refuses because there's no package.json. Use the real output
+  strings from `bin/cleandeps.js`. Wrong-folder transcript (v0.2.0):
+
+  ```
+  $ cleandeps
+  ❌ CleanDeps: No package.json found in this folder
+  ➡️ Run this command inside a Node project (where package.json exists).
+  ```
 
 ## Selected work (professional)
 
