@@ -59,12 +59,20 @@ function ProjectEntry({ project }: { project: Project }) {
           at; on md+ the grid lifts it into the right-hand margin column. */}
       <div
         className={
-          'mt-6 flex flex-col gap-8 md:grid md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-12 ' +
+          'relative mt-6 flex flex-col gap-8 md:grid md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-12 ' +
           (hasFigureAbove ? '' : 'md:mt-10')
         }
       >
         <div className="md:col-start-2 md:row-start-1">
-          <MarginNote text={project.annotation} pointsTo={hasFigureAbove ? 'up' : 'left'} />
+          <MarginNote
+            text={project.annotation}
+            pointsTo={figures.length > 0 ? 'up' : project.terminal ? 'upLeft' : 'left'}
+            // Same text as TerminalReplay's figcaption, so the arrow lands at its end.
+            captionLength={
+              project.terminal &&
+              `Fig. ${figures.length + 1} — ${project.terminal.caption}`.length
+            }
+          />
         </div>
 
         <div className="md:col-start-1 md:row-start-1">
