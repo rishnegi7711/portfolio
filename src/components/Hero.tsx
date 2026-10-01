@@ -3,7 +3,6 @@ import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { identity } from '../content'
 
 type ArrowGeometry = {
-  oval: string
   path: string
   headStroke1: string
   headStroke2: string
@@ -17,17 +16,22 @@ const ARROW_START_INSET = 10 // px into the note's top edge, so the line doesn't
 const ARROWHEAD_LENGTH = 7 // px, each open-stroke wing
 const ARROWHEAD_SPREAD = (26 * Math.PI) / 180 // angle between the two wings and the line
 const WOBBLE = 6 // px of horizontal give in the curve's control points, for a hand-drawn feel
-// The oval is sized from the span's own box, which covers the font's full ascent and
-// descent. Horizontal room comes from the span's CSS padding (px-2.5 = 10px), so it
-// pushes "into" away instead of the stroke landing on its "o"; vertical room is added here.
-const OVAL_PAD_Y = 8 // px above and below the word's box
-const KAPPA = 0.5523 // control-point distance (fraction of radius) for a cubic quarter circle
+const LOOP_INSET_Y = 8 // px the loop's SVG extends above/below the word (-inset-y-2)
+
+// One authored pen loop around "full‑stack", drawn in a 200×60 box that's stretched over
+// the word (preserveAspectRatio="none"). Starts top-right, runs anticlockwise, comes back
+// round and overshoots past its start with a short tail. Lopsided (fuller on the right),
+// and tilted about -2° (left side lower, right side higher). The left side sits closer
+// in (~5px at x-height) since normal word spacing leaves only ~7px to the "o" of "into".
+const LOOP_PATH =
+  'M 170 5 C 128 0, 60 3, 24 8 C 10 11, 9 26, 11 41 C 14 55, 46 60, 100 58 ' +
+  'C 152 57, 192 52, 197 34 C 201 18, 193 4, 158 2 C 142 1, 126 2, 110 5'
 
 /** Measures the live position of the headline's "full‑stack" span, shifts the note
  *  to sit almost directly under it (clamped to the container's right edge so it can
  *  never overflow, and on md+ — where the note floats out of flow — kept clear of
- *  the fact line in the left column), loops a hand-drawn oval around the word, and draws a short curve
- *  + open arrowhead from the note to the oval. Word
+ *  the fact line in the left column), and draws a short curve
+ *  + open arrowhead from the note to the bottom of the pen loop around the word. Word
  *  position can't be predicted with CSS alone: at narrow widths "full‑stack" wraps
  *  to its own line at the LEFT edge, but at wider widths it sits at the RIGHT end
  *  of a long line — opposite positions for the same word, which only measuring the
@@ -62,13 +66,11 @@ function useAnnotationArrow() {
       const noteLeft = Math.max(0, Math.min(desiredLeft, c.width - n.width))
 
       const cx = t.left - c.left + t.width / 2
-      const cy = t.top - c.top + t.height / 2
-      const { d: oval, bottom: ovalBottom } = penLoop(cx, cy, t.width / 2, t.height / 2 + OVAL_PAD_Y)
 
       const startX = noteLeft + ARROW_START_INSET
       const startY = n.top - c.top
       const endX = cx
-      const endY = ovalBottom + 2 // just under the oval's bottom edge
+      const endY = t.bottom - c.top + LOOP_INSET_Y // the loop's bottom edge
 
       const dx = endX - startX
       const dy = endY - startY
@@ -90,7 +92,6 @@ function useAnnotationArrow() {
       const [w2x, w2y] = wing(-1)
 
       setGeometry({
-        oval,
         path,
         headStroke1: `M ${w1x} ${w1y} L ${endX} ${endY}`,
         headStroke2: `M ${w2x} ${w2y} L ${endX} ${endY}`,
@@ -113,54 +114,10 @@ function useAnnotationArrow() {
   return { containerRef, targetRef, noteRef, factRef, geometry }
 }
 
-/** A hand-drawn loop around a box of half-width `hw`, half-height `r`: a pill
- *  (straight top/bottom, semicircular ends of radius r), which — unlike an ellipse —
- *  contains the whole box, corners included. The hand-drawn wobble only ever pushes
- *  outward (a slightly higher first pass, a lower bottom, wider ends), so the stroke
- *  can never drift onto the letters. Drawn clockwise from the top; the second pass
- *  over the top runs on past the start into the right-hand curve, so the pen's
- *  overlap sits at the top-right, in the padding above the letters. */
-function penLoop(cx: number, cy: number, hw: number, r: number): { d: string; bottom: number } {
-  const a = Math.max(0, hw - r) // half-length of the straight top/bottom edges
-  const top1 = cy - r - 2.5 // first pass, a touch high
-  const top2 = cy - r // second pass, exactly on the pill
-  const bottom = cy + r + 1.5
-  const right = cx + a + r + 1
-  const left = cx - a - r - 2
-
-  // Each end is two quarter-ellipse curves between the top and bottom edges.
-  const rMid = (top1 + bottom) / 2
-  const rk = (rMid - top1) * KAPPA
-  const rkx = (right - cx - a) * KAPPA
-  const lMid = (top2 + bottom) / 2
-  const lk = (bottom - lMid) * KAPPA
-  const lkx = (cx - a - left) * KAPPA
-
-  // Overshoot: 30° round the right-hand end, on the pill itself.
-  const angle = Math.PI / 6
-  const ox = cx + a + r * Math.sin(angle)
-  const oy = cy - r * Math.cos(angle)
-  const ok = r * (4 / 3) * Math.tan(angle / 4) // control length for a 30° circular arc
-
-  const d = [
-    `M ${cx - a * 0.3} ${top1}`,
-    `L ${cx + a} ${top1}`,
-    `C ${cx + a + rkx} ${top1}, ${right} ${rMid - rk}, ${right} ${rMid}`,
-    `C ${right} ${rMid + rk}, ${cx + a + rkx} ${bottom}, ${cx + a} ${bottom}`,
-    `L ${cx - a} ${bottom}`,
-    `C ${cx - a - lkx} ${bottom}, ${left} ${lMid + lk}, ${left} ${lMid}`,
-    `C ${left} ${lMid - lk}, ${cx - a - lkx} ${top2}, ${cx - a} ${top2}`,
-    `L ${cx + a} ${top2}`,
-    `C ${cx + a + ok} ${top2}, ${ox - ok * Math.cos(angle)} ${oy - ok * Math.sin(angle)}, ${ox} ${oy}`,
-  ].join(' ')
-
-  return { d, bottom }
-}
-
 const FONT_WAIT_LIMIT = 800 // ms; start the entrance even if fonts are still loading
 
-/** The hero's entrance: name → role line → oval around "full‑stack" → note types in →
- *  arrow draws to the oval (~1.9s, plays once). Only built when the user hasn't asked
+/** The hero's entrance: name → role line → pen loop around "full‑stack" → note types in →
+ *  arrow draws to the loop (~1.9s, plays once). Only built when the user hasn't asked
  *  for reduced motion; otherwise nothing runs and the DOM is already the final state. */
 function useHeroTimeline(containerRef: RefObject<HTMLDivElement | null>) {
   useGSAP(
@@ -200,14 +157,14 @@ function useHeroTimeline(containerRef: RefObject<HTMLDivElement | null>) {
               // re-measure without split spans or stale dash lengths in the way.
               name.revert()
               note.revert()
-              gsap.set('.hero-oval, .hero-arrow, .hero-wing', {
+              gsap.set('.hero-loop, .hero-arrow, .hero-wing', {
                 clearProps: 'strokeDasharray,strokeDashoffset',
               })
             },
           })
           tl.from(name.words, { yPercent: 110, duration: 0.6, ease: 'power3.out', stagger: 0.08 }, 0)
             .from('.hero-role', { y: 8, autoAlpha: 0, duration: 0.5, ease: 'power2.out' }, 0.25)
-            .from('.hero-oval', { drawSVG: 0, duration: 0.55, ease: 'power2.inOut' }, 0.65)
+            .from('.hero-loop', { drawSVG: 0, duration: 0.55, ease: 'power2.inOut' }, 0.65)
             .to(note.chars, { autoAlpha: 1, duration: 0, ease: 'none', stagger: { amount: 0.5 } }, 1.05)
             .from('.hero-arrow', { drawSVG: 0, duration: 0.35, ease: 'power2.out' }, 1.45)
             .from('.hero-wing', { drawSVG: 0, duration: 0.12, ease: 'power2.out' }, 1.75)
@@ -257,9 +214,8 @@ function Hero() {
             height={geometry.containerHeight}
             viewBox={`0 0 ${geometry.containerWidth} ${geometry.containerHeight}`}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 overflow-visible text-accent-muted"
+            className="pointer-events-none absolute inset-0 -z-10 text-accent-muted"
           >
-            <path className="hero-oval" d={geometry.oval} {...strokeProps} />
             <path className="hero-arrow" d={geometry.path} {...strokeProps} />
             <path className="hero-wing" d={geometry.headStroke1} {...strokeProps} />
             <path className="hero-wing" d={geometry.headStroke2} {...strokeProps} />
@@ -275,8 +231,23 @@ function Hero() {
           <div className="relative">
             <p className="hero-role mt-2 max-w-xl font-display text-2xl leading-snug text-ink sm:text-3xl">
               {beforeFullStack}
-              <span ref={targetRef} className="px-2.5 text-accent">
+              <span ref={targetRef} className="relative ml-1 text-accent">
                 {fullStack}
+                {/* Stretched over the word with a negative inset; non-scaling-stroke
+                    keeps the line 1.5px however much the box is stretched. */}
+                <svg
+                  viewBox="0 0 200 60"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-x-3 -inset-y-2 h-[calc(100%+1rem)] w-[calc(100%+1.5rem)] overflow-visible text-accent-muted"
+                >
+                  <path
+                    className="hero-loop"
+                    d={LOOP_PATH}
+                    vectorEffect="non-scaling-stroke"
+                    {...strokeProps}
+                  />
+                </svg>
               </span>
             </p>
 
@@ -296,9 +267,9 @@ function Hero() {
             </p>
           </div>
 
-          {/* Narrow on md+ so the floated note has a clear right-hand column beside it. */}
-          <p ref={factRef} className="mt-4 font-mono text-sm text-ink-muted md:max-w-[19rem]">
-            {city} · {identity.rightToWork}
+          {/* w-fit so its measured width is the text's, for keeping the floated note clear. */}
+          <p ref={factRef} className="mt-4 w-fit font-mono text-sm text-ink-muted">
+            {city} · {identity.coordinates}
           </p>
         </div>
 

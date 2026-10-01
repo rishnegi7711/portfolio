@@ -57,6 +57,9 @@ template, not a dark neon dev site.
 - Links are always underlined, not colour-only (colour alone isn't an accessible link signal).
   On hover, darken or thicken the underline rather than lightening it — lightening reads as a
   wash-out, not emphasis.
+- Hero fact line is the city plus coordinates only ("London · 51.51° N, 0.13° W"). Right to
+  work is deliberately not in the hero; `identity.rightToWork` stays in `content.ts` for
+  use elsewhere.
 - Headings use `text-wrap: balance` (already set globally in `index.css` for h1–h3). Compound
   words like "full-stack" use a non-breaking hyphen (U+2011 `‑`) in copy so they don't break
   mid-word at odd viewport widths.

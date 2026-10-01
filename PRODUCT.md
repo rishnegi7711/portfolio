@@ -37,8 +37,8 @@ they look, and he is looking for a high-autonomy, technically deep team.
 ## Capabilities and Constraints
 
 - Stack is fixed by the project owner, not open for framework debate: React + TypeScript
-  (strict) + Vite, Tailwind CSS with CSS variables for design tokens, `motion/react` for
-  animation, `react-icons/si` for tech logos. No new dependency without asking why.
+  (strict) + Vite, Tailwind CSS with CSS variables for design tokens, GSAP (`gsap` +
+  `@gsap/react`) for animation, `react-icons/si` for tech logos. No new dependency without asking why.
 - The user is learning Claude Code and must be able to explain every line; work proceeds
   one section at a time with the approach proposed and approved before building.
 - Featured projects: Job Application Tracker (full-stack, live) and CleanDeps CLI (npm
@@ -50,7 +50,9 @@ they look, and he is looking for a high-autonomy, technically deep team.
 
 - Name: Rishi Negi. Role headline: "Frontend engineer (React + TypeScript), growing into
   full-stack." Location: London, UK. Right to work: Graduate Visa, valid until September
-  2027.
+  2027 — a fact to state elsewhere (e.g. Contact or the CV), deliberately not shown in
+  the hero.
+- Hero fact line: city plus coordinates ("London · 51.51° N, 0.13° W"), nothing else.
 - Voice: understated, technically grounded, emphasizes understanding mechanisms over
   surface polish.
 - Do not publish the phone number.

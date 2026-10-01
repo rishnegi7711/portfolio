@@ -10,6 +10,8 @@ export type Identity = {
   heroRole: string
   location: string
   rightToWork: string
+  /** shown after the city in the hero's fact line */
+  coordinates: string
   email: string
   github: string
   linkedin: string
@@ -26,6 +28,7 @@ export const identity: Identity = {
   heroRole: 'Frontend engineer, growing into full‑stack',
   location: 'London, UK',
   rightToWork: 'Right to work in the UK (Graduate Visa, to Sep 2027)',
+  coordinates: '51.51° N, 0.13° W',
   email: 'rishnegi28@gmail.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
