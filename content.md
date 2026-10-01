@@ -25,7 +25,9 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 
 ## Featured projects
 
-### 1. Job Application Tracker
+### 1. Applyd (job application tracker)
+
+- Name: Applyd; descriptor "job application tracker"
 
 - Links: repo https://github.com/rishnegi7711/job-tracker · live https://job-tracker-steel-ten.vercel.app
 - Status: live, small tweaks in progress
@@ -40,7 +42,7 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
   - JWT auth with per-route access control; bcrypt password hashing.
   - Shared Zod schemas: React Hook Form and the API validate against one source of truth.
   - TanStack Query for server state and client-side caching.
-- Assets: screenshots / short screen recording (to add)
+- Assets: screenshots in /public/job-tracker/ (board, detail, validation; WebP)
 
 ### 2. CleanDeps CLI
 

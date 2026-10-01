@@ -63,48 +63,63 @@ export type ProjectLink = {
   url: string
 }
 
+export type Figure = {
+  src: string
+  width: number
+  height: number
+  alt: string
+  /** shown after an auto-numbered "Fig. n —" */
+  caption: string
+}
+
 export type Project = {
   id: string
   name: string
+  /** what kind of thing it is, shown under the name */
+  descriptor: string
   status: string
   summary: string
-  /** the motivation behind building it, not just what it does */
-  why?: string
-  stack: string[]
+  /** margin note, for the annotation-arrow motif */
+  annotation: string
+  stack: ToolkitGroup[]
   engineeringStory: string[]
   links: ProjectLink[]
+  figures?: Figure[]
 }
 
 export const projects: Project[] = [
   {
     id: 'job-tracker',
-    name: 'Job Application Tracker',
+    name: 'Applyd',
+    descriptor: 'Job application tracker',
     status: 'Live, small tweaks in progress',
     summary:
       'Full-stack app to track job applications and interview rounds, replacing the ' +
       'spreadsheet most people use. Board view by status, per-application interview ' +
       'history, private multi-user accounts.',
+    annotation:
+      'These errors come from the same Zod schema the API validates against.',
     stack: [
-      'React',
-      'TypeScript',
-      'Vite',
-      'TanStack Query',
-      'React Router',
-      'Tailwind',
-      'shadcn/ui',
-      'React Hook Form',
-      'Zod',
-      'Node.js',
-      'Express',
-      'Prisma',
-      'PostgreSQL (Neon)',
-      'JWT',
-      'bcrypt',
-      'Vitest',
-      'ESLint',
-      'Prettier',
-      'Vercel',
-      'Render',
+      {
+        label: 'Client',
+        items: [
+          'React',
+          'TypeScript',
+          'Vite',
+          'TanStack Query',
+          'React Router',
+          'Tailwind',
+          'shadcn/ui',
+          'React Hook Form',
+          'Zod',
+        ],
+      },
+      {
+        label: 'Server',
+        items: ['Node.js', 'Express', 'TypeScript', 'Prisma', 'PostgreSQL (Neon)', 'JWT', 'bcrypt'],
+      },
+      { label: 'Testing & tooling', items: ['Vitest', 'ESLint', 'Prettier'] },
+      { label: 'Hosting', items: ['Vercel (frontend)', 'Render (backend)'] },
     ],
     engineeringStory: [
       'Built the Express backend from scratch: a deliberate push into unfamiliar territory.',
@@ -116,18 +131,48 @@ export const projects: Project[] = [
       { label: 'Repo', url: 'https://github.com/rishnegi7711/job-tracker' },
       { label: 'Live', url: 'https://job-tracker-steel-ten.vercel.app' },
     ],
+    figures: [
+      {
+        src: '/job-tracker/board.webp',
+        width: 1440,
+        height: 417,
+        alt:
+          'Applyd board with four status columns (Applied, Interviewing, Rejected, Offer), ' +
+          'each holding application cards with company, role and date.',
+        caption: 'Board view by status',
+      },
+      {
+        src: '/job-tracker/detail.webp',
+        width: 1440,
+        height: 781,
+        alt:
+          'Application detail for Fernleaf Studio: a timeline of four interview rounds, ' +
+          'three passed and the final round pending.',
+        caption: 'Per-application interview history',
+      },
+      {
+        src: '/job-tracker/validation.webp',
+        width: 1440,
+        height: 780,
+        alt:
+          'Add Application form with inline errors: "Company name is required", ' +
+          '"Please select a status" and "Please select a date".',
+        caption: 'Form validation from the shared Zod schema',
+      },
+    ],
   },
   {
     id: 'cleandeps',
     name: 'CleanDeps CLI',
+    descriptor: 'npm package',
     status: 'Published',
     summary:
       'One cross-platform command that safely wipes node_modules and reinstalls. ' +
       'Validates package.json is present; supports npm, yarn and bun.',
-    why:
-      'Got tired of typing rm -rf node_modules && npm i several times a week, so made ' +
+    annotation:
+      'Got tired of typing rm ‑rf node_modules && npm i several times a week, so made ' +
       'it one command — and used it as a reason to learn how Node CLIs work from scratch.',
-    stack: ['Node.js', 'npm'],
+    stack: [{ label: 'Built with', items: ['Node.js', 'npm'] }],
     engineeringStory: [
       'Detects the package manager from the lockfile: package-lock.json, bun.lock, ' +
         'bun.lockb, then yarn.lock; first match wins.',
@@ -135,7 +180,7 @@ export const projects: Project[] = [
       "Safety: refuses to run without a package.json, so it can't delete anything in the wrong folder.",
       "If node_modules doesn't exist, it skips the delete and just installs instead of crashing.",
       "Cross-platform: uses Node's fs and path modules instead of shell commands like " +
-        'rm -rf, so it behaves the same on macOS, Linux and Windows.',
+        'rm ‑rf, so it behaves the same on macOS, Linux and Windows.',
     ],
     links: [
       { label: 'npm', url: 'https://www.npmjs.com/package/cleandeps-cli' },
