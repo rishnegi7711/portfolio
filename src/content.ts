@@ -108,6 +108,10 @@ export type Project = {
   architecture?: Architecture
   /** real CLI output for the terminal replay, one scenario per run */
   terminal?: {
+    /** shown after an auto-numbered "Fig. n —" */
+    caption: string
+    /** the copy-able install command under the replay */
+    install: string
     normalRun: TerminalLine[]
     wrongFolderRun: TerminalLine[]
   }
@@ -241,6 +245,8 @@ export const projects: Project[] = [
     // Captured from real runs of v0.2.0; keep in sync if the CLI changes. The normal
     // run's path is anonymised and its package list cut, with a visible "… 14 more".
     terminal: {
+      caption: 'Replay of real output from v0.2.0: a normal run and a wrong-folder run',
+      install: 'npm install -g cleandeps-cli',
       normalRun: [
         { text: '$ cleandeps' },
         { text: '✅ Found package.json' },
@@ -253,8 +259,8 @@ export const projects: Project[] = [
         { text: '+ react-dom@19.2.3', dim: true },
         { text: '+ typescript@5.9.3', dim: true },
         { text: '+ tailwindcss@4.2.1', dim: true },
-        { text: '  … 14 more' },
-        { text: '665 packages installed [837.00ms]' },
+        { text: '  … 14 more', dim: true },
+        { text: '665 packages installed [837.00ms]', dim: true },
         { text: '✅ Dependencies installed' },
       ],
       wrongFolderRun: [

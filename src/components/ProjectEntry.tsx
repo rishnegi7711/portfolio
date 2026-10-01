@@ -1,6 +1,7 @@
 import type { Figure, Project } from '../content'
 import ArchitectureDiagram from './ArchitectureDiagram'
 import MarginNote from './MarginNote'
+import TerminalReplay from './TerminalReplay'
 
 const linkStyle =
   'inline-block py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
@@ -14,6 +15,8 @@ function ProjectEntry({ project }: { project: Project }) {
   const headingId = `${project.id}-heading`
   const figures = project.figures ?? []
   const [leadFigure, ...restFigures] = figures
+  // Anything drawn above the notes (screenshots or the terminal) for the margin note to point at.
+  const hasFigureAbove = figures.length > 0 || project.terminal !== undefined
 
   return (
     <article aria-labelledby={headingId} className="py-14 first:pt-10">
@@ -46,16 +49,22 @@ function ProjectEntry({ project }: { project: Project }) {
         </div>
       )}
 
+      {project.terminal && (
+        <div className="mt-8">
+          <TerminalReplay terminal={project.terminal} number={figures.length + 1} />
+        </div>
+      )}
+
       {/* Note first in the DOM so on mobile it lands right under the figure it points
           at; on md+ the grid lifts it into the right-hand margin column. */}
       <div
         className={
           'mt-6 flex flex-col gap-8 md:grid md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-12 ' +
-          (figures.length > 0 ? '' : 'md:mt-10')
+          (hasFigureAbove ? '' : 'md:mt-10')
         }
       >
         <div className="md:col-start-2 md:row-start-1">
-          <MarginNote text={project.annotation} pointsTo={figures.length > 0 ? 'up' : 'left'} />
+          <MarginNote text={project.annotation} pointsTo={hasFigureAbove ? 'up' : 'left'} />
         </div>
 
         <div className="md:col-start-1 md:row-start-1">
@@ -70,7 +79,10 @@ function ProjectEntry({ project }: { project: Project }) {
 
       {project.architecture && (
         <div className="mt-12">
-          <ArchitectureDiagram architecture={project.architecture} number={figures.length + 1} />
+          <ArchitectureDiagram
+            architecture={project.architecture}
+            number={figures.length + (project.terminal ? 2 : 1)}
+          />
         </div>
       )}
 
