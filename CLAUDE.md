@@ -18,6 +18,8 @@ kept in lockstep — update `content.ts` directly for copy changes, and only tou
   and point out anything worth me understanding (a hook, an animation technique, a CSS trick).
 - Prefer simple, readable code over clever code. No abstractions "for later".
 - Don't add a dependency without asking and saying why.
+- Never delete source assets (images, screenshots) until the processed version has been
+  checked; keep originals until I confirm.
 
 ## Stack (keep to this)
 
