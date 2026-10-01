@@ -14,8 +14,7 @@ function Header() {
       </a>
 
       <header
-        className="sticky top-0 z-40 border-b border-accent-muted/40 bg-paper/95
-          backdrop-blur-sm"
+        className="sticky top-0 z-40 border-b border-accent-muted/40 bg-paper"
       >
         <Container className="flex h-12 items-center justify-between gap-2 sm:gap-4">
           <a
