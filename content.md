@@ -67,7 +67,7 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
   - Package managers live in one array, so supporting a new one means adding one object.
   - Checks before deleting: package.json exists and is valid JSON, a lockfile exists, and
     the `--run` script is defined. If any check fails, nothing is touched.
-  - New flags are opt-in, so plain `cleandeps` behaves exactly as before.
+  - Flags are opt-in; plain `cleandeps` does the same clean reinstall.
   - If node_modules doesn't exist, it skips the delete and just installs instead of crashing.
   - Cross-platform: uses Node's fs and path modules instead of shell commands like rm -rf, so
     it behaves the same on macOS, Linux and Windows.

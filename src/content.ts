@@ -106,8 +106,17 @@ export type Project = {
   links: ProjectLink[]
   figures?: Figure[]
   architecture?: Architecture
-  /** real CLI output for the terminal replay, one line each, starting with the command */
-  wrongFolderRun?: string[]
+  /** real CLI output for the terminal replay, one scenario per run */
+  terminal?: {
+    normalRun: TerminalLine[]
+    wrongFolderRun: TerminalLine[]
+  }
+}
+
+export type TerminalLine = {
+  text: string
+  /** output from the package manager, not the CLI itself; rendered dimmed */
+  dim?: boolean
 }
 
 export const projects: Project[] = [
@@ -220,7 +229,7 @@ export const projects: Project[] = [
       'Package managers live in one array, so supporting a new one means adding one object.',
       'Checks before deleting: package.json exists and is valid JSON, a lockfile exists, ' +
         'and the ‑‑run script is defined. If any check fails, nothing is touched.',
-      'The flags are opt-in, so plain cleandeps behaves exactly as before.',
+      'Flags are opt-in; plain cleandeps does the same clean reinstall.',
       "If node_modules doesn't exist, it skips the delete and just installs instead of crashing.",
       "Cross-platform: uses Node's fs and path modules instead of shell commands like " +
         'rm\u00A0‑rf, so it behaves the same on macOS, Linux and Windows.',
@@ -229,12 +238,31 @@ export const projects: Project[] = [
       { label: 'npm', url: 'https://www.npmjs.com/package/cleandeps-cli' },
       { label: 'Repo', url: 'https://github.com/rishnegi7711/cleandeps-cli' },
     ],
-    // Copied verbatim from bin/cleandeps.js (v0.2.0); keep in sync if the CLI changes.
-    wrongFolderRun: [
-      '$ cleandeps',
-      '❌ CleanDeps: No package.json found in this folder',
-      '➡️ Run this command inside a Node project (where package.json exists).',
-    ],
+    // Captured from real runs of v0.2.0; keep in sync if the CLI changes. The normal
+    // run's path is anonymised and its package list cut, with a visible "… 14 more".
+    terminal: {
+      normalRun: [
+        { text: '$ cleandeps' },
+        { text: '✅ Found package.json' },
+        { text: '📁 Project: ~/projects/my-app' },
+        { text: '🗑️ Removing node_modules...' },
+        { text: '✅ node_modules removed' },
+        { text: '📦 Installing dependencies...' },
+        { text: 'bun install v1.3.9', dim: true },
+        { text: '+ react@19.2.3', dim: true },
+        { text: '+ react-dom@19.2.3', dim: true },
+        { text: '+ typescript@5.9.3', dim: true },
+        { text: '+ tailwindcss@4.2.1', dim: true },
+        { text: '  … 14 more' },
+        { text: '665 packages installed [837.00ms]' },
+        { text: '✅ Dependencies installed' },
+      ],
+      wrongFolderRun: [
+        { text: '$ cleandeps' },
+        { text: '❌ CleanDeps: No package.json found in this folder' },
+        { text: '➡️ Run this command inside a Node project (where package.json exists).' },
+      ],
+    },
   },
 ]
 
