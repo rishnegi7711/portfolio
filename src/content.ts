@@ -35,8 +35,8 @@ export const identity: Identity = {
   cvUrl: null,
   photo: '/Rishi.jpeg',
   heroAnnotation:
-    'Taught myself Node + Express to see the other side of the API, then shipped a ' +
-    'full‑stack app with it.',
+    'Taught myself Node + Express to see the other side of the API, then shipped an ' +
+    'app with it, end to end.',
 }
 
 /** Page sections, in order. The header nav and the page both render from this list,
