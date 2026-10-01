@@ -165,7 +165,16 @@ function useHeroTimeline(containerRef: RefObject<HTMLDivElement | null>) {
           })
           tl.from(name.words, { yPercent: 110, duration: 0.6, ease: 'power3.out', stagger: 0.08 }, 0)
             .from('.hero-role', { y: 8, autoAlpha: 0, duration: 0.5, ease: 'power2.out' }, 0.25)
-            .from('.hero-loop', { drawSVG: 0, duration: 0.55, ease: 'power2.inOut' }, 0.65)
+            // The loop is stretched non-uniformly with a non-scaling stroke, so its length
+            // can't be measured (DrawSVG warns). pathLength={1} defines its length as 1
+            // instead: a 1-long dash offset by 1 is hidden, offset 0 is fully drawn.
+            .fromTo(
+              '.hero-loop',
+              { strokeDasharray: '1 1', strokeDashoffset: 1 },
+              // autoRound: false, or GSAP rounds the px offset and it jumps 1 → 0.
+              { strokeDashoffset: 0, autoRound: false, duration: 0.55, ease: 'power2.inOut' },
+              0.65,
+            )
             .to(note.chars, { autoAlpha: 1, duration: 0, ease: 'none', stagger: { amount: 0.5 } }, 1.05)
             .from('.hero-arrow', { drawSVG: 0, duration: 0.35, ease: 'power2.out' }, 1.45)
             .from('.hero-wing', { drawSVG: 0, duration: 0.12, ease: 'power2.out' }, 1.75)
@@ -245,6 +254,7 @@ function Hero() {
                   <path
                     className="hero-loop"
                     d={LOOP_PATH}
+                    pathLength={1}
                     vectorEffect="non-scaling-stroke"
                     {...strokeProps}
                   />
