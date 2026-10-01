@@ -1,11 +1,4 @@
-import { identity } from '../content'
-
-const navLinks = [
-  { label: 'Work', href: '#work' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-]
+import { identity, sections } from '../content'
 
 function Header() {
   return (
@@ -39,16 +32,16 @@ function Header() {
 
           <nav aria-label="Primary">
             <ul className="flex items-center gap-2 font-mono text-xs sm:gap-5 sm:text-sm">
-              {navLinks.map((link) => (
-                <li key={link.href}>
+              {sections.map((section) => (
+                <li key={section.id}>
                   <a
-                    href={link.href}
+                    href={`#${section.id}`}
                     className="inline-block py-3 -my-3 text-ink-muted underline
                       decoration-accent-muted underline-offset-4 transition-colors
                       hover:text-ink hover:decoration-accent focus-visible:outline
                       focus-visible:outline-2 focus-visible:outline-accent"
                   >
-                    {link.label}
+                    {section.label}
                   </a>
                 </li>
               ))}

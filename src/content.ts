@@ -39,6 +39,18 @@ export const identity: Identity = {
     'full‑stack app with it.',
 }
 
+/** Page sections, in order. The header nav and the page both render from this list,
+ *  so a nav link can never point at a section that doesn't exist. */
+export const sections = [
+  { id: 'work', label: 'Work' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'about', label: 'About' },
+  { id: 'contact', label: 'Contact' },
+]
+
+/** Placeholder line for sections that aren't built yet. */
+export const sectionInProgress = 'In progress — being written up next.'
+
 export const story =
   'Production support engineer turned frontend developer. Likes understanding how ' +
   'things actually work under the hood, not just making them look like they do. ' +
