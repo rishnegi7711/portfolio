@@ -1,10 +1,10 @@
 import { gsap } from 'gsap'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { useGSAP } from '@gsap/react'
 
-// The one place plugins are registered. Add ScrollTrigger here with the first
-// scroll-triggered section; until then nothing uses it, so it isn't shipped.
-gsap.registerPlugin(useGSAP, DrawSVGPlugin, SplitText)
+// The one place plugins are registered.
+gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger, SplitText)
 
-export { gsap, SplitText, useGSAP }
+export { gsap, ScrollTrigger, SplitText, useGSAP }

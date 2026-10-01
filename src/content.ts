@@ -72,6 +72,26 @@ export type Figure = {
   caption: string
 }
 
+export type ArchitectureNode = {
+  label: string
+  /** one per line */
+  details: string[]
+}
+
+export type Architecture = {
+  caption: string
+  /** the diagram in words, for screen readers (the drawn lines and labels are hidden) */
+  description: string
+  /** the request path, in order: client, API, database */
+  path: [ArchitectureNode, ArchitectureNode, ArchitectureNode]
+  /** connector labels between path nodes: client ↔ API, API ↔ database */
+  pathLinks: [string, string]
+  /** code imported by the first two path nodes, drawn above them as the focal node */
+  shared: ArchitectureNode
+  /** labels on the dashed lines from the shared node to the client and to the API */
+  sharedLinks: [string, string]
+}
+
 export type Project = {
   id: string
   name: string
@@ -85,6 +105,7 @@ export type Project = {
   engineeringStory: string[]
   links: ProjectLink[]
   figures?: Figure[]
+  architecture?: Architecture
 }
 
 export const projects: Project[] = [
@@ -160,6 +181,21 @@ export const projects: Project[] = [
         caption: 'Form validation from the shared Zod schema',
       },
     ],
+    architecture: {
+      caption: 'Architecture: the request path, with Zod schemas imported by client and API',
+      description:
+        'The React client talks to the Express API over HTTP / JSON, and the API reaches ' +
+        'PostgreSQL through Prisma. Both the client and the API import the same shared Zod ' +
+        'schemas: the client to validate forms, the API to validate requests.',
+      path: [
+        { label: 'React client', details: ['React Hook Form', 'TanStack Query'] },
+        { label: 'Express API', details: ['JWT auth', 'bcrypt'] },
+        { label: 'PostgreSQL', details: ['hosted on Neon'] },
+      ],
+      pathLinks: ['HTTP / JSON', 'Prisma'],
+      shared: { label: 'Shared Zod schemas', details: ['imported by both'] },
+      sharedLinks: ['validates forms', 'validates requests'],
+    },
   },
   {
     id: 'cleandeps',

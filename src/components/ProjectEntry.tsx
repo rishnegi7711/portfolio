@@ -1,4 +1,5 @@
 import type { Figure, Project } from '../content'
+import ArchitectureDiagram from './ArchitectureDiagram'
 
 const linkStyle =
   'inline-block py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
@@ -99,18 +100,24 @@ function ProjectEntry({ project }: { project: Project }) {
               <li key={point}>{point}</li>
             ))}
           </ul>
-
-          <h4 className="mt-8 font-display text-xl text-ink">Stack</h4>
-          <dl className="mt-3 grid gap-x-6 gap-y-2 font-mono text-sm sm:grid-cols-[10rem_1fr]">
-            {project.stack.map((group) => (
-              <div key={group.label} className="contents">
-                <dt className="text-ink-muted">{group.label}</dt>
-                <dd className="mb-2 text-ink sm:mb-0">{group.items.join(' · ')}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </div>
+
+      {project.architecture && (
+        <div className="mt-12">
+          <ArchitectureDiagram architecture={project.architecture} number={figures.length + 1} />
+        </div>
+      )}
+
+      <h4 className="mt-12 font-display text-xl text-ink">Stack</h4>
+      <dl className="mt-3 grid gap-x-6 gap-y-2 font-mono text-sm sm:grid-cols-[10rem_1fr]">
+        {project.stack.map((group) => (
+          <div key={group.label} className="contents">
+            <dt className="text-ink-muted">{group.label}</dt>
+            <dd className="mb-2 text-ink sm:mb-0">{group.items.join(' · ')}</dd>
+          </div>
+        ))}
+      </dl>
     </article>
   )
 }
