@@ -1,4 +1,5 @@
 import { sectionInProgress } from '../content'
+import Container from './Container'
 
 type SectionStubProps = {
   id: string
@@ -10,13 +11,13 @@ type SectionStubProps = {
 function SectionStub({ id, label }: SectionStubProps) {
   const headingId = `${id}-heading`
   return (
-    <section id={id} aria-labelledby={headingId} className="scroll-mt-14 px-4 py-16 sm:px-6">
-      <div className="mx-auto max-w-4xl">
+    <section id={id} aria-labelledby={headingId} className="scroll-mt-14 py-16">
+      <Container>
         <h2 id={headingId} className="font-display text-3xl text-ink sm:text-4xl">
           {label}
         </h2>
         <p className="mt-3 font-mono text-sm text-ink-muted">{sectionInProgress}</p>
-      </div>
+      </Container>
     </section>
   )
 }

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { identity } from '../content'
+import Container from './Container'
 
 type ArrowGeometry = {
   path: string
@@ -194,7 +195,7 @@ function Hero() {
   const city = identity.location.split(',')[0].trim()
 
   const linkStyle =
-    'inline-block px-1 py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
+    'inline-block py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
     'transition-colors hover:text-ink hover:decoration-accent focus-visible:outline ' +
     'focus-visible:outline-2 focus-visible:outline-accent'
 
@@ -206,8 +207,8 @@ function Hero() {
   }
 
   return (
-    <section className="scroll-mt-14 px-4 pt-16 pb-20 sm:px-6 sm:pt-24">
-      <div ref={containerRef} className="relative isolate mx-auto flex max-w-4xl flex-col gap-6">
+    <section className="scroll-mt-14 pt-16 pb-20 sm:pt-24">
+      <Container ref={containerRef} className="relative isolate flex flex-col gap-6">
         {geometry && (
           <svg
             width={geometry.containerWidth}
@@ -279,7 +280,7 @@ function Hero() {
             className={
               'font-body text-base text-ink underline decoration-accent decoration-2 ' +
               'underline-offset-4 transition-colors hover:text-accent focus-visible:outline ' +
-              'focus-visible:outline-2 focus-visible:outline-accent px-1 py-2.5 -my-2.5 inline-block'
+              'focus-visible:outline-2 focus-visible:outline-accent py-2.5 -my-2.5 inline-block'
             }
           >
             View work →
@@ -290,7 +291,7 @@ function Hero() {
               'font-body text-base text-ink underline decoration-accent-muted ' +
               'underline-offset-4 transition-colors hover:decoration-accent ' +
               'focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent ' +
-              'px-1 py-2.5 -my-2.5 inline-block'
+              'py-2.5 -my-2.5 inline-block'
             }
           >
             Email me
@@ -305,7 +306,7 @@ function Hero() {
             LinkedIn
           </a>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }

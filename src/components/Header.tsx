@@ -1,4 +1,5 @@
 import { identity, sections } from '../content'
+import Container from './Container'
 
 function Header() {
   return (
@@ -16,10 +17,7 @@ function Header() {
         className="sticky top-0 z-40 border-b border-accent-muted/40 bg-paper/95
           backdrop-blur-sm"
       >
-        <div
-          className="mx-auto flex h-12 max-w-4xl items-center justify-between gap-2
-            px-4 sm:gap-4 sm:px-6"
-        >
+        <Container className="flex h-12 items-center justify-between gap-2 sm:gap-4">
           <a
             href="#"
             aria-label="Back to top"
@@ -47,7 +45,7 @@ function Header() {
               ))}
             </ul>
           </nav>
-        </div>
+        </Container>
       </header>
     </>
   )
