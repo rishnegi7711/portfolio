@@ -233,7 +233,7 @@ function Hero() {
         )}
 
         <div>
-          <h1 className="font-display text-5xl leading-tight text-ink sm:text-6xl">
+          <h1 className="font-display text-5xl leading-tight text-ink sm:text-6xl lg:text-8xl">
             {identity.name}
           </h1>
           {/* Positioning context for the note: on md+ it floats just below the role
