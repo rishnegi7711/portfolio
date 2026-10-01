@@ -23,7 +23,8 @@ kept in lockstep — update `content.ts` directly for copy changes, and only tou
 
 - React + TypeScript (strict) + Vite
 - Tailwind CSS for styling, CSS variables for design tokens
-- Motion (`motion/react`, formerly Framer Motion) for animation
+- GSAP (`gsap` + `@gsap/react`'s `useGSAP`) for animation. Plugins: DrawSVG, SplitText,
+  ScrollTrigger, registered once in `src/lib/gsap.ts`
 - `react-icons` (Simple Icons set, `react-icons/si`) for tech logos
 - Single page with anchor navigation; no router unless we add case-study pages
 - Deployed on Vercel (`*.vercel.app` to start)
@@ -65,13 +66,24 @@ template, not a dark neon dev site.
 - Motion explains or guides, never decorates for its own sake.
 - Signature moments:
   1. SVG annotation lines and arrows that "draw" in as their section scrolls into view.
-  2. CleanDeps: an animated terminal replaying the real CLI flow (detect package manager →
-     remove node_modules → reinstall), replayable, with a copy-able install command.
+  2. CleanDeps: an animated terminal replaying the CLI's real output strings (from
+     `bin/cleandeps.js` — it uses Node's fs, never shell commands like `rm -rf`) in two
+     scenarios: a normal run, and a "wrong folder" run that refuses without a package.json.
+     Each scenario has its own replay button; plus a copy-able install command.
   3. Job Tracker: an architecture diagram (React client ↔ shared Zod schemas ↔ Express API ↔
      PostgreSQL) whose connections draw in on scroll.
-- Short, well-eased transitions (roughly 150–400ms). No bouncing, no endless loops, no
-  scroll-jacking.
-- Always respect `prefers-reduced-motion`: show the final state instantly.
+- Micro-interactions (hover, focus, state changes): 150–400ms, CSS transitions, not GSAP.
+- Signature sequences are GSAP timelines: ~1–2s total, play once, never loop. No bouncing.
+- No ScrollSmoother, no scroll-jacking, no `scrub`. ScrollTrigger only starts a timeline
+  (`once: true`).
+- Shared eases: type reveals `power3.out`, pen strokes `power2.inOut` (or `power2.out` for
+  short strokes), typing `none`.
+- All GSAP code goes through `useGSAP` (never a bare `useEffect`), so it's cleaned up on unmount.
+- Reduced motion: build timelines inside
+  `gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', …)`, so with reduced
+  motion nothing runs and the DOM is already the final state.
+- Hidden-before-animating states are set from JS (never in markup or CSS) and always have a
+  timeout fallback, so content can never stay hidden.
 
 ## Avoid (AI-slop tells)
 

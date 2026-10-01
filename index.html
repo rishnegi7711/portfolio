@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The hero waits for this font before animating (capped at 800ms), so start
+         downloading it during HTML parse rather than after the CSS is applied. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2"
+    />
     <title>portfolio</title>
   </head>
   <body>
