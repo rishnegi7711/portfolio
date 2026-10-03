@@ -52,8 +52,13 @@ export const sections = [
   { id: 'contact', label: 'Contact' },
 ]
 
-/** Placeholder line for sections that aren't built yet. */
-export const sectionInProgress = 'In progress — being written up next.'
+/** The Contact section's line and the email copy button's status messages. */
+export const contact = {
+  line: 'Hiring for a frontend or full‑stack role? Email is the quickest way to reach me.',
+  copied: 'Copied',
+  // Shown when the Clipboard API fails; the address is selected for the shortcut.
+  copyFallback: 'Press Ctrl+C or ⌘C to copy',
+}
 
 /** The About section's story, one string per paragraph. */
 export const story = [
