@@ -51,7 +51,11 @@ function TerminalReplay({ terminal, number }: { terminal: Terminal; number: numb
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         // Split once, up front: re-splitting on every replay would nest the char divs.
-        SplitText.create('.terminal-command', { type: 'chars', charsClass: 'terminal-char' })
+        SplitText.create('.terminal-command', {
+          type: 'chars',
+          charsClass: 'terminal-char',
+          aria: 'none',
+        })
 
         // The normal run plays once on scroll. Paused, so its hidden start state is
         // applied now (from JS) but nothing moves until it's in view.
@@ -136,7 +140,12 @@ function TerminalReplay({ terminal, number }: { terminal: Terminal; number: numb
                 line.text.startsWith('$ ') ? (
                   <span key={i} className="block text-ink">
                     <span className="text-accent">$</span>{' '}
-                    <span className="terminal-command">{line.text.slice(2)}</span>
+                    {/* Screen readers get the plain copy: the visible one is split into
+                        chars, and SplitText's aria-label on a span isn't reliably read. */}
+                    <span className="sr-only">{line.text.slice(2)}</span>
+                    <span className="terminal-command" aria-hidden="true">
+                      {line.text.slice(2)}
+                    </span>
                   </span>
                 ) : (
                   <span

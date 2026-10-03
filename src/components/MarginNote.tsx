@@ -54,7 +54,7 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
           // The timeline's pivot: the note types itself in as the nib reaches the swerve
           // (0.25s in: the smoothed nib arrives just after the trigger), then the arrow
           // draws to it.
-          const { chars } = SplitText.create('.margin-note-text', { type: 'chars' })
+          const { chars } = SplitText.create('.margin-note-text', { type: 'chars', aria: 'none' })
           tl.from(
             chars,
             { autoAlpha: 0, duration: 0.01, stagger: { amount: 0.6 }, ease: 'none' },
@@ -114,7 +114,12 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
           style={{ left: `${captionLength}ch` }}
         />
       )}
-      <span className="margin-note-text">{text}</span>
+      {/* Screen readers get the plain copy: the visible one may be split into chars, and
+          SplitText's aria-label on a span isn't reliably read. */}
+      <span className="sr-only">{text}</span>
+      <span className="margin-note-text" aria-hidden="true">
+        {text}
+      </span>
     </p>
   )
 }
