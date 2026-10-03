@@ -3,10 +3,7 @@ import { experience, type ExperienceEntry, type Point } from '../content'
 import { gsap, playOnceInView, ScrollTrigger, useGSAP } from '../lib/gsap'
 import Container from './Container'
 import MarginNote from './MarginNote'
-
-// One authored pen stroke in a 100×8 box stretched under a metric (like the hero loop):
-// a slight wave that lifts at the end, as if the pen came off the page.
-const UNDERLINE_PATH = 'M 1 5.5 C 22 3.5, 48 6.5, 72 4.5 C 84 3.8, 93 4.2, 99 2.5'
+import PenUnderline from './PenUnderline'
 
 // The line starts at the first tick (top-4). x = 0.75 is the middle of a 1.5px stroke
 // at the column's left edge, where the ticks meet it.
@@ -211,48 +208,11 @@ function PointText({ point }: { point: Point }) {
   return (
     <>
       {before}
-      <PenUnderline>{metric}</PenUnderline>
+      {/* 0.25s: the trigger fires when the nib's target passes, and the smoothed nib
+          itself arrives a moment later (scrub: 0.5). */}
+      <PenUnderline delay={0.25}>{metric}</PenUnderline>
       {after}
     </>
-  )
-}
-
-/** Underlines a metric in pen the first time the nib passes it (its own trigger, so
- *  each one draws on its own line of text). The text is never hidden; only the stroke
- *  draws. Reduced motion: the stroke is simply there. */
-function PenUnderline({ children }: { children: string }) {
-  const svgRef = useRef<SVGSVGElement>(null)
-
-  useGSAP(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // Starts 0.25s in: the trigger fires when the nib's target passes, and the smoothed
-      // nib itself arrives a moment later (scrub: 0.5).
-      const tl = gsap.timeline({ paused: true }).fromTo(
-        svgRef.current?.querySelector('path') ?? null,
-        { strokeDasharray: '1 1', strokeDashoffset: 1 },
-        { strokeDashoffset: 0, autoRound: false, duration: 0.4, ease: 'power2.out' },
-        0.25,
-      )
-      return playOnceInView(svgRef.current, tl)
-    })
-  })
-
-  return (
-    // nowrap: a metric split over two lines would leave the stroke under neither.
-    <span className="relative whitespace-nowrap">
-      {children}
-      {/* Stretched under the word; non-scaling-stroke keeps it 1.5px at any width. */}
-      <svg
-        ref={svgRef}
-        viewBox="0 0 100 8"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-        className="pointer-events-none absolute -inset-x-0.5 -bottom-1.5 h-2 w-[calc(100%+0.25rem)] overflow-visible text-accent-muted"
-      >
-        <path d={UNDERLINE_PATH} pathLength={1} vectorEffect="non-scaling-stroke" {...strokeProps} />
-      </svg>
-    </span>
   )
 }
 
