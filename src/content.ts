@@ -60,6 +60,14 @@ export const contact = {
   copyFallback: 'Press Ctrl+C or ⌘C to copy',
 }
 
+/** The footer colophon: what the site is built with, each linking to its site. */
+export const colophon = [
+  { label: 'React', url: 'https://react.dev' },
+  { label: 'Tailwind', url: 'https://tailwindcss.com' },
+  { label: 'GSAP', url: 'https://gsap.com' },
+  { label: 'Claude Code', url: 'https://claude.com/claude-code' },
+]
+
 /** The About section's story, one string per paragraph. */
 export const story = [
   'I started in production support. For three years I looked after a live British ' +
