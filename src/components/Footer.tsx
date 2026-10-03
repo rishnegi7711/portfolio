@@ -5,28 +5,30 @@ import { colophon } from '../content'
 import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
 import Container from './Container'
 
-// Presentation for each colophon entry, kept here like About's ICONS: the logo, its
-// brand colour (Simple Icons' published hex, shown on hover/focus only), and one small
-// move. motion-safe: so with reduced motion only the colour changes.
+// Presentation for each colophon entry, kept here like About's MARKS: the logo, its
+// brand colour (shown on hover/focus only), and one small move. All four Simple Icons
+// hexes are under 3:1 on the paper, so each is darkened (same hue) to reach it; React
+// and Tailwind use the same values as About. The original hex is in the comment.
+// motion-safe: so with reduced motion only the colour changes.
 const MARKS: Record<string, { Icon: IconType; brand: string; move: string }> = {
   React: {
     Icon: SiReact,
-    brand: '#61DAFB',
+    brand: '#4499B0', // #61DAFB
     move: 'motion-safe:group-hover:rotate-360 motion-safe:group-focus-visible:rotate-360',
   },
   Tailwind: {
     Icon: SiTailwindcss,
-    brand: '#06B6D4',
+    brand: '#059CB5', // #06B6D4
     move: 'motion-safe:group-hover:translate-x-0.75 motion-safe:group-focus-visible:translate-x-0.75',
   },
   GSAP: {
     Icon: SiGsap,
-    brand: '#0AE448',
+    brand: '#07A534', // #0AE448
     move: 'motion-safe:group-hover:-translate-y-0.75 motion-safe:group-focus-visible:-translate-y-0.75',
   },
   'Claude Code': {
     Icon: SiClaude,
-    brand: '#D97757',
+    brand: '#D47455', // #D97757
     move: 'motion-safe:group-hover:rotate-90 motion-safe:group-focus-visible:rotate-90',
   },
 }
