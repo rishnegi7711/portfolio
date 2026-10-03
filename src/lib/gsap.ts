@@ -1,11 +1,12 @@
 import { gsap } from 'gsap'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { useGSAP } from '@gsap/react'
 
 // The one place plugins are registered.
-gsap.registerPlugin(useGSAP, DrawSVGPlugin, ScrollTrigger, SplitText)
+gsap.registerPlugin(useGSAP, DrawSVGPlugin, MotionPathPlugin, ScrollTrigger, SplitText)
 
 // Triggers measure their start when they mount, before the webfonts and the lazy Work
 // screenshots have settled the layout, so starts land late. Re-measure once both fonts

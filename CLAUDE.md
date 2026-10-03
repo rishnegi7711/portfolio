@@ -25,8 +25,8 @@ kept in lockstep — update `content.ts` directly for copy changes, and only tou
 
 - React + TypeScript (strict) + Vite
 - Tailwind CSS for styling, CSS variables for design tokens
-- GSAP (`gsap` + `@gsap/react`'s `useGSAP`) for animation. Plugins: DrawSVG, SplitText,
-  ScrollTrigger, registered once in `src/lib/gsap.ts`
+- GSAP (`gsap` + `@gsap/react`'s `useGSAP`) for animation. Plugins: DrawSVG, MotionPath,
+  SplitText, ScrollTrigger, registered once in `src/lib/gsap.ts`
 - `react-icons` (Simple Icons set, `react-icons/si`) for tech logos
 - Single page with anchor navigation; no router unless we add case-study pages
 - Deployed on Vercel (`*.vercel.app` to start)
@@ -79,8 +79,9 @@ template, not a dark neon dev site.
      PostgreSQL) whose connections draw in on scroll.
   4. Experience timeline: a reading-progress line. A pen nib travels down the dates column
      as you scroll, drawing the line behind it; each tick, and each key metric's pen
-     underline, draws once as the nib passes it, and a margin note marks the switch to
-     frontend.
+     underline, draws once as the nib passes it. At the switch to frontend the line swerves
+     out and back once (the nib follows it via MotionPath), and the margin note there types
+     itself in, then draws its arrow to the swerve.
 - Micro-interactions (hover, focus, state changes): 150–400ms, CSS transitions, not GSAP.
 - Signature sequences are GSAP timelines: ~1–2s total, play once, never loop. No bouncing.
 - No ScrollSmoother, no scroll-jacking, no `scrub`. ScrollTrigger only starts a timeline

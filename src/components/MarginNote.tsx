@@ -1,5 +1,5 @@
 import { type CSSProperties, useRef } from 'react'
-import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
+import { gsap, playOnceInView, SplitText, useGSAP } from '../lib/gsap'
 
 // Hand-authored pen arrows, each one path: a slightly bent line, then an open
 // arrowhead (wing → tip → wing) angled off the line's direction at the tip, like the
@@ -36,8 +36,8 @@ type MarginNoteProps = {
 }
 
 /** Mono margin note with a small drawn arrow. The first time it scrolls into view the
- *  arrow draws in, then the text fades in (~0.6s, once). Reduced motion: both are simply
- *  there. */
+ *  arrow draws in, then the text fades in (~0.6s, once); the Experience note ("line")
+ *  types itself in first, then draws its arrow. Reduced motion: both are simply there. */
 function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
   const noteRef = useRef<HTMLParagraphElement>(null)
 
@@ -49,11 +49,27 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
         // until playOnceInView plays it. pathLength={1}: a dash of 1 offset by 1 is
         // hidden, offset 0 is drawn; autoRound: false, or the offset jumps 1 → 0.
         const tl = gsap.timeline({ paused: true })
+        const typed = pointsTo === 'line'
+        if (typed) {
+          // The timeline's pivot: the note types itself in as the nib reaches the swerve
+          // (0.25s in: the smoothed nib arrives just after the trigger), then the arrow
+          // draws to it.
+          const { chars } = SplitText.create('.margin-note-text', { type: 'chars' })
+          tl.from(
+            chars,
+            { autoAlpha: 0, duration: 0.01, stagger: { amount: 0.6 }, ease: 'none' },
+            0.25,
+          )
+        }
+        // Appended, so it draws after the typing, or first when the note fades.
         tl.fromTo(
           '.margin-note-arrow',
           { strokeDasharray: '1 1', strokeDashoffset: 1 },
           { strokeDashoffset: 0, autoRound: false, duration: 0.4, ease: 'power2.inOut' },
-        ).from('.margin-note-text', { autoAlpha: 0, duration: 0.3, ease: 'power2.out' }, 0.3)
+        )
+        if (!typed) {
+          tl.from('.margin-note-text', { autoAlpha: 0, duration: 0.3, ease: 'power2.out' }, 0.3)
+        }
 
         return playOnceInView(noteRef.current, tl)
       })
@@ -78,10 +94,11 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
       ) : pointsTo === 'line' ? (
         // xMinYMid slice: scaled to the box's height and pinned left, so on narrow screens
         // the box crops the arrow's tail end and the head still lands by the line.
+        // −8px / −16px: the head stops 6px short of the timeline's swerve (12px / 20px).
         <Arrow
           arrow={ARROWS.line}
           preserveAspectRatio="xMinYMid slice"
-          className="absolute right-full -top-0.5 h-6 w-[6.5rem] md:w-[11.5rem]"
+          className="absolute right-full -top-0.5 h-6 w-[calc(6.5rem-8px)] md:w-[calc(11.5rem-16px)]"
         />
       ) : (
         <Arrow

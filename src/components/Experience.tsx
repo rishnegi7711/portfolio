@@ -1,12 +1,29 @@
 import { useRef } from 'react'
 import { experience, type ExperienceEntry, type Point } from '../content'
-import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
+import { gsap, playOnceInView, ScrollTrigger, useGSAP } from '../lib/gsap'
 import Container from './Container'
 import MarginNote from './MarginNote'
 
 // One authored pen stroke in a 100×8 box stretched under a metric (like the hero loop):
 // a slight wave that lifts at the end, as if the pen came off the page.
 const UNDERLINE_PATH = 'M 1 5.5 C 22 3.5, 48 6.5, 72 4.5 C 84 3.8, 93 4.2, 99 2.5'
+
+// The line starts at the first tick (top-4). x = 0.75 is the middle of a 1.5px stroke
+// at the column's left edge, where the ticks meet it.
+const LINE_TOP = 16
+const LINE_X = 0.75
+
+/** Straight down, except one out-and-back swerve of `bulge` px to the right, 64px tall
+ *  and centred on `apex`: two curves, out then back, each easing in and out. */
+function swervePath(height: number, apex: number, bulge: number) {
+  const x = LINE_X
+  const out = x + bulge
+  return (
+    `M ${x} 0 V ${apex - 32} ` +
+    `C ${x} ${apex - 16}, ${out} ${apex - 16}, ${out} ${apex} ` +
+    `C ${out} ${apex + 16}, ${x} ${apex + 16}, ${x} ${apex + 32} V ${height}`
+  )
+}
 
 const strokeProps = {
   stroke: 'currentColor',
@@ -16,7 +33,8 @@ const strokeProps = {
 } as const
 
 /** The timeline as a reading-progress line: as you scroll, a pen nib travels down it and
- *  draws the line behind it (the site's only scroll-linked animation).
+ *  draws the line behind it (the site's only scroll-linked animation). At the switch to
+ *  frontend the line swerves out and back once, and the nib rides through the swerve.
  *
  *  Sync: the scrub runs from the line's top reaching 75% of the viewport to its bottom
  *  reaching 75%, so the nib's target is always wherever the line crosses that 75% mark.
@@ -27,30 +45,72 @@ function Experience() {
 
   useGSAP(
     () => {
+      const timeline = timelineRef.current
+      const svg = timeline?.querySelector<SVGSVGElement>('.timeline-line')
+      const path = svg?.querySelector('path')
+      if (!timeline || !svg || !path) return
+
+      // An SVG can't stretch between top and bottom like a div, so its height and the
+      // swerve's position are measured, then written straight onto the SVG (not React
+      // state: ScrollTrigger needs the new path synchronously, before it re-measures).
+      function layoutLine() {
+        if (!timeline || !svg || !path) return
+        const height = timeline.offsetHeight - LINE_TOP
+        // The swerve's apex sits level with the note's arrow, so the arrow always points
+        // at it. A difference of two rects, so scroll position doesn't matter.
+        const arrow = timeline.querySelector('.margin-note-arrow')?.closest('svg')
+        const box = arrow?.getBoundingClientRect()
+        const apex = box ? box.top + box.height / 2 - svg.getBoundingClientRect().top : height / 2
+        const bulge = window.matchMedia('(min-width: 768px)').matches ? 20 : 12
+        svg.setAttribute('height', String(height))
+        svg.setAttribute('width', String(bulge + 2))
+        svg.setAttribute('viewBox', `0 0 ${bulge + 2} ${height}`)
+        path.setAttribute('d', swervePath(height, apex, bulge))
+      }
+      layoutLine()
+
+      // Re-layout before every ScrollTrigger refresh (resize, fonts, lazy images), so the
+      // scrub below re-reads an up-to-date path. The observer covers reduced motion,
+      // where no ScrollTriggers exist to refresh.
+      ScrollTrigger.addEventListener('refreshInit', layoutLine)
+      const observer = new ResizeObserver(layoutLine)
+      observer.observe(timeline)
+
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        const line = timelineRef.current?.querySelector<HTMLElement>('.timeline-line')
-        if (!line) return
-
         // The nib only exists while motion runs (matchMedia undoes this set otherwise).
         gsap.set('.timeline-nib', { display: 'block' })
 
-        // Line and nib share one playhead (same start, same length, linear), so the nib
-        // is always at the line's drawn end. scrub: 0.5 smooths the playhead's catch-up.
-        // invalidateOnRefresh re-measures the nib's distance after a resize.
+        // Line and nib share one playhead (same start, same length, linear in path
+        // length), so the nib is always at the line's drawn end. scrub: 0.5 smooths the
+        // playhead's catch-up. invalidateOnRefresh re-reads the path after a re-layout.
         gsap
           .timeline({
             scrollTrigger: {
-              trigger: line,
+              trigger: svg,
               start: 'top 75%',
               end: 'bottom 75%',
               scrub: 0.5,
               invalidateOnRefresh: true,
             },
           })
-          .fromTo(line, { scaleY: 0 }, { scaleY: 1, ease: 'none' }, 0)
-          .fromTo('.timeline-nib', { y: 0 }, { y: () => line.offsetHeight, ease: 'none' }, 0)
+          .fromTo(
+            path,
+            { strokeDasharray: '1 1', strokeDashoffset: 1 },
+            { strokeDashoffset: 0, autoRound: false, ease: 'none' },
+            0,
+          )
+          .to(
+            '.timeline-nib',
+            { motionPath: { path, align: path, alignOrigin: [0.5, 0.5] }, ease: 'none' },
+            0,
+          )
       })
+
+      return () => {
+        ScrollTrigger.removeEventListener('refreshInit', layoutLine)
+        observer.disconnect()
+      }
     },
     { scope: timelineRef },
   )
@@ -62,16 +122,16 @@ function Experience() {
           Experience
         </h2>
         <div ref={timelineRef} className="relative mt-10">
-          {/* top-4: starts at the first tick. bottom-0: ends where the last entry's content
-              ends (it has no bottom padding). A div stretches between top and bottom; an
-              SVG wouldn't. The nib is centred on the line's top: (1.5px − 7px) / 2. */}
+          {/* top-4: starts at the first tick. Its height and path are set by layoutLine. */}
+          <svg
+            aria-hidden="true"
+            className="timeline-line absolute top-4 left-0 overflow-visible text-accent-muted"
+          >
+            <path pathLength={1} {...strokeProps} strokeLinecap="butt" />
+          </svg>
           <div
             aria-hidden="true"
-            className="timeline-line absolute top-4 bottom-0 left-0 w-[1.5px] origin-top bg-accent-muted"
-          />
-          <div
-            aria-hidden="true"
-            className="timeline-nib absolute top-[calc(1rem-3.5px)] left-[-2.75px] hidden size-[7px] rounded-full bg-accent"
+            className="timeline-nib absolute top-0 left-0 hidden size-[7px] rounded-full bg-accent"
           />
           <ol>
             {experience.map((entry) => (
