@@ -77,10 +77,16 @@ template, not a dark neon dev site.
      Each scenario has its own replay button; plus a copy-able install command.
   3. Job Tracker: an architecture diagram (React client ↔ shared Zod schemas ↔ Express API ↔
      PostgreSQL) whose connections draw in on scroll.
+  4. Experience timeline: a reading-progress line. A pen nib travels down the dates column
+     as you scroll, drawing the line behind it; each tick, and each key metric's pen
+     underline, draws once as the nib passes it, and a margin note marks the switch to
+     frontend.
 - Micro-interactions (hover, focus, state changes): 150–400ms, CSS transitions, not GSAP.
 - Signature sequences are GSAP timelines: ~1–2s total, play once, never loop. No bouncing.
 - No ScrollSmoother, no scroll-jacking, no `scrub`. ScrollTrigger only starts a timeline
-  (`once: true`).
+  (`once: true`). The one exception: the Experience timeline's line and nib are scrubbed
+  (smoothed), as a reading-progress line. It is the only scroll-linked animation; keep it
+  that way. Everything it passes (ticks, underlines, note) still plays once.
 - Shared eases: type reveals `power3.out`, pen strokes `power2.inOut` (or `power2.out` for
   short strokes), typing `none`.
 - All GSAP code goes through `useGSAP` (never a bare `useEffect`), so it's cleaned up on unmount.

@@ -15,6 +15,10 @@ const ARROWS = {
     viewBox: '0 0 120 102',
     d: 'M 112 98 C 110 50, 38 49, 16 10 M 15.9 19 L 16 10 L 23.7 14.6',
   },
+  // 1 unit = 1px, drawn for the md+ gap (184px) from the note's left edge (x = 184) back
+  // to just short of the Experience timeline (x = 0). Narrower boxes crop the tail, not
+  // the head (see the Arrow's preserveAspectRatio below).
+  line: { viewBox: '0 0 184 24', d: 'M 182 14 C 130 20, 60 2, 3 12 M 10.7 14.2 L 3 12 L 9.5 7.3' },
 }
 
 type MarginNoteProps = {
@@ -23,8 +27,9 @@ type MarginNoteProps = {
    *  under it). "left": across the column gap at the text beside it, so md+ only, once
    *  the note is in the margin.
    *  "upLeft": like "up" below md; on md+, a longer arrow from the note up-left to the
-   *  bottom edge of the full-width figure above, just past the end of its caption. */
-  pointsTo: 'up' | 'left' | 'upLeft'
+   *  bottom edge of the full-width figure above, just past the end of its caption.
+   *  "line": left, back across the Experience dates column to the timeline line. */
+  pointsTo: 'up' | 'left' | 'upLeft' | 'line'
   /** "upLeft" only: the caption's length in characters. It's monospace, so its end is
    *  that many `ch` from the left of the note's positioned ancestor (the notes grid). */
   captionLength?: number
@@ -70,6 +75,14 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
           arrow={ARROWS.left}
           className="absolute top-0.5 -left-11 hidden h-6 w-10 md:block"
         />
+      ) : pointsTo === 'line' ? (
+        // xMinYMid slice: scaled to the box's height and pinned left, so on narrow screens
+        // the box crops the arrow's tail end and the head still lands by the line.
+        <Arrow
+          arrow={ARROWS.line}
+          preserveAspectRatio="xMinYMid slice"
+          className="absolute right-full -top-0.5 h-6 w-[6.5rem] md:w-[11.5rem]"
+        />
       ) : (
         <Arrow
           arrow={ARROWS.up}
@@ -93,12 +106,14 @@ type ArrowProps = {
   arrow: { viewBox: string; d: string }
   className: string
   style?: CSSProperties
+  preserveAspectRatio?: string
 }
 
-function Arrow({ arrow, className, style }: ArrowProps) {
+function Arrow({ arrow, className, style, preserveAspectRatio }: ArrowProps) {
   return (
     <svg
       viewBox={arrow.viewBox}
+      preserveAspectRatio={preserveAspectRatio}
       aria-hidden="true"
       className={'text-accent-muted ' + className}
       style={style}

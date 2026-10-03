@@ -272,71 +272,84 @@ export const projects: Project[] = [
   },
 ]
 
-export type Role = {
-  company: string
-  title: string
-  location: string
+/** A bullet; a tuple marks its key metric, which gets a pen underline. */
+export type Point = string | [before: string, metric: string, after: string]
+
+export type ExperienceEntry = {
+  id: string
+  /** company or university */
+  org: string
+  /** job title or degree */
+  role: string
+  place?: string
   dates: string
-  highlights: string[]
-  /** margin note — the standout metric, for the annotation-arrow motif */
-  annotation?: string
+  points: Point[]
+  /** margin note, pointing back at the timeline line */
+  note?: string
 }
 
-export const roles: Role[] = [
+/** Jobs and education as one timeline, newest first. */
+export const experience: ExperienceEntry[] = [
   {
-    company: 'RapinnoTech',
-    title: 'Software Developer',
-    location: 'Hyderabad',
-    dates: 'May 2022 – Aug 2023',
-    annotation: '1,000+ field agents · 50% faster quotes',
-    highlights: [
-      'Rebuilt the Employee Notifier UI in React; standardised reusable component ' +
-        'patterns (Buttons, Modals, Tabs) adopted product-wide, reducing duplicate UI code.',
-      'Redux-based authentication and session handling for a live app used by 1,000+ ' +
-        'field agents, eliminating a recurring class of sign-in failures.',
-      'Built the frontend for the HDFC Life Offline Quote application (live insurance ' +
-        'quoting for sales agents), improving quote generation speed by 50%.',
-      'Full UI overhaul that increased user engagement by 30%, working with PMs and ' +
-        'designers in Agile sprints.',
+    id: 'msc',
+    org: 'University of West London',
+    role: 'MSc Software Engineering',
+    place: 'London',
+    dates: 'Oct 2023 – Jul 2025',
+    points: [
+      'Studied while working part-time and building the projects above.',
+      'Dissertation: comparative evaluation of GraphQL and REST API integration approaches.',
     ],
   },
   {
-    company: 'Coforge',
-    title: 'Software Engineer',
-    location: 'Greater Noida',
+    id: 'rapinnotech',
+    org: 'RapinnoTech',
+    role: 'Software Developer',
+    place: 'Hyderabad',
+    dates: 'May 2022 – Aug 2023',
+    note: 'switched to frontend here',
+    points: [
+      'Rebuilt the Employee Notifier UI in React; standardised reusable component ' +
+        'patterns (Buttons, Modals, Tabs) adopted product-wide, reducing duplicate UI code.',
+      [
+        'Redux-based authentication and session handling for a live app used by ',
+        '1,000+ field agents',
+        ', eliminating a recurring class of sign-in failures.',
+      ],
+      [
+        'Built the frontend for the HDFC Life Offline Quote application (live insurance ' +
+          'quoting for sales agents), improving quote generation speed by ',
+        '50%',
+        '.',
+      ],
+      [
+        'Full UI overhaul that increased user engagement by ',
+        '30%',
+        ', working with PMs and designers in Agile sprints.',
+      ],
+    ],
+  },
+  {
+    id: 'coforge',
+    org: 'Coforge',
+    role: 'Software Engineer',
+    place: 'Greater Noida',
     dates: '2019 – 2022',
-    annotation: '~350 incidents/yr · 90-min SLA',
-    highlights: [
-      'Supported a live production system for British Airways: ~350 incidents a year ' +
-        'within a 90-minute SLA.',
+    points: [
+      [
+        'Supported a live production system for British Airways: ',
+        '~350 incidents a year',
+        ' within a 90-minute SLA.',
+      ],
       'Led migration of production servers from RHEL5 to RHEL7 on an unfamiliar legacy codebase.',
     ],
   },
-]
-
-/** 2023–2025 doesn't fit the Role shape: no single company, just one context line. */
-export const timelineNote =
-  'MSc in Software Engineering in London while working part-time and building the projects above.'
-
-export type EducationEntry = {
-  degree: string
-  institution: string
-  dates: string
-  detail?: string
-}
-
-export const education: EducationEntry[] = [
   {
-    degree: 'MSc Software Engineering',
-    institution: 'University of West London',
-    dates: 'Oct 2023 – Jul 2025',
-    detail:
-      'Dissertation: comparative evaluation of GraphQL and REST API integration approaches.',
-  },
-  {
-    degree: 'BTech Computer Science',
-    institution: 'DIT University',
+    id: 'btech',
+    org: 'DIT University',
+    role: 'BTech Computer Science',
     dates: '2014 – 2018',
+    points: [],
   },
 ]
 
