@@ -9,7 +9,6 @@ export type Identity = {
   /** short role line sized for the hero's large display type */
   heroRole: string
   location: string
-  rightToWork: string
   /** shown after the city in the hero's fact line */
   coordinates: string
   email: string
@@ -17,7 +16,8 @@ export type Identity = {
   linkedin: string
   /** null until a CV PDF is added to /public */
   cvUrl: string | null
-  photo: string
+  /** cropped, optimised copy of the original photo, used in About */
+  photo: { src: string; width: number; height: number; alt: string }
   /** first-person copy for the hero's signature margin annotation */
   heroAnnotation: string
 }
@@ -27,13 +27,17 @@ export const identity: Identity = {
   roleHeadline: 'Frontend engineer (React + TypeScript), growing into full‑stack',
   heroRole: 'Frontend engineer, growing into full‑stack',
   location: 'London, UK',
-  rightToWork: 'Right to work in the UK (Graduate Visa, to Sep 2027)',
   coordinates: '51.51° N, 0.13° W',
   email: 'rishnegi28@gmail.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
   cvUrl: null,
-  photo: '/Rishi.jpeg',
+  photo: {
+    src: '/about/rishi.webp',
+    width: 400,
+    height: 500,
+    alt: 'Rishi Negi, smiling, in a brown puffer jacket in front of a grey louvred wall.',
+  },
   heroAnnotation:
     'Taught myself Node + Express to see the other side of the API, then shipped an ' +
     'app with it, end to end.',
@@ -51,12 +55,17 @@ export const sections = [
 /** Placeholder line for sections that aren't built yet. */
 export const sectionInProgress = 'In progress — being written up next.'
 
-export const story =
-  'Production support engineer turned frontend developer. Likes understanding how ' +
-  'things actually work under the hood, not just making them look like they do. ' +
-  'Stepped outside the frontend comfort zone to self-teach a Node/Express backend ' +
-  'and ship a full‑stack app end-to-end. Looking for a high-autonomy, technically ' +
-  'deep team in London.'
+/** The About section's story, one string per paragraph. */
+export const story = [
+  'I started in production support. For three years I looked after a live British ' +
+    'Airways system, and when something broke, my job was to find out why. That habit ' +
+    'stayed with me: I want to know how a thing actually works, not just how it looks.',
+  'In 2022 I moved into frontend work, building React apps used by field and sales ' +
+    'agents. In 2023 I came to London for an MSc in Software Engineering and used the ' +
+    'time to learn the backend: Node, Express and PostgreSQL. Applyd is what came out of that.',
+  "Now I'm looking for a junior frontend or full‑stack role in London, on a team that " +
+    'goes deep technically and gives people room to own their work.',
+]
 
 export type ProjectLink = {
   label: string

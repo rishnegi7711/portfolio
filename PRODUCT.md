@@ -50,8 +50,7 @@ they look, and he is looking for a high-autonomy, technically deep team.
 
 - Name: Rishi Negi. Role headline: "Frontend engineer (React + TypeScript), growing into
   full-stack." Location: London, UK. Right to work: Graduate Visa, valid until September
-  2027 — a fact to state elsewhere (e.g. Contact or the CV), deliberately not shown in
-  the hero.
+  2027 — recorded in `content.md` only; deliberately not shown anywhere on the site.
 - Hero fact line: city plus coordinates ("London · 51.51° N, 0.13° W"), nothing else.
 - Voice: understated, technically grounded, emphasizes understanding mechanisms over
   surface polish.
