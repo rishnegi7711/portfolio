@@ -31,7 +31,7 @@ export const identity: Identity = {
   email: 'rishnegi28@gmail.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
-  cvUrl: null,
+  cvUrl: '/Rishi-Negi-CV.pdf',
   photo: {
     src: '/about/rishi.webp',
     width: 400,

@@ -12,9 +12,10 @@ Claude invent anything.
 - Email: rishnegi28@gmail.com
 - GitHub: https://github.com/rishnegi7711
 - LinkedIn: https://www.linkedin.com/in/rishi-negi-a9057a207/
-- CV: link to a PDF in /public (to add)
+- CV: /public/Rishi-Negi-CV.pdf, linked as "CV (PDF)"
 - Photo: /public/rishi.jpg (to add)
-- DO NOT publish the phone number.
+- Phone number: never shown as text on the site. It may appear inside the downloadable
+  CV PDF (Rishi's decision).
 
 ## Positioning / story
 

@@ -54,14 +54,15 @@ they look, and he is looking for a high-autonomy, technically deep team.
 - Hero fact line: city plus coordinates ("London · 51.51° N, 0.13° W"), nothing else.
 - Voice: understated, technically grounded, emphasizes understanding mechanisms over
   surface polish.
-- Do not publish the phone number.
+- The phone number is never shown as text on the site; it may appear inside the
+  downloadable CV PDF (the owner's decision).
 
 ## Evidence on Hand
 
 - Identity, positioning, project details, work history and toolkit are fully specified in
   `content.md` — treat as the single source of truth for all facts.
-- CV PDF and a profile photo are referenced in `content.md` as "to add" — not yet available;
-  do not fabricate placeholders that look like real content.
+- CV PDF: `/public/Rishi-Negi-CV.pdf`, linked from Contact. Profile photo:
+  `/public/about/rishi.webp`, used in About.
 - Applyd (job application tracker): live at https://job-tracker-steel-ten.vercel.app, repo at
   https://github.com/rishnegi7711/job-tracker. Screenshots (board, detail, validation;
   WebP) are in `/public/job-tracker/`.

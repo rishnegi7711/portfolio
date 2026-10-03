@@ -59,6 +59,8 @@ template, not a dark neon dev site.
 - Links are always underlined, not colour-only (colour alone isn't an accessible link signal).
   On hover, darken or thicken the underline rather than lightening it — lightening reads as a
   wash-out, not emphasis.
+- The phone number is never shown as text on the site. It may appear inside the
+  downloadable CV (`public/Rishi-Negi-CV.pdf`); that's my decision.
 - Hero fact line is the city plus coordinates only ("London · 51.51° N, 0.13° W"). Right to
   work is not shown anywhere on the site (it stays only in `content.md` as a fact).
 - Headings use `text-wrap: balance` (already set globally in `index.css` for h1–h3). Compound
