@@ -15,6 +15,7 @@ const linkStyle =
 function ProjectEntry({ project }: { project: Project }) {
   const headingId = `${project.id}-heading`
   const figures = project.figures ?? []
+  const lastFigure = figures.at(-1)
   // Anything drawn above the notes (screenshots or the terminal) for the margin note to point at.
   const hasFigureAbove = figures.length > 0 || project.terminal !== undefined
 
@@ -38,9 +39,22 @@ function ProjectEntry({ project }: { project: Project }) {
 
       {figures.length > 0 && (
         <div className="mt-8 flex flex-col gap-8">
-          {figures.map((figure, i) => (
+          {figures.slice(0, -1).map((figure, i) => (
             <ProjectFigure key={figure.src} figure={figure} number={i + 1} />
           ))}
+          {/* The last figure (Applyd's form) is narrow, so the note sits in the space beside
+              it on md+, its arrow level with the form's first error message. Below md
+              it drops under the figure and points up. */}
+          {lastFigure && (
+            <div className="flex flex-col gap-6 md:flex-row md:gap-14">
+              <ProjectFigure figure={lastFigure} number={figures.length} />
+              {/* 205px: the error sits 221px down the 384px-wide form; the arrow's head is
+                  16px below the note's top. */}
+              <div className="md:mt-[205px] md:max-w-52">
+                <MarginNote text={project.annotation} pointsTo="left" />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -58,17 +72,19 @@ function ProjectEntry({ project }: { project: Project }) {
           (hasFigureAbove ? '' : 'md:mt-10')
         }
       >
-        <div className="md:col-start-2 md:row-start-1">
-          <MarginNote
-            text={project.annotation}
-            pointsTo={figures.length > 0 ? 'up' : project.terminal ? 'upLeft' : 'left'}
-            // Same text as TerminalReplay's figcaption, so the arrow lands at its end.
-            captionLength={
-              project.terminal &&
-              `Fig. ${figures.length + 1} — ${project.terminal.caption}`.length
-            }
-          />
-        </div>
+        {!lastFigure && (
+          <div className="md:col-start-2 md:row-start-1">
+            <MarginNote
+              text={project.annotation}
+              pointsTo={project.terminal ? 'upLeft' : 'left'}
+              // Same text as TerminalReplay's figcaption, so the arrow lands at its end.
+              captionLength={
+                project.terminal &&
+                `Fig. ${figures.length + 1} — ${project.terminal.caption}`.length
+              }
+            />
+          </div>
+        )}
 
         <div className="md:col-start-1 md:row-start-1">
           <h4 className="font-display text-xl text-ink">How it works</h4>
@@ -110,7 +126,7 @@ function ProjectFigure({ figure, number }: { figure: Figure; number: number }) {
   const isPortrait = figure.height > figure.width
 
   return (
-    <figure className={isPortrait ? 'max-w-sm' : undefined}>
+    <figure className={isPortrait ? 'w-full max-w-sm shrink-0' : undefined}>
       <button
         type="button"
         aria-haspopup="dialog"

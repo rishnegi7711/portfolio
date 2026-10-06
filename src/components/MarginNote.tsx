@@ -23,13 +23,12 @@ const ARROWS = {
 
 type MarginNoteProps = {
   text: string
-  /** "up": at the thing above the note (shown at every width, since the note sits right
-   *  under it). "left": across the column gap at the text beside it, so md+ only, once
-   *  the note is in the margin.
+  /** "left": below md, up at the thing above the note (it sits right under it); on md+,
+   *  left across the gap at whatever is beside it (a narrow figure, or the text).
    *  "upLeft": like "up" below md; on md+, a longer arrow from the note up-left to the
    *  bottom edge of the full-width figure above, just past the end of its caption.
    *  "line": left, back across the Experience dates column to the timeline line. */
-  pointsTo: 'up' | 'left' | 'upLeft' | 'line'
+  pointsTo: 'left' | 'upLeft' | 'line'
   /** "upLeft" only: the caption's length in characters. It's monospace, so its end is
    *  that many `ch` from the left of the note's positioned ancestor (the notes grid). */
   captionLength?: number
@@ -86,12 +85,7 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
         (pointsTo === 'upLeft' ? ' md:static' : '')
       }
     >
-      {pointsTo === 'left' ? (
-        <Arrow
-          arrow={ARROWS.left}
-          className="absolute top-0.5 -left-11 hidden h-6 w-10 md:block"
-        />
-      ) : pointsTo === 'line' ? (
+      {pointsTo === 'line' ? (
         // xMinYMid slice: scaled to the box's height and pinned left, so on narrow screens
         // the box crops the arrow's tail end and the head still lands by the line.
         // −8px / −16px: the head stops 6px short of the timeline's swerve (12px / 20px).
@@ -101,9 +95,12 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
           className="absolute right-full -top-0.5 h-6 w-[calc(6.5rem-8px)] md:w-[calc(11.5rem-16px)]"
         />
       ) : (
+        <Arrow arrow={ARROWS.up} className="mb-1 ml-2 h-10 w-8 md:hidden" />
+      )}
+      {pointsTo === 'left' && (
         <Arrow
-          arrow={ARROWS.up}
-          className={'mb-1 ml-2 h-10 w-8' + (pointsTo === 'upLeft' ? ' md:hidden' : '')}
+          arrow={ARROWS.left}
+          className="absolute top-0.5 -left-11 hidden h-6 w-10 md:block"
         />
       )}
       {pointsTo === 'upLeft' && (
