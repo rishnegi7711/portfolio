@@ -200,7 +200,7 @@ export const projects: Project[] = [
           'Applyd board with four status columns (Applied, Interviewing, Rejected, Offer), ' +
           'each holding application cards with company, role and date.',
         caption: 'Board view by status',
-        full: { src: '/job-tracker/board-full.webp', width: 2874, height: 1552 },
+        full: { src: '/job-tracker/board-full.webp', width: 2874, height: 760 },
       },
       {
         src: '/job-tracker/detail.webp',
