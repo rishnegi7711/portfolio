@@ -330,6 +330,12 @@ function Hero() {
           <a href={identity.linkedin} className={linkStyle}>
             LinkedIn
           </a>
+          {/* Up here too, since it's what a recruiter wants first. New tab, as in Contact. */}
+          {identity.cvUrl && (
+            <a href={identity.cvUrl} target="_blank" rel="noopener" className={linkStyle}>
+              CV (PDF)
+            </a>
+          )}
         </div>
       </Container>
     </section>

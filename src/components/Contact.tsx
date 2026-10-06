@@ -80,16 +80,12 @@ function Contact() {
           <a href={identity.linkedin} className={linkStyle}>
             LinkedIn
           </a>
+          {/* A new tab, so the browser's PDF viewer (which has its own download button)
+              doesn't replace the page. */}
           {identity.cvUrl && (
-            <>
-              {/* A new tab, so the browser's PDF viewer doesn't replace the page. */}
-              <a href={identity.cvUrl} target="_blank" rel="noopener" className={linkStyle}>
-                CV (PDF)
-              </a>
-              <a href={identity.cvUrl} download="Rishi-Negi-CV.pdf" className={linkStyle}>
-                Download CV
-              </a>
-            </>
+            <a href={identity.cvUrl} target="_blank" rel="noopener" className={linkStyle}>
+              CV (PDF)
+            </a>
           )}
         </div>
       </Container>
