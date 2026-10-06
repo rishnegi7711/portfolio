@@ -16,7 +16,12 @@ function Header() {
       <header
         className="sticky top-0 z-40 border-b border-accent-muted/40 bg-paper"
       >
-        <Container className="flex h-12 items-center justify-between gap-2 sm:gap-4">
+        {/* Below 375px the name and four links only fit inside the gutters with tighter
+            gaps and tracking. */}
+        <Container
+          className="flex h-12 items-center justify-between gap-2 max-[374px]:gap-1
+            max-[374px]:tracking-tight sm:gap-4"
+        >
           <a
             href="#"
             aria-label="Back to top"
@@ -28,12 +33,13 @@ function Header() {
           </a>
 
           <nav aria-label="Primary">
-            <ul className="flex items-center gap-2 font-mono text-xs sm:gap-5 sm:text-sm">
+            {/* py-3.5 on the links keeps each tap target 44px tall. */}
+            <ul className="flex items-center gap-2 font-mono text-xs max-[374px]:gap-1 sm:gap-5 sm:text-sm">
               {sections.map((section) => (
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="inline-block py-3 -my-3 text-ink-muted underline
+                    className="inline-block py-3.5 -my-3.5 text-ink-muted underline
                       decoration-accent-muted underline-offset-4 transition-colors
                       hover:text-ink hover:decoration-accent focus-visible:outline
                       focus-visible:outline-2 focus-visible:outline-accent"
