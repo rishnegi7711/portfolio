@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { experience, type ExperienceEntry, type Point } from '../content'
 import { gsap, playOnceInView, ScrollTrigger, useGSAP } from '../lib/gsap'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
 import MarginNote from './MarginNote'
 import PenMark from './PenMark'
@@ -210,17 +211,17 @@ function Entry({ entry }: { entry: ExperienceEntry }) {
 }
 
 function PointText({ point }: { point: Point }) {
-  if (typeof point === 'string') return point
+  if (typeof point === 'string') return noBreakHyphens(point)
   const [before, metric, after] = point
   return (
     <>
-      {before}
+      {noBreakHyphens(before)}
       {/* 0.25s: the trigger fires when the nib's target passes, and the smoothed nib
           itself arrives a moment later (scrub: 0.5). */}
       <PenMark kind="highlight" delay={0.25}>
         {metric}
       </PenMark>
-      {after}
+      {noBreakHyphens(after)}
     </>
   )
 }

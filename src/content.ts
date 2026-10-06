@@ -201,8 +201,8 @@ export const projects: Project[] = [
     figures: [
       {
         src: '/job-tracker/board.webp',
-        width: 1792,
-        height: 362,
+        width: 872,
+        height: 176,
         alt:
           'Applyd board with four status columns (Applied, Interviewing, Rejected, Offer), ' +
           'each holding application cards with company, role and date.',
@@ -211,8 +211,8 @@ export const projects: Project[] = [
       },
       {
         src: '/job-tracker/detail.webp',
-        width: 1792,
-        height: 798,
+        width: 872,
+        height: 389,
         alt:
           'Application detail for Fernleaf Studio: a timeline of four interview rounds, ' +
           'three passed and the final round pending.',
