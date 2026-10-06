@@ -49,7 +49,8 @@ function ProjectEntry({ project }: { project: Project }) {
             <div className="flex flex-col gap-6 md:flex-row md:gap-14">
               <ProjectFigure figure={lastFigure} number={figures.length} />
               {/* 205px: the error sits 221px down the 384px-wide form; the arrow's head is
-                  16px below the note's top. */}
+                  16px below the note's top. Measured from the error text's position in
+                  validation.png: re-measure if that screenshot or its crop changes. */}
               <div className="md:mt-[205px] md:max-w-52">
                 <MarginNote text={project.annotation} pointsTo="left" />
               </div>
