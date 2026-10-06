@@ -141,8 +141,9 @@ function Experience() {
   )
 }
 
-/** One timeline entry: dates on the left, what happened on the right. Its tick draws
- *  when the nib reaches it. */
+/** One timeline entry: on sm+, dates on the left and what happened on the right; below
+ *  sm, one column in a narrow gutter beside the line, dates on top. Its tick draws when
+ *  the nib reaches it. */
 function Entry({ entry }: { entry: ExperienceEntry }) {
   const tickRef = useRef<SVGSVGElement>(null)
 
@@ -161,22 +162,27 @@ function Entry({ entry }: { entry: ExperienceEntry }) {
   })
 
   return (
-    // pt-2 + half the dates' 1rem line height puts the tick 1rem down (top-4), level with
-    // the middle of the heading's first line, and on the line.
-    <li className="grid grid-cols-[6rem_minmax(0,1fr)] gap-x-4 pb-12 last:pb-0 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-x-8">
-      <p className="relative pt-2 pl-4 font-mono text-xs leading-4 text-ink-muted">
-        <svg
-          ref={tickRef}
-          viewBox="0 0 10 2"
-          aria-hidden="true"
-          className="absolute top-4 left-0 h-0.5 w-2.5 -translate-y-1/2 text-accent-muted"
-        >
-          <path d="M 0 1 H 10" pathLength={1} {...strokeProps} strokeLinecap="butt" />
-        </svg>
-        {entry.dates}
-      </p>
+    // The dates start the entry at every width, so pt-2 + half their 1rem line height
+    // puts the tick 1rem down (top-4), on the line and level with the dates (and, on sm+,
+    // with the middle of the heading's first line beside them). pl-6 below sm: room for
+    // the tick and the line's 12px swerve.
+    <li
+      className={
+        'relative pb-12 pl-6 last:pb-0 sm:grid sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-x-4 ' +
+        'sm:pl-0 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-x-8'
+      }
+    >
+      <svg
+        ref={tickRef}
+        viewBox="0 0 10 2"
+        aria-hidden="true"
+        className="absolute top-4 left-0 h-0.5 w-2.5 -translate-y-1/2 text-accent-muted"
+      >
+        <path d="M 0 1 H 10" pathLength={1} {...strokeProps} strokeLinecap="butt" />
+      </svg>
+      <p className="pt-2 font-mono text-xs leading-4 text-ink-muted sm:pl-4">{entry.dates}</p>
 
-      <div>
+      <div className="mt-1 sm:mt-0">
         <h3 className="font-display text-2xl text-ink">{entry.org}</h3>
         <p className="mt-1 font-mono text-xs text-ink-muted">
           {entry.place ? `${entry.role} · ${entry.place}` : entry.role}
@@ -192,8 +198,9 @@ function Entry({ entry }: { entry: ExperienceEntry }) {
         )}
         {/* At the bottom of the entry, so the note sits at the boundary with the next
             (older) role, and its arrow points back at the line there. */}
+        {/* ml-10 below sm: the gutter alone is too narrow for the arrow to reach the line. */}
         {entry.note && (
-          <div className="mt-6">
+          <div className="mt-6 ml-10 sm:ml-0">
             <MarginNote text={entry.note} pointsTo="line" />
           </div>
         )}

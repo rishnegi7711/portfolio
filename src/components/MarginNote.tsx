@@ -88,12 +88,16 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
     >
       {pointsTo === 'line' ? (
         // xMinYMid slice: scaled to the box's height and pinned left, so on narrow screens
-        // the box crops the arrow's tail end and the head still lands by the line.
-        // −8px / −16px: the head stops 6px short of the timeline's swerve (12px / 20px).
+        // the box crops the arrow's tail end and the head still lands by the line. Each
+        // width is the note's distance from the line (below sm: 1.5rem gutter + 2.5rem
+        // indent; sm: 6rem dates + 1rem gap...) less the swerve (12px / 20px) and a gap.
         <Arrow
           arrow={ARROWS.line}
           preserveAspectRatio="xMinYMid slice"
-          className="absolute right-full -top-0.5 h-6 w-[calc(6.5rem-8px)] md:w-[calc(11.5rem-16px)]"
+          className={
+            'absolute right-full -top-0.5 h-6 w-[calc(4rem-18px)] sm:w-[calc(6.5rem-8px)] ' +
+            'md:w-[calc(11.5rem-16px)]'
+          }
         />
       ) : (
         <Arrow arrow={ARROWS.up} className="mb-1 ml-2 h-10 w-8 md:hidden" />
