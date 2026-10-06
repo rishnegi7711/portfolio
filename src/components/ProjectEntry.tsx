@@ -11,14 +11,20 @@ const linkStyle =
   'focus-visible:outline-2 focus-visible:outline-accent'
 
 
-/** One project as a notebook entry: what it is, the evidence (figures), then how it
- *  works, with a margin note glossing the mechanism. */
+/** One project as a notebook entry: what it is, then the mechanism first (architecture,
+ *  the annotated figure or terminal), how it works, and the other screens last. */
 function ProjectEntry({ project }: { project: Project }) {
   const headingId = `${project.id}-heading`
   const figures = project.figures ?? []
+  // The last figure is the annotated one (Applyd's form); the rest are a strip of screens.
   const lastFigure = figures.at(-1)
-  // Anything drawn above the notes (screenshots or the terminal) for the margin note to point at.
-  const hasFigureAbove = figures.length > 0 || project.terminal !== undefined
+  const screens = figures.slice(0, -1)
+  // Figures are numbered in reading order.
+  let figureCount = 0
+  const architectureNumber = project.architecture ? ++figureCount : 0
+  const lastFigureNumber = lastFigure ? ++figureCount : 0
+  const terminalNumber = project.terminal ? ++figureCount : 0
+  const firstScreenNumber = figureCount + 1
 
   return (
     <article aria-labelledby={headingId} className="py-14 first:pt-10">
@@ -40,40 +46,40 @@ function ProjectEntry({ project }: { project: Project }) {
         </p>
       </header>
 
-      {figures.length > 0 && (
-        <div className="mt-8 flex flex-col gap-8">
-          {figures.slice(0, -1).map((figure, i) => (
-            <ProjectFigure key={figure.src} figure={figure} number={i + 1} />
-          ))}
-          {/* The last figure (Applyd's form) is narrow, so the note sits in the space beside
-              it on md+, its arrow level with the form's first error message. Below md
-              it drops under the figure and points up. */}
-          {lastFigure && (
-            <div className="flex flex-col gap-6 md:flex-row md:gap-14">
-              <ProjectFigure figure={lastFigure} number={figures.length} />
-              {/* 205px: the error sits 221px down the 384px-wide form; the arrow's head is
-                  16px below the note's top. Measured from the error text's position in
-                  validation.png: re-measure if that screenshot or its crop changes. */}
-              <div className="md:mt-[205px] md:max-w-52">
-                <MarginNote text={project.annotation} pointsTo="left" />
-              </div>
-            </div>
-          )}
+      {project.architecture && (
+        <div className="mt-8">
+          <ArchitectureDiagram architecture={project.architecture} number={architectureNumber} />
+        </div>
+      )}
+
+      {/* The form is narrow, so the note sits in the space beside it on md+, its arrow
+          level with the form's first error message. Below md it drops under the figure
+          and points up. */}
+      {lastFigure && (
+        <div className="mt-10 flex flex-col gap-6 md:flex-row md:gap-14">
+          <ProjectFigure figure={lastFigure} number={lastFigureNumber} />
+          {/* 205px: the error sits 221px down the 384px-wide form; the arrow's head is
+              16px below the note's top. Measured from the error text's position in
+              validation.png: re-measure if that screenshot or its crop changes. */}
+          <div className="md:mt-[205px] md:max-w-52">
+            <MarginNote text={project.annotation} pointsTo="left" />
+          </div>
         </div>
       )}
 
       {project.terminal && (
         <div className="mt-8">
-          <TerminalReplay terminal={project.terminal} number={figures.length + 1} />
+          <TerminalReplay terminal={project.terminal} number={terminalNumber} />
         </div>
       )}
 
-      {/* Note first in the DOM so on mobile it lands right under the figure it points
-          at; on md+ the grid lifts it into the right-hand margin column. */}
+      {/* Note first in the DOM so on mobile it lands right under the terminal it points
+          at; on md+ the grid lifts it into the right-hand margin column. mt-6 under the
+          terminal: the upLeft arrow's height assumes it. */}
       <div
         className={
-          'relative mt-6 flex flex-col gap-8 md:grid md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-12 ' +
-          (hasFigureAbove ? '' : 'md:mt-10')
+          'relative flex flex-col gap-8 md:grid md:grid-cols-[minmax(0,1fr)_13rem] md:gap-x-12 ' +
+          (project.terminal ? 'mt-6' : 'mt-10')
         }
       >
         {!lastFigure && (
@@ -84,7 +90,7 @@ function ProjectEntry({ project }: { project: Project }) {
               // Same text as TerminalReplay's figcaption, so the arrow lands at its end.
               captionLength={
                 project.terminal &&
-                `Fig. ${figures.length + 1} — ${project.terminal.caption}`.length
+                `Fig. ${terminalNumber} — ${project.terminal.caption}`.length
               }
             />
           </div>
@@ -100,12 +106,13 @@ function ProjectEntry({ project }: { project: Project }) {
         </div>
       </div>
 
-      {project.architecture && (
-        <div className="mt-12">
-          <ArchitectureDiagram
-            architecture={project.architecture}
-            number={figures.length + (project.terminal ? 2 : 1)}
-          />
+      {/* The other screens, smaller: evidence it's a real app, after the mechanism.
+          Each opens full size. */}
+      {screens.length > 0 && (
+        <div className="mt-12 grid items-start gap-6 md:grid-cols-2">
+          {screens.map((figure, i) => (
+            <ProjectFigure key={figure.src} figure={figure} number={firstScreenNumber + i} />
+          ))}
         </div>
       )}
 
