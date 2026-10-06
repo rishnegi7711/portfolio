@@ -30,3 +30,6 @@ notes/
 
 # Impeccable critique snapshots (local working notes)
 .impeccable/critique/
+
+# Full-resolution screenshot sources; only the exported WebPs ship
+public/job-tracker/*.png

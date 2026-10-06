@@ -92,6 +92,8 @@ export type Figure = {
   alt: string
   /** shown after an auto-numbered "Fig. n —" */
   caption: string
+  /** the uncropped screenshot, opened by clicking the figure */
+  full: { src: string; width: number; height: number }
 }
 
 export type ArchitectureNode = {
@@ -192,30 +194,33 @@ export const projects: Project[] = [
     figures: [
       {
         src: '/job-tracker/board.webp',
-        width: 1440,
-        height: 417,
+        width: 1792,
+        height: 362,
         alt:
           'Applyd board with four status columns (Applied, Interviewing, Rejected, Offer), ' +
           'each holding application cards with company, role and date.',
         caption: 'Board view by status',
+        full: { src: '/job-tracker/board-full.webp', width: 2874, height: 1552 },
       },
       {
         src: '/job-tracker/detail.webp',
-        width: 1440,
-        height: 781,
+        width: 1792,
+        height: 798,
         alt:
           'Application detail for Fernleaf Studio: a timeline of four interview rounds, ' +
           'three passed and the final round pending.',
         caption: 'Per-application interview history',
+        full: { src: '/job-tracker/detail-full.webp', width: 2872, height: 1558 },
       },
       {
         src: '/job-tracker/validation.webp',
-        width: 1440,
-        height: 780,
+        width: 768,
+        height: 1296,
         alt:
           'Add Application form with inline errors: "Company name is required", ' +
           '"Please select a status" and "Please select a date".',
         caption: 'Form validation from the shared Zod schema',
+        full: { src: '/job-tracker/validation-full.webp', width: 2874, height: 1556 },
       },
     ],
     architecture: {

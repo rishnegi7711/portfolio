@@ -33,3 +33,28 @@ h3 {
   font-family: var(--font-display);
   text-wrap: balance;
 }
+
+/* Figure lightbox: fade in/out. With reduced motion it simply appears and disappears.
+   allow-discrete keeps the dialog in the top layer until the fade-out finishes. */
+@media (prefers-reduced-motion: no-preference) {
+  .figure-dialog,
+  .figure-dialog::backdrop {
+    opacity: 0;
+    transition:
+      opacity 200ms ease-out,
+      display 200ms allow-discrete,
+      overlay 200ms allow-discrete;
+  }
+
+  .figure-dialog[open],
+  .figure-dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .figure-dialog[open],
+    .figure-dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}
