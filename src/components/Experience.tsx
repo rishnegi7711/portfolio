@@ -3,7 +3,7 @@ import { experience, type ExperienceEntry, type Point } from '../content'
 import { gsap, playOnceInView, ScrollTrigger, useGSAP } from '../lib/gsap'
 import Container from './Container'
 import MarginNote from './MarginNote'
-import PenUnderline from './PenUnderline'
+import PenMark from './PenMark'
 
 // The line starts at the first tick (top-4). x = 0.75 is the middle of a 1.5px stroke
 // at the column's left edge, where the ticks meet it.
@@ -35,7 +35,7 @@ const strokeProps = {
  *
  *  Sync: the scrub runs from the line's top reaching 75% of the viewport to its bottom
  *  reaching 75%, so the nib's target is always wherever the line crosses that 75% mark.
- *  Every other trigger here (ticks, underlines, the margin note) is playOnceInView, which
+ *  Every other trigger here (ticks, highlights, the margin note) is playOnceInView, which
  *  also fires at "top 75%" — i.e. exactly when the nib's target reaches that element. */
 function Experience() {
   const timelineRef = useRef<HTMLDivElement>(null)
@@ -210,7 +210,9 @@ function PointText({ point }: { point: Point }) {
       {before}
       {/* 0.25s: the trigger fires when the nib's target passes, and the smoothed nib
           itself arrives a moment later (scrub: 0.5). */}
-      <PenUnderline delay={0.25}>{metric}</PenUnderline>
+      <PenMark kind="highlight" delay={0.25}>
+        {metric}
+      </PenMark>
       {after}
     </>
   )

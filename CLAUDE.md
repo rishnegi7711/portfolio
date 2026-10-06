@@ -58,7 +58,8 @@ template, not a dark neon dev site.
   (Impeccable's design-review hook flags side-tab borders as an AI-slop tell).
 - Links are always underlined, not colour-only (colour alone isn't an accessible link signal).
   On hover, darken or thicken the underline rather than lightening it — lightening reads as a
-  wash-out, not emphasis.
+  wash-out, not emphasis. Underlines mean links only: non-link emphasis (Experience's
+  metrics) uses `PenMark`'s highlighter stroke instead.
 - The phone number is never shown as text on the site. It may appear inside the
   downloadable CV (`public/Rishi-Negi-CV.pdf`); that's my decision.
 - Hero fact line is the city plus coordinates only ("London · 51.51° N, 0.13° W"). Right to
@@ -81,8 +82,8 @@ template, not a dark neon dev site.
   3. Job Tracker: an architecture diagram (React client ↔ shared Zod schemas ↔ Express API ↔
      PostgreSQL) whose connections draw in on scroll.
   4. Experience timeline: a reading-progress line. A pen nib travels down the dates column
-     as you scroll, drawing the line behind it; each tick, and each key metric's pen
-     underline, draws once as the nib passes it. At the switch to frontend the line swerves
+     as you scroll, drawing the line behind it; each tick, and each key metric's
+     highlighter stroke, draws once as the nib passes it. At the switch to frontend the line swerves
      out and back once (the nib follows it via MotionPath), and the margin note there types
      itself in, then draws its arrow to the swerve.
 - Micro-interactions (hover, focus, state changes): 150–400ms, CSS transitions, not GSAP.
@@ -90,7 +91,7 @@ template, not a dark neon dev site.
 - No ScrollSmoother, no scroll-jacking, no `scrub`. ScrollTrigger only starts a timeline
   (`once: true`). The one exception: the Experience timeline's line and nib are scrubbed
   (smoothed), as a reading-progress line. It is the only scroll-linked animation; keep it
-  that way. Everything it passes (ticks, underlines, note) still plays once.
+  that way. Everything it passes (ticks, highlights, note) still plays once.
 - Shared eases: type reveals `power3.out`, pen strokes `power2.inOut` (or `power2.out` for
   short strokes), typing `none`.
 - All GSAP code goes through `useGSAP` (never a bare `useEffect`), so it's cleaned up on unmount.

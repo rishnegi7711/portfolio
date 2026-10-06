@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { contact, identity } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
-import PenUnderline from './PenUnderline'
+import PenMark from './PenMark'
 
 const linkStyle =
   'inline-block py-3 -my-3 underline decoration-accent-muted underline-offset-4 ' +
@@ -56,9 +56,9 @@ function Contact() {
             }
           >
             <span ref={emailRef}>
-              <PenUnderline className="text-accent-muted transition-colors group-hover:text-accent">
+              <PenMark className="text-accent-muted transition-colors group-hover:text-accent">
                 {identity.email}
-              </PenUnderline>
+              </PenMark>
             </span>
           </a>
           <div className="flex items-center gap-3">
