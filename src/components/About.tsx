@@ -27,6 +27,7 @@ import {
 } from 'react-icons/si'
 import { identity, story, toolkit } from '../content'
 import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
 
 // Toolkit names → Simple Icons, each with its brand colour (Simple Icons' hex, shown on
@@ -115,7 +116,7 @@ function About() {
           />
           <div className="flex max-w-[65ch] flex-col gap-5 text-lg leading-relaxed text-ink md:col-start-1 md:row-start-1">
             {story.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <p key={paragraph}>{noBreakHyphens(paragraph)}</p>
             ))}
           </div>
         </div>

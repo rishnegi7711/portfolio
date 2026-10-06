@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { contact, identity } from '../content'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
 import PenUnderline from './PenUnderline'
 
@@ -40,7 +41,9 @@ function Contact() {
         <h2 id="contact-heading" className="font-display text-3xl text-ink sm:text-4xl">
           Contact
         </h2>
-        <p className="mt-4 max-w-[65ch] text-lg leading-relaxed text-ink">{contact.line}</p>
+        <p className="mt-4 max-w-[65ch] text-lg leading-relaxed text-ink">
+          {noBreakHyphens(contact.line)}
+        </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-4">
           {/* The pen stroke is this link's underline, so it's never colour-only; on hover

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { identity } from '../content'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
 
 type ArrowGeometry = {
@@ -19,7 +20,7 @@ const ARROWHEAD_SPREAD = (26 * Math.PI) / 180 // angle between the two wings and
 const WOBBLE = 6 // px of horizontal give in the curve's control points, for a hand-drawn feel
 const LOOP_INSET_Y = 8 // px the loop's SVG extends above/below the word (-inset-y-2)
 
-// One authored pen loop around "full‑stack", drawn in a 200×60 box that's stretched over
+// One authored pen loop around "full-stack", drawn in a 200×60 box that's stretched over
 // the word (preserveAspectRatio="none"). Starts top-right, runs anticlockwise, comes back
 // round and overshoots past its start with a short tail. Lopsided (fuller on the right),
 // and tilted about -2° (left side lower, right side higher). The left side sits closer
@@ -28,12 +29,12 @@ const LOOP_PATH =
   'M 170 5 C 128 0, 60 3, 24 8 C 10 11, 9 26, 11 41 C 14 55, 46 60, 100 58 ' +
   'C 152 57, 192 52, 197 34 C 201 18, 193 4, 158 2 C 142 1, 126 2, 110 5'
 
-/** Measures the live position of the headline's "full‑stack" span, shifts the note
+/** Measures the live position of the headline's "full-stack" span, shifts the note
  *  to sit almost directly under it (clamped to the container's right edge so it can
  *  never overflow, and on md+ — where the note floats out of flow — kept clear of
  *  the fact line in the left column), and draws a short curve
  *  + open arrowhead from the note to the bottom of the pen loop around the word. Word
- *  position can't be predicted with CSS alone: at narrow widths "full‑stack" wraps
+ *  position can't be predicted with CSS alone: at narrow widths "full-stack" wraps
  *  to its own line at the LEFT edge, but at wider widths it sits at the RIGHT end
  *  of a long line — opposite positions for the same word, which only measuring the
  *  live layout can resolve. */
@@ -117,7 +118,7 @@ function useAnnotationArrow() {
 
 const FONT_WAIT_LIMIT = 800 // ms; start the entrance even if fonts are still loading
 
-/** The hero's entrance: name → role line → pen loop around "full‑stack" → note types in →
+/** The hero's entrance: name → role line → pen loop around "full-stack" → note types in →
  *  arrow draws to the loop (~1.9s, plays once). Only built when the user hasn't asked
  *  for reduced motion; otherwise nothing runs and the DOM is already the final state. */
 function useHeroTimeline(containerRef: RefObject<HTMLDivElement | null>) {
@@ -242,7 +243,7 @@ function Hero() {
             <p className="hero-role mt-2 max-w-xl font-display text-2xl leading-snug text-ink sm:text-3xl">
               {beforeFullStack}
               <span ref={targetRef} className="relative ml-1 text-accent">
-                {fullStack}
+                {noBreakHyphens(fullStack)}
                 {/* Stretched over the word with a negative inset; non-scaling-stroke
                     keeps the line 1.5px however much the box is stretched. */}
                 <svg
@@ -262,7 +263,7 @@ function Hero() {
               </span>
             </p>
 
-            {/* Shifted under "full‑stack" via inline style (see useAnnotationArrow) so
+            {/* Shifted under "full-stack" via inline style (see useAnnotationArrow) so
                 it stays close to the word whether that word wraps to the left edge
                 (narrow viewports) or the end of a long line (wide viewports). With
                 left-0, the same margin-left also places it when it's absolute. */}
@@ -293,7 +294,21 @@ function Hero() {
               'focus-visible:outline-2 focus-visible:outline-accent py-2.5 -my-2.5 inline-block'
             }
           >
-            View work →
+            View work
+            <svg
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              className="ml-1.5 inline-block h-[0.85em] w-[0.85em] align-[-0.05em]"
+            >
+              <path
+                d="M 2 8 H 13 M 9 4 L 13 8 L 9 12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
           </a>
           <a
             href={`mailto:${identity.email}`}
@@ -321,11 +336,10 @@ function Hero() {
   )
 }
 
-/** Splits the role line on the non-breaking hyphen (U+2011) in "full‑stack" so the
- *  word can be wrapped in an accent span; a plain hyphen edit would silently skip
- *  the split, so keep this character matching content.ts's heroRole. */
+/** Splits the role line at "full-stack" so the word can be wrapped in an accent span;
+ *  keep this marker matching content.ts's heroRole, or the split is silently skipped. */
 function splitOnFullStack(headline: string): [string, string] {
-  const marker = 'full‑stack'
+  const marker = 'full-stack'
   const index = headline.indexOf(marker)
   if (index === -1) return [headline, '']
   return [headline.slice(0, index), headline.slice(index)]

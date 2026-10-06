@@ -64,8 +64,10 @@ template, not a dark neon dev site.
 - Hero fact line is the city plus coordinates only ("London · 51.51° N, 0.13° W"). Right to
   work is not shown anywhere on the site (it stays only in `content.md` as a fact).
 - Headings use `text-wrap: balance` (already set globally in `index.css` for h1–h3). Compound
-  words like "full-stack" use a non-breaking hyphen (U+2011 `‑`) in copy so they don't break
-  mid-word at odd viewport widths.
+  words like "full-stack" use a normal hyphen in copy and render through `noBreakHyphens()`
+  (`src/lib/noBreakHyphens.tsx`), which wraps each hyphenated token in a `white-space: nowrap`
+  span so it doesn't break mid-word at odd viewport widths. Never use U+2011 `‑` or other
+  characters the fonts lack a glyph for (e.g. `→`): use the helper, or an inline SVG.
 
 ## Motion principles
 

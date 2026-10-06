@@ -24,8 +24,8 @@ export type Identity = {
 
 export const identity: Identity = {
   name: 'Rishi Negi',
-  roleHeadline: 'Frontend engineer (React + TypeScript), growing into full‑stack',
-  heroRole: 'Frontend engineer, growing into full‑stack',
+  roleHeadline: 'Frontend engineer (React + TypeScript), growing into full-stack',
+  heroRole: 'Frontend engineer, growing into full-stack',
   location: 'London, UK',
   coordinates: '51.51° N, 0.13° W',
   email: 'rishnegi28@gmail.com',
@@ -54,10 +54,10 @@ export const sections = [
 
 /** The Contact section's line and the email copy button's status messages. */
 export const contact = {
-  line: 'Hiring for a frontend or full‑stack role? Email is the quickest way to reach me.',
+  line: 'Hiring for a frontend or full-stack role? Email is the quickest way to reach me.',
   copied: 'Copied',
   // Shown when the Clipboard API fails; the address is selected for the shortcut.
-  copyFallback: 'Press Ctrl+C or ⌘C to copy',
+  copyFallback: 'Press Ctrl+C or Cmd+C to copy',
 }
 
 /** The footer colophon: what the site is built with, each linking to its site. */
@@ -76,7 +76,7 @@ export const story = [
   'In 2022 I moved into frontend work, building React apps used by field and sales ' +
     'agents. In 2023 I came to London for an MSc in Software Engineering and used the ' +
     'time to learn the backend: Node, Express and PostgreSQL. Applyd is what came out of that.',
-  "Now I'm looking for a junior frontend or full‑stack role in London, on a team that " +
+  "Now I'm looking for a junior frontend or full-stack role in London, on a team that " +
     'goes deep technically and gives people room to own their work.',
 ]
 
@@ -244,14 +244,13 @@ export const projects: Project[] = [
     name: 'CleanDeps CLI',
     descriptor: 'npm package',
     status: 'Published, v0.2.0',
-    // Flags use non-breaking hyphens (‑) so "‑‑lock" can't break across lines.
     summary:
       'One cross-platform command that safely wipes node_modules and reinstalls. ' +
-      'Supports npm, yarn and bun. Opt-in flags also delete the lockfile (‑‑lock), ' +
-      'clear the cache (‑‑cache) or run a script afterwards (‑‑run\u00A0dev).',
-    // "rm\u00A0‑rf": a non-breaking space and a non-breaking hyphen keep the command on one line.
+      'Supports npm, yarn and bun. Opt-in flags also delete the lockfile (--lock), ' +
+      'clear the cache (--cache) or run a script afterwards (--run\u00A0dev).',
+    // "rm\u00A0-rf": the non-breaking space and noBreakHyphens keep the command on one line.
     annotation:
-      'Got tired of typing rm\u00A0‑rf node_modules && npm i several times a week, so made ' +
+      'Got tired of typing rm\u00A0-rf node_modules && npm i several times a week, so made ' +
       'it one command — and used it as a reason to learn how Node CLIs work from scratch.',
     stack: [{ label: 'Built with', items: ['Node.js', 'npm'] }],
     engineeringStory: [
@@ -259,11 +258,11 @@ export const projects: Project[] = [
         'bun.lockb, then yarn.lock; first match wins. With no lockfile it stops instead of guessing.',
       'Package managers live in one array, so supporting a new one means adding one object.',
       'Checks before deleting: package.json exists and is valid JSON, a lockfile exists, ' +
-        'and the ‑‑run script is defined. If any check fails, nothing is touched.',
+        'and the --run script is defined. If any check fails, nothing is touched.',
       'Flags are opt-in; plain cleandeps does the same clean reinstall.',
       "If node_modules doesn't exist, it skips the delete and just installs instead of crashing.",
       "Cross-platform: uses Node's fs and path modules instead of shell commands like " +
-        'rm\u00A0‑rf, so it behaves the same on macOS, Linux and Windows.',
+        'rm\u00A0-rf, so it behaves the same on macOS, Linux and Windows.',
     ],
     links: [
       { label: 'npm', url: 'https://www.npmjs.com/package/cleandeps-cli' },

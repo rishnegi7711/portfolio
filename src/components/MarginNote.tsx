@@ -1,5 +1,6 @@
 import { type CSSProperties, useRef } from 'react'
 import { gsap, playOnceInView, SplitText, useGSAP } from '../lib/gsap'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 
 // Hand-authored pen arrows, each one path: a slightly bent line, then an open
 // arrowhead (wing → tip → wing) angled off the line's direction at the tip, like the
@@ -115,7 +116,7 @@ function MarginNote({ text, pointsTo, captionLength = 0 }: MarginNoteProps) {
           SplitText's aria-label on a span isn't reliably read. */}
       <span className="sr-only">{text}</span>
       <span className="margin-note-text" aria-hidden="true">
-        {text}
+        {noBreakHyphens(text)}
       </span>
     </p>
   )

@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import type { Figure, Project } from '../content'
+import { noBreakHyphens } from '../lib/noBreakHyphens'
 import ArchitectureDiagram from './ArchitectureDiagram'
 import MarginNote from './MarginNote'
 import TerminalReplay from './TerminalReplay'
@@ -34,7 +35,9 @@ function ProjectEntry({ project }: { project: Project }) {
             </a>
           ))}
         </p>
-        <p className="mt-5 max-w-[65ch] text-lg leading-relaxed text-ink">{project.summary}</p>
+        <p className="mt-5 max-w-[65ch] text-lg leading-relaxed text-ink">
+          {noBreakHyphens(project.summary)}
+        </p>
       </header>
 
       {figures.length > 0 && (
@@ -91,7 +94,7 @@ function ProjectEntry({ project }: { project: Project }) {
           <h4 className="font-display text-xl text-ink">How it works</h4>
           <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 leading-relaxed text-ink marker:text-accent-muted">
             {project.engineeringStory.map((point) => (
-              <li key={point}>{point}</li>
+              <li key={point}>{noBreakHyphens(point)}</li>
             ))}
           </ul>
         </div>

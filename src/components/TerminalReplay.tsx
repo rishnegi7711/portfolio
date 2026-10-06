@@ -116,7 +116,21 @@ function TerminalReplay({ terminal, number }: { terminal: Terminal; number: numb
               onClick={() => replay(id)}
               className={buttonStyle}
             >
-              <span aria-hidden="true">↻ </span>
+              {/* Replay: an open circle with an arrowhead at its end (the ↻ glyph isn't in Fragment Mono). */}
+              <svg
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+                className="mr-1.5 inline-block h-[1em] w-[1em] align-[-0.15em]"
+              >
+                <path
+                  d="M 13 8 A 5 5 0 1 1 11.5 4.5 M 12 1.5 L 12 5 L 8.5 5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+              </svg>
               {label}
             </button>
           ))}
