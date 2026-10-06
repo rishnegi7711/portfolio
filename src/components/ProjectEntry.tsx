@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { Figure, Project } from '../content'
+import { figureEnlargeHint, type Figure, type Project } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import ArchitectureDiagram from './ArchitectureDiagram'
 import MarginNote from './MarginNote'
@@ -13,14 +13,21 @@ const linkStyle =
 
 /** One project as a notebook entry: what it is, then the mechanism first (architecture,
  *  the annotated figure or terminal), how it works, and the other screens last. */
-function ProjectEntry({ project }: { project: Project }) {
+type ProjectEntryProps = {
+  project: Project
+  /** Figures are numbered across the whole page, so this entry's first one continues
+   *  from the entries before it. */
+  firstFigureNumber: number
+}
+
+function ProjectEntry({ project, firstFigureNumber }: ProjectEntryProps) {
   const headingId = `${project.id}-heading`
   const figures = project.figures ?? []
   // The last figure is the annotated one (Applyd's form); the rest are a strip of screens.
   const lastFigure = figures.at(-1)
   const screens = figures.slice(0, -1)
-  // Figures are numbered in reading order.
-  let figureCount = 0
+  // Figures are numbered in reading order, continuing from the entries before this one.
+  let figureCount = firstFigureNumber - 1
   const architectureNumber = project.architecture ? ++figureCount : 0
   const lastFigureNumber = lastFigure ? ++figureCount : 0
   const terminalNumber = project.terminal ? ++figureCount : 0
@@ -160,7 +167,7 @@ function ProjectFigure({ figure, number }: { figure: Figure; number: number }) {
       </button>
       <figcaption className="mt-2 font-mono text-xs text-ink-muted">
         Fig. {number} — {figure.caption}
-        <span aria-hidden="true"> · Click to enlarge</span>
+        <span aria-hidden="true"> · {figureEnlargeHint}</span>
       </figcaption>
 
       <dialog

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { contact, identity } from '../content'
+import { clipboard, contact, identity } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
 import PenMark from './PenMark'
@@ -25,13 +25,13 @@ function Contact() {
     try {
       // Throws if the API is missing (non-HTTPS) or permission is denied.
       await navigator.clipboard.writeText(identity.email)
-      setCopyStatus(contact.copied)
+      setCopyStatus(clipboard.copied)
       // Clear it, so copying again changes the text and is announced again.
       window.setTimeout(() => setCopyStatus(''), 2000)
     } catch {
       // Select the address so the keyboard shortcut copies it.
       window.getSelection()?.selectAllChildren(emailRef.current!)
-      setCopyStatus(contact.copyFallback)
+      setCopyStatus(clipboard.copyFallback)
     }
   }
 

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import type { Project } from '../content'
+import { clipboard, type Project } from '../content'
 import { gsap, playOnceInView, SplitText, useGSAP } from '../lib/gsap'
 
 type Terminal = NonNullable<Project['terminal']>
@@ -94,13 +94,13 @@ function TerminalReplay({ terminal, number }: { terminal: Terminal; number: numb
     try {
       // Throws if the API is missing (non-HTTPS) or permission is denied.
       await navigator.clipboard.writeText(terminal.install)
-      setCopyStatus('Copied')
+      setCopyStatus(clipboard.copied)
       // Clear it, so copying again changes the text and is announced again.
       window.setTimeout(() => setCopyStatus(''), 2000)
     } catch {
       // Select the command so the keyboard shortcut copies it.
       window.getSelection()?.selectAllChildren(commandRef.current!)
-      setCopyStatus('Press Cmd+C to copy')
+      setCopyStatus(clipboard.copyFallback)
     }
   }
 

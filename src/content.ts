@@ -52,13 +52,20 @@ export const sections = [
   { id: 'contact', label: 'Contact' },
 ]
 
-/** The Contact section's line and the email copy button's status messages. */
+/** The Contact section's line. */
 export const contact = {
   line: 'Hiring for a frontend or full-stack role? Email is the quickest way to reach me.',
+}
+
+/** Status messages for the copy buttons (Contact's email, CleanDeps' install command). */
+export const clipboard = {
   copied: 'Copied',
-  // Shown when the Clipboard API fails; the address is selected for the shortcut.
+  // Shown when the Clipboard API fails; the text is selected for the shortcut.
   copyFallback: 'Press Ctrl+C or Cmd+C to copy',
 }
+
+/** After each screenshot's caption: the figure opens full size. */
+export const figureEnlargeHint = 'Tap or click to enlarge'
 
 /** The footer colophon: what the site is built with, each linking to its site. */
 export const colophon = [
