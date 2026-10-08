@@ -33,3 +33,6 @@ notes/
 
 # Full-resolution screenshot sources; only the exported WebPs ship
 public/job-tracker/*.png
+
+# Full-size About photo source; only the cropped WebP ships
+public/about/rishi-original.PNG

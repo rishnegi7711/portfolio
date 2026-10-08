@@ -34,9 +34,9 @@ export const identity: Identity = {
   cvUrl: '/Rishi-Negi-CV.pdf',
   photo: {
     src: '/about/rishi.webp',
-    width: 400,
-    height: 500,
-    alt: 'Rishi Negi, smiling, in a brown puffer jacket in front of a grey louvred wall.',
+    width: 416,
+    height: 520,
+    alt: 'Rishi Negi, smiling, in glasses, a navy suit and tie against a plain white background.',
   },
   heroAnnotation:
     'Taught myself Node + Express to see the other side of the API, then shipped an ' +
