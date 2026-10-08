@@ -26,6 +26,7 @@ import {
   SiZod,
 } from 'react-icons/si'
 import { identity, story, toolkit } from '../content'
+import { aboutPhotoNumber } from '../lib/figures'
 import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import Container from './Container'
@@ -67,12 +68,51 @@ const MARKS: Record<string, { Icon: IconType; brand: string; move: string }> = {
   Vercel: { Icon: SiVercel, brand: '#000000', move: LIFT },
 }
 
-/** Who I am and why I work the way I do, then the toolkit. The story is static; each
- *  toolkit group's icons appear one after another the first time it scrolls into view
- *  (once). Reduced motion: they're simply there. */
+// Pen corner marks around the photo, one L each in a 20×20 box hung 8px outside its
+// corner. Each runs clockwise round the frame (TL, TR, BR, BL), so drawn in that order
+// they read as one pen going round; each is a little uneven, like the hero's loop.
+const CORNERS = [
+  { d: 'M 2.5 17 C 2.2 11, 2.4 6, 3 2.8 C 8 2.4, 12.5 2.9, 17.5 2.2', at: '-top-2 -left-2' },
+  { d: 'M 2.6 3.2 C 7.5 2.6, 12 3, 17.2 2.7 C 17.6 7.5, 17.3 12, 17.8 16.8', at: '-top-2 -right-2' },
+  { d: 'M 17.4 2.8 C 17.1 8, 17.6 12.5, 17 17.3 C 12 17.6, 7.6 17.1, 2.4 17.5', at: '-right-2 -bottom-2' },
+  { d: 'M 17.3 17.2 C 12.3 17.5, 7.8 17, 2.9 17.4 C 2.5 12.5, 3.1 8, 2.6 3', at: '-bottom-2 -left-2' },
+]
+const CORNER_STROKE = 0.15 // s per corner; four in a row is 0.6s
+
+/** Who I am and why I work the way I do, then the toolkit. The story is static. The
+ *  first time the photo scrolls into view its corner marks draw in one after another,
+ *  then its caption fades in; each toolkit group's icons appear one after another the
+ *  first time it does (all once). Reduced motion: they're simply there. */
 function About() {
   const { photo } = identity
   const toolkitRef = useRef<HTMLDListElement>(null)
+  const photoRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // pathLength={1}: same dash trick as MarginNote's arrows, one corner after another,
+        // then the caption, appended so it starts as the last corner lands.
+        const tl = gsap
+          .timeline({ paused: true })
+          .fromTo(
+            '.photo-corner',
+            { strokeDasharray: '1 1', strokeDashoffset: 1 },
+            {
+              strokeDashoffset: 0,
+              autoRound: false,
+              duration: CORNER_STROKE,
+              stagger: CORNER_STROKE,
+              ease: 'power2.out',
+            },
+          )
+          .from('figcaption', { autoAlpha: 0, duration: 0.3, ease: 'power2.out' })
+        return playOnceInView(photoRef.current, tl)
+      })
+    },
+    { scope: photoRef },
+  )
 
   useGSAP(
     () => {
@@ -105,15 +145,45 @@ function About() {
         {/* Photo first in the DOM, so on mobile it sits above the story; on md+ the grid
             moves it into the right-hand column. */}
         <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,1fr)_13rem] md:gap-12">
-          <img
-            src={photo.src}
-            width={photo.width}
-            height={photo.height}
-            alt={photo.alt}
-            loading="lazy"
-            decoding="async"
-            className="h-auto w-3/5 max-w-52 border border-ink/15 md:col-start-2 md:row-start-1 md:w-full md:max-w-none"
-          />
+          <figure
+            ref={photoRef}
+            className="w-3/5 max-w-52 md:col-start-2 md:row-start-1 md:w-full md:max-w-none"
+          >
+            <div className="relative">
+              <img
+                src={photo.src}
+                width={photo.width}
+                height={photo.height}
+                alt={photo.alt}
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full rounded-xl"
+              />
+              {CORNERS.map((corner) => (
+                <svg
+                  key={corner.at}
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  className={'absolute size-5 text-accent-muted ' + corner.at}
+                >
+                  <path
+                    className="photo-corner"
+                    d={corner.d}
+                    pathLength={1}
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                </svg>
+              ))}
+            </div>
+            {/* mt-4, not the screenshots' mt-2: clear of the corner marks hanging below. */}
+            <figcaption className="mt-4 font-mono text-xs text-ink-muted">
+              Fig. {aboutPhotoNumber} — {photo.caption}
+            </figcaption>
+          </figure>
           <div className="flex max-w-[65ch] flex-col gap-5 text-lg leading-relaxed text-ink md:col-start-1 md:row-start-1">
             {story.map((paragraph) => (
               <p key={paragraph}>{noBreakHyphens(paragraph)}</p>

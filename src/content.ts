@@ -17,7 +17,7 @@ export type Identity = {
   /** null until a CV PDF is added to /public */
   cvUrl: string | null
   /** cropped, optimised copy of the original photo, used in About */
-  photo: { src: string; width: number; height: number; alt: string }
+  photo: { src: string; width: number; height: number; alt: string; caption: string }
   /** first-person copy for the hero's signature margin annotation */
   heroAnnotation: string
 }
@@ -37,6 +37,8 @@ export const identity: Identity = {
     width: 416,
     height: 520,
     alt: 'Rishi Negi, smiling, in glasses, a navy suit and tie against a plain white background.',
+    /** shown after an auto-numbered "Fig. n —" */
+    caption: 'the person who reads the error messages',
   },
   heroAnnotation:
     'Taught myself Node + Express to see the other side of the API, then shipped an ' +

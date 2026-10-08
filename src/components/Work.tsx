@@ -1,17 +1,7 @@
 import { projects } from '../content'
+import { firstFigureNumbers } from '../lib/figures'
 import Container from './Container'
 import ProjectEntry from './ProjectEntry'
-
-// Figures are numbered across the whole page, so each entry's first figure continues
-// from the entries before it: its architecture diagram, screenshots and terminal each
-// count as one. The project list is static, so this is worked out once.
-const firstFigureNumbers: number[] = []
-let figuresSoFar = 0
-for (const project of projects) {
-  firstFigureNumbers.push(figuresSoFar + 1)
-  figuresSoFar +=
-    (project.architecture ? 1 : 0) + (project.figures?.length ?? 0) + (project.terminal ? 1 : 0)
-}
 
 function Work() {
   return (
