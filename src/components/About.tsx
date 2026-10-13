@@ -5,6 +5,7 @@ import {
   SiEslint,
   SiExpress,
   SiGit,
+  SiGnubash,
   SiGraphql,
   SiHtml5,
   SiJavascript,
@@ -33,7 +34,7 @@ import Container from './Container'
 
 // Toolkit names → Simple Icons, each with its brand colour (Simple Icons' hex, shown on
 // hover only) and a small move. Kept here, not in content.ts, because an icon is
-// presentation, not a fact. A name with no entry (REST) just shows its label.
+// presentation, not a fact. A name with no entry (REST, SQL) just shows its label.
 // Colours under 3:1 on the paper are darkened (same hue) until they reach it; those
 // are marked with the original hex.
 // motion-safe: so with reduced motion only the colour changes.
@@ -65,6 +66,7 @@ const MARKS: Record<string, { Icon: IconType; brand: string; move: string }> = {
   ESLint: { Icon: SiEslint, brand: '#4B32C3', move: LIFT },
   Prettier: { Icon: SiPrettier, brand: '#B4872D', move: LIFT }, // #F7B93E
   Linux: { Icon: SiLinux, brand: '#AF8A19', move: LIFT }, // #FCC624
+  'Shell scripting': { Icon: SiGnubash, brand: '#4AA223', move: LIFT }, // #4EAA25
   Vercel: { Icon: SiVercel, brand: '#000000', move: LIFT },
 }
 

@@ -125,5 +125,5 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 
 - Frontend: React, TypeScript, JavaScript, Redux, Tailwind CSS, HTML5, CSS3, React Hook Form
 - APIs & data: REST, GraphQL, TanStack Query, Zod
-- Backend: Node.js, Express, PostgreSQL, Prisma, JWT
-- Tooling: Git, Vite, Vitest, ESLint, Prettier, Linux, Vercel
+- Backend: Node.js, Express, PostgreSQL, SQL, Prisma, JWT
+- Tooling: Git, Vite, Vitest, ESLint, Prettier, Linux, Shell scripting, Vercel

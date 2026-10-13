@@ -421,10 +421,19 @@ export const toolkit: ToolkitGroup[] = [
   },
   {
     label: 'Backend',
-    items: ['Node.js', 'Express', 'PostgreSQL', 'Prisma', 'JWT'],
+    items: ['Node.js', 'Express', 'PostgreSQL', 'SQL', 'Prisma', 'JWT'],
   },
   {
     label: 'Tooling',
-    items: ['Git', 'Vite', 'Vitest', 'ESLint', 'Prettier', 'Linux', 'Vercel'],
+    items: [
+      'Git',
+      'Vite',
+      'Vitest',
+      'ESLint',
+      'Prettier',
+      'Linux',
+      'Shell scripting',
+      'Vercel',
+    ],
   },
 ]
