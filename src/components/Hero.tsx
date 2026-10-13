@@ -281,7 +281,7 @@ function Hero() {
 
           {/* w-fit so its measured width is the text's, for keeping the floated note clear. */}
           <p ref={factRef} className="mt-4 w-fit font-mono text-sm text-ink-muted">
-            {city} · {identity.coordinates}
+            {city} · {identity.heroFact}
           </p>
         </div>
 

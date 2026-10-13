@@ -10,7 +10,7 @@ export type Identity = {
   heroRole: string
   location: string
   /** shown after the city in the hero's fact line */
-  coordinates: string
+  heroFact: string
   email: string
   github: string
   linkedin: string
@@ -27,7 +27,7 @@ export const identity: Identity = {
   roleHeadline: 'Frontend engineer (React + TypeScript), growing into full-stack',
   heroRole: 'Frontend engineer, growing into full-stack',
   location: 'London, UK',
-  coordinates: '51.51° N, 0.13° W',
+  heroFact: '4+ years in software engineering',
   email: 'rishnegi28@gmail.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
@@ -79,8 +79,8 @@ export const colophon = [
 
 /** The About section's story, one string per paragraph. */
 export const story = [
-  'I started in production support. For three years I looked after a live British ' +
-    'Airways system, and when something broke, my job was to find out why. That habit ' +
+  "I've spent 4+ years in software engineering, starting in production support. " +
+    'For three years I looked after a live British Airways system, and when something broke, my job was to find out why. That habit ' +
     'stayed with me: I want to know how a thing actually works, not just how it looks.',
   'In 2022 I moved into frontend work, building React apps used by field and sales ' +
     'agents. In 2023 I came to London for an MSc in Software Engineering and used the ' +
@@ -161,7 +161,7 @@ export const projects: Project[] = [
     id: 'job-tracker',
     name: 'Applyd',
     descriptor: 'Job application tracker',
-    status: 'Live, small tweaks in progress',
+    status: 'Live, in active development',
     summary:
       'Full-stack app to track job applications and interview rounds, replacing the ' +
       'spreadsheet most people use. Board view by status, per-application interview ' +
@@ -191,9 +191,12 @@ export const projects: Project[] = [
       { label: 'Hosting', items: ['Vercel (frontend)', 'Render (backend)'] },
     ],
     engineeringStory: [
-      'Built the Express backend from scratch: a deliberate push into unfamiliar territory.',
+      'Built the Express backend from scratch alongside the React frontend: a deliberate ' +
+        'push into unfamiliar territory.',
       'JWT auth with per-route access control; bcrypt password hashing.',
-      'Shared Zod schemas: React Hook Form and the API validate against one source of truth.',
+      'Full CRUD across applications, statuses and user accounts.',
+      'Three shared Zod schemas: React Hook Form and the API validate against the same ' +
+        "ones, so there's no duplicate client/server validation.",
       'TanStack Query for server state and client-side caching.',
     ],
     links: [
@@ -344,23 +347,25 @@ export const experience: ExperienceEntry[] = [
     dates: 'May 2022 – Aug 2023',
     note: 'switched to frontend here',
     points: [
-      'Rebuilt the Employee Notifier UI in React; standardised reusable component ' +
-        'patterns (Buttons, Modals, Tabs) adopted product-wide, reducing duplicate UI code.',
       [
-        'Redux-based authentication and session handling for a live app used by ',
-        '1,000+ field agents',
-        ', eliminating a recurring class of sign-in failures.',
-      ],
-      [
-        'Built the frontend for the HDFC Life Offline Quote application (live insurance ' +
-          'quoting for sales agents), improving quote generation speed by ',
-        '50%',
+        "Built the React frontend for HDFC Life's offline quote tool, so sales agents " +
+          'could generate quotes in the field. Quote generation became ',
+        '50% faster',
         '.',
       ],
+      'Helped redesign the app as a single page when management asked to fold a 2–3 ' +
+        'page flow into one screen: walked senior product management through the ' +
+        'codebase, and worked with the other developers to rebuild the core Redux state ' +
+        'logic for it.',
+      'Handled sign-in and session logic in Redux, including REST API calls and token ' +
+        'handling, and fixed the sign-in failures field agents kept reporting.',
+      'Rebuilt the Employee Notifier UI in React and wrote shared Button, Modal and Tab ' +
+        'components that the rest of the product team adopted.',
       [
-        'Full UI overhaul that increased user engagement by ',
-        '30%',
-        ', working with PMs and designers in Agile sprints.',
+        'Added new products with product managers over Agile sprints and redesigned the ' +
+          'main screens, raising user engagement by ',
+        '20%',
+        '.',
       ],
     ],
   },
@@ -371,12 +376,15 @@ export const experience: ExperienceEntry[] = [
     place: 'Greater Noida',
     dates: '2019 – 2022',
     points: [
+      'Automated recurring operational reports with shell scripts, cutting manual ' +
+        'reporting time for 5–6 business teams.',
       [
-        'Supported a live production system for British Airways: ',
-        '~350 incidents a year',
-        ' within a 90-minute SLA.',
+        'Supported a live production system for British Airways, resolving ',
+        '~350 incidents per year',
+        ' within SLA.',
       ],
-      'Led migration of production servers from RHEL5 to RHEL7 on an unfamiliar legacy codebase.',
+      'Led the migration of production servers from RHEL5 to RHEL7 for business-critical ' +
+        'workloads.',
     ],
   },
   {

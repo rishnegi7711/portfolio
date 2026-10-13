@@ -23,6 +23,7 @@ Production support engineer turned frontend developer. Likes understanding how t
 actually work under the hood, not just making them look like they do. Stepped outside the
 frontend comfort zone to self-teach a Node/Express backend and ship a full-stack app
 end-to-end. Looking for a high-autonomy, technically deep team in London.
+4+ years in software engineering (Coforge 2019–2022, RapinnoTech 2022–2023).
 
 ## Featured projects
 
@@ -31,7 +32,7 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 - Name: Applyd; descriptor "job application tracker"
 
 - Links: repo https://github.com/rishnegi7711/job-tracker · live https://job-tracker-steel-ten.vercel.app
-- Status: live, small tweaks in progress
+- Status: live, in active development
 - What: full-stack app to track job applications and interview rounds, replacing the
   spreadsheet most people use. Board view by status, per-application interview history,
   private multi-user accounts.
@@ -39,9 +40,12 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
   React Hook Form, Zod · Node.js, Express, TypeScript, Prisma, PostgreSQL (Neon), JWT, bcrypt ·
   Vitest, ESLint, Prettier · Vercel (frontend), Render (backend)
 - Engineering story (case-study angles):
-  - Built the Express backend from scratch: a deliberate push into unfamiliar territory.
+  - Built the Express backend from scratch alongside the React frontend: a deliberate push
+    into unfamiliar territory.
   - JWT auth with per-route access control; bcrypt password hashing.
-  - Shared Zod schemas: React Hook Form and the API validate against one source of truth.
+  - Full CRUD across applications, statuses and user accounts.
+  - Three shared Zod schemas: React Hook Form and the API validate against the same ones,
+    so there's no duplicate client/server validation.
   - TanStack Query for server state and client-side caching.
 - Assets: screenshots in /public/job-tracker/ (board, detail, validation; WebP)
 
@@ -86,20 +90,25 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 
 ### RapinnoTech · Software Developer · Hyderabad · May 2022 – Aug 2023
 
-- Rebuilt the Employee Notifier UI in React; standardised reusable component patterns
-  (Buttons, Modals, Tabs) adopted product-wide, reducing duplicate UI code.
-- Redux-based authentication and session handling for a live app used by 1,000+ field agents,
-  eliminating a recurring class of sign-in failures.
-- Built the frontend for the HDFC Life Offline Quote application (live insurance quoting for
-  sales agents), improving quote generation speed by 50%.
-- Full UI overhaul that increased user engagement by 30%, working with PMs and designers
-  in Agile sprints.
+- Built the React frontend for HDFC Life's offline quote tool, so sales agents could generate
+  quotes in the field. Quote generation became 50% faster.
+- Helped redesign the app as a single page when management asked to fold a 2–3 page flow
+  into one screen: walked senior product management through the codebase, and worked with
+  the other developers to rebuild the core Redux state logic for it.
+- Handled sign-in and session logic in Redux, including REST API calls and token handling,
+  and fixed the sign-in failures field agents kept reporting.
+- Rebuilt the Employee Notifier UI in React and wrote shared Button, Modal and Tab components
+  that the rest of the product team adopted.
+- Added new products with product managers over Agile sprints and redesigned the main
+  screens, raising user engagement by 20%.
 
 ### Coforge · Software Engineer · Greater Noida · 2019 – 2022
 
-- Supported a live production system for British Airways: ~350 incidents a year within a
-  90-minute SLA.
-- Led migration of production servers from RHEL5 to RHEL7 on an unfamiliar legacy codebase.
+- Automated recurring operational reports with shell scripts, cutting manual reporting time
+  for 5–6 business teams.
+- Supported a live production system for British Airways, resolving ~350 incidents per year
+  within SLA.
+- Led the migration of production servers from RHEL5 to RHEL7 for business-critical workloads.
 
 ### 2023 – 2025
 

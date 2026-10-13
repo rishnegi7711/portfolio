@@ -62,7 +62,7 @@ template, not a dark neon dev site.
   metrics) uses `PenMark`'s highlighter stroke instead.
 - The phone number is never shown as text on the site. It may appear inside the
   downloadable CV (`public/Rishi-Negi-CV.pdf`); that's my decision.
-- Hero fact line is the city plus coordinates only ("London · 51.51° N, 0.13° W"). Right to
+- Hero fact line is the city plus experience only ("London · 4+ years in software engineering"). Right to
   work is not shown anywhere on the site (it stays only in `content.md` as a fact).
 - Headings use `text-wrap: balance` (already set globally in `index.css` for h1–h3). Compound
   words like "full-stack" use a normal hyphen in copy and render through `noBreakHyphens()`
