@@ -1,8 +1,8 @@
-# rishi-negi.vercel.app
+# rishinegi.com
 
 My portfolio site. I'm a frontend engineer in London, working in React and TypeScript and growing into full-stack.
 
-**Live:** [rishi-negi.vercel.app](https://rishi-negi.vercel.app)
+**Live:** [rishinegi.com](https://www.rishinegi.com)
 
 The site is styled like an engineer's notebook: warm paper, ink, one teal pen, and margin notes that point at things. The idea is that every project shows how it works, not just what it looks like.
 
@@ -23,7 +23,7 @@ The site is styled like an engineer's notebook: warm paper, ink, one teal pen, a
 - GSAP for animation: `useGSAP`, ScrollTrigger, DrawSVG, SplitText and MotionPath
 - Self-hosted fonts through Fontsource: Newsreader, Source Sans 3 and Fragment Mono
 - `react-icons` (Simple Icons) for the tech logos
-- Hosted on Vercel
+- Hosted on Vercel at [rishinegi.com](https://www.rishinegi.com)
 
 ## How I built this
 
@@ -80,7 +80,7 @@ bun run lint
 - `src/content.ts` has all the copy and facts. Components read from it, so text isn't scattered through the JSX.
 - `src/components/` has one file per section, plus shared pieces like `PenMark` and `MarginNote`.
 - `src/lib/gsap.ts` registers the GSAP plugins and has the `playOnceInView` helper that most animations use.
-- `scripts/` has the headless Chrome measuring script and the script that renders the social preview images.
+- `scripts/` has the headless Chrome measuring script.
 - `CLAUDE.md` and `PRODUCT.md` are the briefs the site was built from.
 
 The code is here to read. Please don't reuse the content or the photos.

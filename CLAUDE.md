@@ -29,7 +29,7 @@ kept in lockstep — update `content.ts` directly for copy changes, and only tou
   SplitText, ScrollTrigger, registered once in `src/lib/gsap.ts`
 - `react-icons` (Simple Icons set, `react-icons/si`) for tech logos
 - Single page with anchor navigation; no router unless we add case-study pages
-- Deployed on Vercel (`*.vercel.app` to start)
+- Deployed on Vercel at https://www.rishinegi.com (rishinegi.com redirects to it)
 - Bun is the package manager and script runner — never npm/yarn/pnpm. Use `bun add`,
   `bun run`, `bunx`. Keep `bun.lock` committed.
 

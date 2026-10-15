@@ -30,7 +30,7 @@ they look, and he is looking for a high-autonomy, technically deep team.
 
 - Single-page site with anchor navigation; no separate routed pages at this time (revisit
   only if case-study pages are explicitly requested later).
-- Deployed on Vercel (`*.vercel.app` to start).
+- Deployed on Vercel at https://www.rishinegi.com (rishinegi.com redirects to it).
 - All copy, facts and links are sourced from `content.md` in the project root — never
   invented. Missing facts must be asked about, not fabricated.
 

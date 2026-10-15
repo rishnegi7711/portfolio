@@ -9,7 +9,7 @@ Claude invent anything.
 - Role headline: Frontend engineer (React + TypeScript), growing into full-stack
 - Location: London, UK
 - Right to work: Graduate Visa, valid until September 2027
-- Email: rishnegi28@gmail.com
+- Email: rishi@rishinegi.com
 - GitHub: https://github.com/rishnegi7711
 - LinkedIn: https://www.linkedin.com/in/rishi-negi-a9057a207/
 - CV: /public/Rishi-Negi-CV.pdf, linked as "CV (PDF)"

@@ -28,7 +28,7 @@ export const identity: Identity = {
   heroRole: 'Frontend engineer, growing into full-stack',
   location: 'London, UK',
   heroFact: '4+ years in software engineering',
-  email: 'rishnegi28@gmail.com',
+  email: 'rishi@rishinegi.com',
   github: 'https://github.com/rishnegi7711',
   linkedin: 'https://www.linkedin.com/in/rishi-negi-a9057a207/',
   cvUrl: '/Rishi-Negi-CV.pdf',
