@@ -1,14 +1,17 @@
 import { type CSSProperties, useRef } from 'react'
 import type { IconType } from 'react-icons'
 import {
+  SiClaude,
   SiCss,
   SiEslint,
   SiExpress,
+  SiFigma,
   SiGit,
   SiGnubash,
   SiGraphql,
   SiHtml5,
   SiJavascript,
+  SiJenkins,
   SiJsonwebtokens,
   SiLinux,
   SiNodedotjs,
@@ -67,6 +70,9 @@ const MARKS: Record<string, { Icon: IconType; brand: string; move: string }> = {
   Prettier: { Icon: SiPrettier, brand: '#B4872D', move: LIFT }, // #F7B93E
   Linux: { Icon: SiLinux, brand: '#AF8A19', move: LIFT }, // #FCC624
   'Shell scripting': { Icon: SiGnubash, brand: '#4AA223', move: LIFT }, // #4EAA25
+  Jenkins: { Icon: SiJenkins, brand: '#D24939', move: LIFT },
+  Figma: { Icon: SiFigma, brand: '#F24E1E', move: LIFT },
+  'Claude Code': { Icon: SiClaude, brand: '#D47555', move: LIFT }, // #D97757
   Vercel: { Icon: SiVercel, brand: '#000000', move: LIFT },
 }
 

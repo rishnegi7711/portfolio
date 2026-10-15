@@ -90,17 +90,22 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 
 ### RapinnoTech · Software Developer · Hyderabad · May 2022 – Aug 2023
 
-- Built the React frontend for HDFC Life's offline quote tool, so sales agents could generate
-  quotes in the field. Quote generation became 50% faster.
+- Developed features for HDFC Life's offline quote tool in React and added new products to it
+  with product managers over Agile sprints, so insurance sales agents could quote in the
+  field. Quote generation became 50% faster.
 - Helped redesign the app as a single page when management asked to fold a 2–3 page flow
-  into one screen: walked senior product management through the codebase, and worked with
-  the other developers to rebuild the core Redux state logic for it.
+  into one screen, and walked senior product management through the codebase on planning
+  calls.
+- Worked directly with the other developers to extract the core state logic from Redux and
+  rebuild it for the single-page version, and fixed the bugs and blockers they hit along the
+  way.
 - Handled sign-in and session logic in Redux, including REST API calls and token handling,
   and fixed the sign-in failures field agents kept reporting.
+- Used Jenkins CI/CD pipelines as part of the team's build and release workflow.
 - Rebuilt the Employee Notifier UI in React and wrote shared Button, Modal and Tab components
   that the rest of the product team adopted.
-- Added new products with product managers over Agile sprints and redesigned the main
-  screens, raising user engagement by 20%.
+- Built responsive screens from the designers' Figma files and redesigned the main screens,
+  raising user engagement by 20%.
 
 ### Coforge · Software Engineer · Greater Noida · 2019 – 2022
 
@@ -126,4 +131,4 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 - Frontend: React, TypeScript, JavaScript, Redux, Tailwind CSS, HTML5, CSS3, React Hook Form
 - APIs & data: REST, GraphQL, TanStack Query, Zod
 - Backend: Node.js, Express, PostgreSQL, SQL, Prisma, JWT
-- Tooling: Git, Vite, Vitest, ESLint, Prettier, Linux, Shell scripting, Vercel
+- Tooling: Git, Vite, Vitest, ESLint, Prettier, Linux, Shell scripting, Jenkins, Figma, Claude Code, Vercel

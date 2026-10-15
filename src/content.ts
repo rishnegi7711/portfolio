@@ -348,22 +348,26 @@ export const experience: ExperienceEntry[] = [
     note: 'switched to frontend here',
     points: [
       [
-        "Built the React frontend for HDFC Life's offline quote tool, so sales agents " +
-          'could generate quotes in the field. Quote generation became ',
+        "Developed features for HDFC Life's offline quote tool in React and added new " +
+          'products to it with product managers over Agile sprints, so insurance sales ' +
+          'agents could quote in the field. Quote generation became ',
         '50% faster',
         '.',
       ],
       'Helped redesign the app as a single page when management asked to fold a 2–3 ' +
-        'page flow into one screen: walked senior product management through the ' +
-        'codebase, and worked with the other developers to rebuild the core Redux state ' +
-        'logic for it.',
+        'page flow into one screen, and walked senior product management through the ' +
+        'codebase on planning calls.',
+      'Worked directly with the other developers to extract the core state logic from ' +
+        'Redux and rebuild it for the single-page version, and fixed the bugs and blockers ' +
+        'they hit along the way.',
       'Handled sign-in and session logic in Redux, including REST API calls and token ' +
         'handling, and fixed the sign-in failures field agents kept reporting.',
+      "Used Jenkins CI/CD pipelines as part of the team's build and release workflow.",
       'Rebuilt the Employee Notifier UI in React and wrote shared Button, Modal and Tab ' +
         'components that the rest of the product team adopted.',
       [
-        'Added new products with product managers over Agile sprints and redesigned the ' +
-          'main screens, raising user engagement by ',
+        "Built responsive screens from the designers' Figma files and redesigned the main " +
+          'screens, raising user engagement by ',
         '20%',
         '.',
       ],
@@ -433,6 +437,9 @@ export const toolkit: ToolkitGroup[] = [
       'Prettier',
       'Linux',
       'Shell scripting',
+      'Jenkins',
+      'Figma',
+      'Claude Code',
       'Vercel',
     ],
   },
