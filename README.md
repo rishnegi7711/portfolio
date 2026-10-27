@@ -10,8 +10,13 @@ The site is styled like an engineer's notebook: warm paper, ink, one teal pen, a
 
 - **Hero:** a short animated intro. A pen circles "AI coding agents" and a margin note writes itself in.
 - **Work:** two projects.
-  - **Applyd**, a full-stack job tracker. It has an architecture diagram that draws itself as you scroll, and screenshots you can open full size.
+  - **Applyd**, a full-stack job tracker I built by hand and then rebuilt with Claude Code. The entry is compact: a before/after slider of the old dark board against the redesign (it sweeps once when it scrolls into view, then it's yours to drag), the two phases in four bullets, the live demo with its login, and an architecture diagram that draws itself as you scroll.
   - **CleanDeps**, a CLI I published on npm. A terminal replays its real output, including the run where it refuses to delete anything because there's no `package.json`.
+- **Applyd case study** (`/work/applyd`): the longer story. It covers the hand-built phase, the Claude Code phase, the redesign and how I work with Claude Code, plus five decisions where the obvious answer was wrong and a roadmap that is clearly marked as planned. Along the way:
+  - the old form and detail screens, which open full size;
+  - the new board in light and dark, switched by a control;
+  - a short muted video of Applyd's own animations, which plays only while it's on screen and has a pause button;
+  - the board with three details circled in pen and numbered, which also opens larger, circles included.
 - **Experience:** a timeline where a pen line draws down the page as you read. It swerves at the point where I moved from production support to frontend work.
 - **About** and **Contact**, with a copyable email and my CV.
 
@@ -23,6 +28,7 @@ The site is styled like an engineer's notebook: warm paper, ink, one teal pen, a
 - GSAP for animation: `useGSAP`, ScrollTrigger, DrawSVG, SplitText and MotionPath
 - Self-hosted fonts through Fontsource: Newsreader, Source Sans 3 and Fragment Mono
 - `react-icons` (Simple Icons) for the tech logos
+- React Router, for the one extra page (`/work/applyd`). `vercel.json` sends every path to `index.html`, so a link straight to the case study loads.
 - Hosted on Vercel at [rishinegi.com](https://www.rishinegi.com)
 
 ## How I built this
@@ -44,7 +50,7 @@ I built it with Claude Code. I wanted to learn how to work with an AI coding too
 
 **Animations firing late.** Some scroll animations started after their content was already on screen, which looked like a flicker. The cause was web fonts. ScrollTrigger saved each trigger's position when the page loaded, then the fonts arrived, the text reflowed and pushed everything down by 20 to 100px. The fix was to refresh ScrollTrigger once the fonts and images have loaded. I checked it by measuring every trigger before and after.
 
-**The pen loop popped in instead of drawing.** The loop around "full-stack" draws by animating `stroke-dashoffset` from 1 to 0. GSAP rounds pixel values to whole numbers by default, so it jumped straight from 1 to 0. Setting `autoRound: false` fixed it.
+**The pen loop popped in instead of drawing.** The loop around "AI coding agents" draws by animating `stroke-dashoffset` from 1 to 0. GSAP rounds pixel values to whole numbers by default, so it jumped straight from 1 to 0. Setting `autoRound: false` fixed it.
 
 **Keeping the CleanDeps replay honest.** The terminal replay only shows output the CLI really prints. The normal run has the path anonymised and the package list visibly shortened, and nothing is made up. When I noticed the CLI's error messages had typos, I fixed them in CleanDeps itself and published a new version, rather than tidying the text only on the website.
 
@@ -55,9 +61,18 @@ I built it with Claude Code. I wanted to learn how to work with an AI coding too
 - Every animation is built inside a `prefers-reduced-motion` check. With reduced motion turned on, you see the finished page with nothing moving.
 - Content is never hidden in the HTML. Anything an animation hides is hidden from JavaScript, with a timeout fallback, so if a script fails the page is still readable.
 - Keyboard: a skip link, visible focus rings, and a native `<dialog>` for the enlarged screenshots.
+- The before/after slider is a native range input laid invisibly over the image, so the arrow keys, Home, End and Page Up and Down work, and it is announced with its value. The Light and Dark control is a native radio group.
+- The case study's video plays only while it's on screen, has a pause button that stays paused, and with reduced motion isn't loaded at all: you get a still instead.
 - Screen readers get text versions of the diagram, the terminal and the margin notes.
 - Tap targets are at least 44px, and nothing scrolls sideways down to 320px wide.
-- Lighthouse on mobile (PageSpeed Insights): 92 performance, 100 accessibility, 100 best practices, 100 SEO.
+- Lighthouse, mobile preset, run locally against the production build served with gzip (median of three runs):
+
+  | Page | Performance | Accessibility | Best practices | SEO |
+  | --- | --- | --- | --- | --- |
+  | `/` | 92 | 100 | 100 | 100 |
+  | `/work/applyd` | 91 | 100 | 100 | 100 |
+
+  These are lab numbers, so PageSpeed Insights on the deployed site can differ a little.
 
 ## Running locally
 
@@ -78,9 +93,10 @@ bun run lint
 ## Where things live
 
 - `src/content.ts` has all the copy and facts. Components read from it, so text isn't scattered through the JSX.
-- `src/components/` has one file per section, plus shared pieces like `PenMark` and `MarginNote`.
+- `src/pages/` has the home page, the Applyd case study and the 404, and `src/router.tsx` says which address shows which.
+- `src/components/` has one file per section, plus shared pieces like `PenMark`, `MarginNote`, `BeforeAfter` and `MotionLoop`.
 - `src/lib/gsap.ts` registers the GSAP plugins and has the `playOnceInView` helper that most animations use.
-- `scripts/` has the headless Chrome measuring script (`cdp.ts`) and the generators for the link-preview image (`og-image.tsx`) and the LinkedIn banner.
+- `scripts/` is for development only, and needs Google Chrome. `cdp.ts` measures the live page. `capture-applyd.ts` screenshots Applyd's live demo (read-only, through its public demo login) and exports the images, and `record-applyd.ts` films the loop from it; both use `lib/applyd-demo.ts`. `og-image.tsx` and `linkedin-banner.tsx` render the link-preview image and the LinkedIn banner.
 - `CLAUDE.md` and `PRODUCT.md` are the briefs the site was built from.
 
 The code is here to read. Please don't reuse the content or the photos.
