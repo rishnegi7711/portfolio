@@ -131,6 +131,14 @@ export type Compare = {
   after: CompareImage
 }
 
+/** The same screen in the redesign's two themes, switched by a Light / Dark control. */
+export type ThemeFigure = {
+  /** shown after an auto-numbered "Fig. n —" */
+  caption: string
+  light: CompareImage
+  dark: CompareImage
+}
+
 export type ArchitectureNode = {
   label: string
   /** one per line */
@@ -365,6 +373,24 @@ export const applydCaseStudy = {
   redesign: {
     heading: 'The redesign',
     goal: 'The goal: make it feel premium, with animation that means something.',
+    // Same crop and sizes as the before/after slider; see scripts/capture-applyd.ts.
+    themes: {
+      caption: 'The Paper board in its light and dark themes',
+      light: {
+        src: '/job-tracker/board-paper-light.webp',
+        mobileSrc: '/job-tracker/board-paper-light-mobile.webp',
+        alt:
+          'The Paper board in its light theme: a warm off-white page, white cards on a ' +
+          'slightly darker panel, near-black text, and a coloured dot beside each status.',
+      },
+      dark: {
+        src: '/job-tracker/board-paper-dark.webp',
+        mobileSrc: '/job-tracker/board-paper-dark-mobile.webp',
+        alt:
+          'The same board in its dark theme: a warm charcoal page, slightly lighter cards, ' +
+          'cream text, and the same status dots in lighter tints.',
+      },
+    } satisfies ThemeFigure,
     processHeading: 'How it went',
     process: [
       'I researched design skills and chose a small, deliberate set instead of stacking them.',

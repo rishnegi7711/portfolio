@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import Container from '../components/Container'
 import MarginNote from '../components/MarginNote'
 import ProjectFigure from '../components/ProjectFigure'
+import ThemeToggleFigure from '../components/ThemeToggleFigure'
 import { applydCaseStudy as cs, projects } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import { usePageMeta } from '../lib/usePageMeta'
@@ -126,6 +127,9 @@ function ApplydCaseStudy() {
             <Bullets items={cs.redesign.process} ordered />
             <SubHeading>{cs.redesign.decisionsHeading}</SubHeading>
             <Bullets items={cs.redesign.decisions} />
+            <div className="mt-10">
+              <ThemeToggleFigure figure={cs.redesign.themes} number={3} />
+            </div>
             <SubHeading>{cs.redesign.iterationHeading}</SubHeading>
             <p className="mt-3 max-w-[65ch] leading-relaxed text-ink">{cs.redesign.iterationLead}</p>
             <Bullets items={cs.redesign.iteration} />
