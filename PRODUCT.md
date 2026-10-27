@@ -21,15 +21,19 @@ the build itself (code quality, accessibility, performance).
 
 ## Positioning
 
-A production-support engineer turned frontend developer who stepped outside his comfort
-zone to self-teach a Node/Express backend and ship a full-stack app end-to-end. The
-differentiator is depth: he cares how things actually work under the hood, not just how
-they look, and he is looking for a high-autonomy, technically deep team.
+A production-support engineer turned frontend developer, now a full-stack engineer who
+builds with AI coding agents. He self-taught a Node/Express backend and shipped a full-stack
+app end-to-end (Applyd), then rebuilt and extended it with Claude Code to learn how to plan,
+steer and review an agent. The differentiator is depth and judgement: he cares how things
+actually work under the hood, and checks what an agent gives him before trusting it. He is
+learning, not claiming to be an "AI engineer" or an expert; Applyd's AI features are
+planned, not built, and the site must say so. He is looking for a high-autonomy,
+technically deep team.
 
 ## Operating Context
 
-- Single-page site with anchor navigation; no separate routed pages at this time (revisit
-  only if case-study pages are explicitly requested later).
+- Single-page site with anchor navigation, plus one routed case-study page, `/work/applyd`
+  (React Router, with a Vercel rewrite so a deep link loads). No other routes.
 - Deployed on Vercel at https://www.rishinegi.com (rishinegi.com redirects to it).
 - All copy, facts and links are sourced from `content.md` in the project root — never
   invented. Missing facts must be asked about, not fabricated.
@@ -41,15 +45,17 @@ they look, and he is looking for a high-autonomy, technically deep team.
   `@gsap/react`) for animation, `react-icons/si` for tech logos. No new dependency without asking why.
 - The user is learning Claude Code and must be able to explain every line; work proceeds
   one section at a time with the approach proposed and approved before building.
-- Featured projects: Applyd, a job application tracker (full-stack, live), and CleanDeps CLI (npm
-  package). Their signature motion moments (SVG annotation draw-ins, an animated CLI replay
-  for CleanDeps, a scroll-driven architecture diagram for Applyd) are committed
-  product facts, not open design choices.
+- Featured projects: Applyd, a job application tracker (full-stack, live, with a case-study
+  page), and CleanDeps CLI (npm package). Their signature motion moments (SVG annotation
+  draw-ins, an animated CLI replay for CleanDeps, a scroll-driven architecture diagram and a
+  before/after slider for Applyd) are committed product facts, not open design choices.
+- Copy rules (from the Applyd brief): no em dashes, no filler words, short sentences,
+  British English. Never "AI engineer", "expert" or "production AI system".
 
 ## Brand Commitments
 
-- Name: Rishi Negi. Role headline: "Frontend engineer (React + TypeScript), growing into
-  full-stack." Location: London, UK. Right to work: Graduate Visa, valid until September
+- Name: Rishi Negi. Role headline: "Full-stack engineer, building with AI coding agents."
+  Location: London, UK. Right to work: Graduate Visa, valid until September
   2027 — recorded in `content.md` only; deliberately not shown anywhere on the site.
 - Hero fact line: city plus experience ("London · 4+ years in software engineering"), nothing else.
 - Voice: understated, technically grounded, emphasizes understanding mechanisms over
@@ -65,7 +71,9 @@ they look, and he is looking for a high-autonomy, technically deep team.
   `/public/about/rishi.webp`, used in About.
 - Applyd (job application tracker): live at https://job-tracker-steel-ten.vercel.app, repo at
   https://github.com/rishnegi7711/job-tracker. Screenshots (board, detail, validation;
-  WebP) are in `/public/job-tracker/`.
+  WebP) are in `/public/job-tracker/`: the old dark UI is the "before", and the new Paper UI
+  (light and dark) is captured from the live demo. Source brief: `notes/applyd-portfolio-brief.md`
+  (local only).
 - CleanDeps CLI (v0.2.0): published at https://www.npmjs.com/package/cleandeps-cli; repo at
   https://github.com/rishnegi7711/cleandeps-cli.
 

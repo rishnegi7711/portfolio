@@ -83,7 +83,7 @@ const page = (check: boolean) => `<!doctype html><meta charset="utf-8">${fonts}
     d="M 1 5.5 C 22 3.5, 48 6.5, 72 4.5 C 84 3.8, 93 4.2, 99 2.5" fill="none"
     stroke="${token('accent-muted')}" stroke-width="2.5" stroke-linecap="round"
     vector-effect="non-scaling-stroke"/></svg></h1>
-  <div class="role">Frontend engineer · React + TypeScript · London</div>
+  <div class="role">Full-stack engineer · AI coding agents · London</div>
   <div class="icons">${iconRow}</div>
   <div class="contact">${site} · ${identity.email}</div>
 </main>

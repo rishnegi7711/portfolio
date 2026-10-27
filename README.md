@@ -1,6 +1,6 @@
 # rishinegi.com
 
-My portfolio site. I'm a frontend engineer in London, working in React and TypeScript and growing into full-stack.
+My portfolio site. I'm a full-stack engineer in London, working in React, TypeScript and Node, and building with AI coding agents.
 
 **Live:** [rishinegi.com](https://www.rishinegi.com)
 
@@ -8,7 +8,7 @@ The site is styled like an engineer's notebook: warm paper, ink, one teal pen, a
 
 ## What's on the page
 
-- **Hero:** a short animated intro. A pen circles "full-stack" and a margin note writes itself in.
+- **Hero:** a short animated intro. A pen circles "AI coding agents" and a margin note writes itself in.
 - **Work:** two projects.
   - **Applyd**, a full-stack job tracker. It has an architecture diagram that draws itself as you scroll, and screenshots you can open full size.
   - **CleanDeps**, a CLI I published on npm. A terminal replays its real output, including the run where it refuses to delete anything because there's no `package.json`.

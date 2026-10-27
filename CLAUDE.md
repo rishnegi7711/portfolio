@@ -3,6 +3,11 @@
 Personal portfolio for junior frontend / full-stack roles in London. The site is itself a
 work sample: recruiters and engineers will judge the code and the craft, not just the content.
 
+Positioning: a full-stack engineer who builds with AI coding agents, and is learning, not
+claiming to be an "AI engineer" or an expert (Applyd has no AI features yet; they are
+planned). Site copy follows the Applyd brief's rules: no em dashes, no filler words
+("seamless", "robust", "leverage", "passionate"), short sentences, British English.
+
 All copy, facts and links originate in `content.md` — never invent facts, metrics or
 projects; if something is missing, ask me. Once `src/content.ts` exists, it is the working
 source of truth for on-site copy (components read from it, not from JSX literals);
@@ -28,7 +33,8 @@ kept in lockstep — update `content.ts` directly for copy changes, and only tou
 - GSAP (`gsap` + `@gsap/react`'s `useGSAP`) for animation. Plugins: DrawSVG, MotionPath,
   SplitText, ScrollTrigger, registered once in `src/lib/gsap.ts`
 - `react-icons` (Simple Icons set, `react-icons/si`) for tech logos
-- Single page with anchor navigation; no router unless we add case-study pages
+- Single page with anchor navigation, plus one case-study page at `/work/applyd` (React
+  Router, with a Vercel rewrite for client-side routing); no other routes
 - Deployed on Vercel at https://www.rishinegi.com (rishinegi.com redirects to it)
 - Bun is the package manager and script runner — never npm/yarn/pnpm. Use `bun add`,
   `bun run`, `bunx`. Keep `bun.lock` committed.
@@ -86,12 +92,19 @@ template, not a dark neon dev site.
      highlighter stroke, draws once as the nib passes it. At the switch to frontend the line swerves
      out and back once (the nib follows it via MotionPath), and the margin note there types
      itself in, then draws its arrow to the swerve.
+  5. Applyd's before/after slider: one automatic sweep the first time it enters view, then
+     it is the visitor's. A native range input, so the keyboard works; static 50/50 with
+     reduced motion.
+  6. The Applyd case study's annotated screenshot: numbered pen circles draw in once.
 - Micro-interactions (hover, focus, state changes): 150–400ms, CSS transitions, not GSAP.
 - Signature sequences are GSAP timelines: ~1–2s total, play once, never loop. No bouncing.
 - No ScrollSmoother, no scroll-jacking, no `scrub`. ScrollTrigger only starts a timeline
   (`once: true`). The one exception: the Experience timeline's line and nib are scrubbed
   (smoothed), as a reading-progress line. It is the only scroll-linked animation; keep it
   that way. Everything it passes (ticks, highlights, note) still plays once.
+- The one looping thing is the case study's short, muted video of Applyd's own animations.
+  It plays only while in view, has a visible Pause button, never downloads with reduced
+  motion (a still image shows instead), and is footage of the app, not site decoration.
 - Shared eases: type reveals `power3.out`, pen strokes `power2.inOut` (or `power2.out` for
   short strokes), typing `none`.
 - All GSAP code goes through `useGSAP` (never a bare `useEffect`), so it's cleaned up on unmount.
