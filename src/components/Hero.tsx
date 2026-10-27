@@ -9,16 +9,28 @@ type ArrowGeometry = {
   headStroke1: string
   headStroke2: string
   noteLeft: number
+  /** md and up only (null when the note is in the flow): its top, level with the loop's top */
+  noteTop: number | null
   containerWidth: number
   containerHeight: number
 }
 
-const NOTE_GAP = 32 // px between the left column and the floated note (md and up)
+type Point = { x: number; y: number }
+
 const ARROW_START_INSET = 10 // px into the note's top edge, so the line doesn't start exactly at its corner
 const ARROWHEAD_LENGTH = 7 // px, each open-stroke wing
 const ARROWHEAD_SPREAD = (26 * Math.PI) / 180 // angle between the two wings and the line
 const WOBBLE = 6 // px of horizontal give in the curve's control points, for a hand-drawn feel
-const LOOP_INSET_Y = 8 // px the loop's SVG extends above/below the word (-inset-y-2)
+const LOOP_INSET_X = 12 // px the loop's SVG extends left/right of the phrase (-inset-x-3)
+const LOOP_INSET_Y = 8 // px the loop's SVG extends above/below the phrase (-inset-y-2)
+
+// md and up: the note sits to the right of the loop, with a short arrow back to it.
+const NOTE_OFFSET = 96 // px from the loop's right edge to the note's left edge
+const ARROW_GAP = 12 // px between the arrow's tail and the note's left edge
+const TIP_GAP = 4 // px between the arrowhead's tip and the loop's stroke
+const NOTE_DROP = 8 // px the note's top sits below the loop's top: level enough, but clear of the role line above
+const NOTE_LINE_MID = 10 // px from the note's top to the middle of its first line (14px text, 1.375 leading)
+const BOW = 14 // px the arrow sags below the straight line between its ends, so it reads as drawn
 
 // One authored pen loop around the marked phrase (identity.heroMark), drawn in a 200×60
 // box that's stretched over it (preserveAspectRatio="none"). Starts top-right, runs anticlockwise, comes back
@@ -28,21 +40,21 @@ const LOOP_INSET_Y = 8 // px the loop's SVG extends above/below the word (-inset
 const LOOP_PATH =
   'M 170 5 C 128 0, 60 3, 24 8 C 10 11, 9 26, 11 41 C 14 55, 46 60, 100 58 ' +
   'C 152 57, 192 52, 197 34 C 201 18, 193 4, 158 2 C 142 1, 126 2, 110 5'
+// The point on that stroke the md+ arrow aims at, in the same 200×60 box: lower right.
+const LOOP_TARGET = { x: 197, y: 34 }
 
-/** Measures the live position of the headline's marked-phrase span, shifts the note
- *  to sit almost directly under it (clamped to the container's right edge so it can
- *  never overflow, and on md+ — where the note floats out of flow — kept clear of
- *  the fact line in the left column), and draws a short curve
- *  + open arrowhead from the note to the bottom of the pen loop around the word. Word
- *  position can't be predicted with CSS alone: at narrow widths the phrase wraps
- *  to its own line at the LEFT edge, but at wider widths it sits at the RIGHT end
- *  of a long line — opposite positions for the same phrase, which only measuring the
- *  live layout can resolve. */
+/** Measures the live position of the headline's marked-phrase span and places the note
+ *  and its arrow around it. md and up, where the note floats out of flow: the note sits to
+ *  the right of the pen loop with its top level with the loop's, and a short curved arrow
+ *  runs from the note's left edge to the loop's lower-right stroke. Below md the note is in
+ *  the flow, under the headline, and its arrow curves up to the bottom of the loop. In both
+ *  the arrow ends in an open, hand-drawn arrowhead. Where the phrase sits can't be
+ *  predicted with CSS alone (the role line wraps differently at each width), which only
+ *  measuring the live layout can resolve. */
 function useAnnotationArrow() {
   const containerRef = useRef<HTMLDivElement>(null)
   const targetRef = useRef<HTMLSpanElement>(null)
   const noteRef = useRef<HTMLParagraphElement>(null)
-  const factRef = useRef<HTMLParagraphElement>(null)
   const [geometry, setGeometry] = useState<ArrowGeometry | null>(null)
 
   useLayoutEffect(() => {
@@ -52,8 +64,7 @@ function useAnnotationArrow() {
     function measure() {
       const target = targetRef.current
       const note = noteRef.current
-      const fact = factRef.current
-      if (!container || !target || !note || !fact) return
+      if (!container || !target || !note) return
 
       const c = container.getBoundingClientRect()
       const t = target.getBoundingClientRect()
@@ -61,43 +72,64 @@ function useAnnotationArrow() {
 
       // CSS decides whether the note floats (md+); JS just reads the result.
       const floating = getComputedStyle(note).position === 'absolute'
-      const clearOfFactLine = floating
-        ? fact.getBoundingClientRect().right - c.left + NOTE_GAP
-        : 0
-      const desiredLeft = Math.max(t.left - c.left, clearOfFactLine)
-      const noteLeft = Math.max(0, Math.min(desiredLeft, c.width - n.width))
 
-      const cx = t.left - c.left + t.width / 2
+      let noteLeft: number
+      let noteTop: number | null = null
+      let start: Point
+      let end: Point
+      let cp1: Point
+      let cp2: Point
 
-      const startX = noteLeft + ARROW_START_INSET
-      const startY = n.top - c.top
-      const endX = cx
-      const endY = t.bottom - c.top + LOOP_INSET_Y // the loop's bottom edge
+      if (floating) {
+        // The loop's SVG box, relative to the container.
+        const loopLeft = t.left - c.left - LOOP_INSET_X
+        const loopTop = t.top - c.top - LOOP_INSET_Y
+        const loopWidth = t.width + 2 * LOOP_INSET_X
+        const loopHeight = t.height + 2 * LOOP_INSET_Y
 
-      const dx = endX - startX
-      const dy = endY - startY
-      const cp1x = startX + dx * 0.3 + WOBBLE
-      const cp1y = startY + dy * 0.3
-      const cp2x = startX + dx * 0.7 - WOBBLE
-      const cp2y = startY + dy * 0.7
+        // Clamped to the container's right edge so the note can never overflow.
+        noteLeft = Math.max(0, Math.min(loopLeft + loopWidth + NOTE_OFFSET, c.width - n.width))
+        // Its offset parent is the wrapper around the role line, not the container.
+        const parent = (note.offsetParent ?? container).getBoundingClientRect()
+        noteTop = t.top - LOOP_INSET_Y + NOTE_DROP - parent.top
 
-      const path = `M ${startX} ${startY} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} ${endY}`
+        start = { x: noteLeft - ARROW_GAP, y: loopTop + NOTE_DROP + NOTE_LINE_MID }
+        end = {
+          x: loopLeft + (LOOP_TARGET.x / 200) * loopWidth + TIP_GAP,
+          y: loopTop + (LOOP_TARGET.y / 60) * loopHeight,
+        }
+        // Both control points sag below the line, so it bows down and rises into the loop.
+        const run = start.x - end.x
+        cp1 = { x: start.x - run * 0.3, y: start.y + BOW }
+        cp2 = { x: end.x + run * 0.3, y: end.y + BOW }
+      } else {
+        noteLeft = Math.max(0, Math.min(t.left - c.left, c.width - n.width))
+        start = { x: noteLeft + ARROW_START_INSET, y: n.top - c.top }
+        end = { x: t.left - c.left + t.width / 2, y: t.bottom - c.top + LOOP_INSET_Y } // the loop's bottom edge
+        const dx = end.x - start.x
+        const dy = end.y - start.y
+        cp1 = { x: start.x + dx * 0.3 + WOBBLE, y: start.y + dy * 0.3 }
+        cp2 = { x: start.x + dx * 0.7 - WOBBLE, y: start.y + dy * 0.7 }
+      }
+
+      const path = `M ${start.x} ${start.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${end.x} ${end.y}`
 
       // Open, hand-drawn arrowhead: two short strokes angled off the curve's own
       // tangent at its end point, instead of a filled marker triangle.
-      const angle = Math.atan2(endY - cp2y, endX - cp2x)
+      const angle = Math.atan2(end.y - cp2.y, end.x - cp2.x)
       const wing = (sign: 1 | -1): [number, number] => {
         const a = angle + Math.PI - sign * ARROWHEAD_SPREAD
-        return [endX + ARROWHEAD_LENGTH * Math.cos(a), endY + ARROWHEAD_LENGTH * Math.sin(a)]
+        return [end.x + ARROWHEAD_LENGTH * Math.cos(a), end.y + ARROWHEAD_LENGTH * Math.sin(a)]
       }
       const [w1x, w1y] = wing(1)
       const [w2x, w2y] = wing(-1)
 
       setGeometry({
         path,
-        headStroke1: `M ${w1x} ${w1y} L ${endX} ${endY}`,
-        headStroke2: `M ${w2x} ${w2y} L ${endX} ${endY}`,
+        headStroke1: `M ${w1x} ${w1y} L ${end.x} ${end.y}`,
+        headStroke2: `M ${w2x} ${w2y} L ${end.x} ${end.y}`,
         noteLeft,
+        noteTop,
         containerWidth: c.width,
         containerHeight: c.height,
       })
@@ -113,7 +145,7 @@ function useAnnotationArrow() {
     return () => observer.disconnect()
   }, [])
 
-  return { containerRef, targetRef, noteRef, factRef, geometry }
+  return { containerRef, targetRef, noteRef, geometry }
 }
 
 const FONT_WAIT_LIMIT = 800 // ms; start the entrance even if fonts are still loading
@@ -199,7 +231,7 @@ function useHeroTimeline(containerRef: RefObject<HTMLDivElement | null>) {
 }
 
 function Hero() {
-  const { containerRef, targetRef, noteRef, factRef, geometry } = useAnnotationArrow()
+  const { containerRef, targetRef, noteRef, geometry } = useAnnotationArrow()
   useHeroTimeline(containerRef)
   const [beforeMark, mark] = splitOnMark(identity.heroRole, identity.heroMark)
   const city = identity.location.split(',')[0].trim()
@@ -237,8 +269,8 @@ function Hero() {
           <h1 className="font-display text-5xl leading-tight text-ink sm:text-6xl lg:text-8xl">
             {identity.name}
           </h1>
-          {/* Positioning context for the note: on md+ it floats just below the role
-              line (top-full), out of flow, so the content below doesn't move down. */}
+          {/* Positioning context for the note: on md+ it floats out of flow, to the right
+              of the circled phrase, so the content below doesn't move down. */}
           <div className="relative">
             <p className="hero-role mt-2 max-w-xl font-display text-2xl leading-snug text-ink sm:text-3xl">
               {beforeMark}
@@ -265,24 +297,25 @@ function Hero() {
               </span>
             </p>
 
-            {/* Shifted under the marked phrase via inline style (see useAnnotationArrow) so
-                it stays close to the phrase whether it wraps to the left edge
-                (narrow viewports) or the end of a long line (wide viewports). With
-                left-0, the same margin-left also places it when it's absolute. */}
+            {/* Placed by inline style (see useAnnotationArrow). In the flow (below md) only
+                its margin-left applies, shifting it under the phrase; absolute (md+) it
+                gets left-0 plus that margin, and a top level with the loop's. md:mt-0 so
+                the in-flow margin doesn't also push the absolute note down. */}
             <p
               ref={noteRef}
-              style={{ marginLeft: geometry?.noteLeft }}
+              style={{ marginLeft: geometry?.noteLeft, top: geometry?.noteTop ?? undefined }}
               className={
                 'hero-note mt-6 max-w-[22rem] font-mono text-sm leading-snug text-accent ' +
-                'md:absolute md:top-full md:left-0 md:w-[22rem]'
+                'md:absolute md:left-0 md:mt-0 md:w-[22rem]'
               }
             >
               {identity.heroAnnotation}
             </p>
           </div>
 
-          {/* w-fit so its measured width is the text's, for keeping the floated note clear. */}
-          <p ref={factRef} className="mt-4 w-fit font-mono text-sm text-ink-muted">
+          {/* md:mt-9: the floated note's last line stays 12px or more above this row (measured
+              at 768 and 1280), even where the note extends over it horizontally. */}
+          <p className="mt-4 font-mono text-sm text-ink-muted md:mt-9">
             {city} · {identity.heroFact}
           </p>
         </div>
