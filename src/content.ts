@@ -88,10 +88,9 @@ export const story = [
   'In 2022 I moved into frontend work, building React apps used by field and sales ' +
     'agents. In 2023 I came to London for an MSc in Software Engineering and used the ' +
     'time to learn the backend: Node, Express and PostgreSQL. Applyd is what came out of that.',
-  'I built Applyd by hand first, so I understood every layer. Then I switched to ' +
-    'directing Claude Code. It writes the code. I plan the work, review every change and ' +
-    "set the rules it works within. I'm still learning, and Applyd's AI features are " +
-    'planned, not built.',
+  'These days I work with an AI coding agent. Claude Code writes the code; I plan the ' +
+    'work, review every change and set the rules it works within. Knowing when its answer ' +
+    "is wrong is the skill I'm building most deliberately.",
   "Now I'm looking for a junior frontend or full-stack role in London, on a team that " +
     'goes deep technically and gives people room to own their work.',
 ]
@@ -169,10 +168,7 @@ export const projects: Project[] = [
     name: 'Applyd',
     descriptor: 'Job application tracker',
     status: 'Live, in active development',
-    summary:
-      'Full-stack app to track job applications and interview rounds, replacing the ' +
-      'spreadsheet most people use. Board view by status, per-application interview ' +
-      'history, private multi-user accounts.',
+    summary: 'A job application tracker: board view, interview timelines, and light and dark themes.',
     annotation:
       'These errors come from the same Zod schema the API validates against.',
     stack: [
