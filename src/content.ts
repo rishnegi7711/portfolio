@@ -310,9 +310,212 @@ export const projects: Project[] = [
   },
 ]
 
-/** What the home entry no longer shows, parked here for the case study page: the screens
- *  from the hand-built phase, and the stack. */
+/** The Applyd case study page (/work/applyd). Written from notes/applyd-portfolio-brief.md. */
 export const applydCaseStudy = {
+  title: 'Applyd',
+  subtitle: 'A case study: one job tracker, built by hand and then with Claude Code',
+  intro:
+    'I built the first version of Applyd by hand to learn every layer of a full-stack app: ' +
+    'the API, auth, database and deployment. Once I understood all of it, I switched to ' +
+    'directing Claude Code. It writes the code; I plan, review every change, and set the ' +
+    "rules it works within. Since then I've added CI, runtime validation, a safe production " +
+    'migration, and a full redesign with a written design system and a designed dark mode.',
+
+  phaseOne: {
+    heading: 'Phase 1: built by hand',
+    lead: 'Written line by line, to learn every layer.',
+    points: [
+      'A monorepo with an Express API and a React client.',
+      'A Postgres schema with Prisma, hosted on Neon.',
+      'Auth with bcrypt and JWT, plus middleware protecting every route.',
+      'CRUD routes with ownership checks: find the record, check the owner, then act.',
+      'Zod schemas shared between client and server.',
+      'Board and detail views with TanStack Query and React Hook Form.',
+      'Deployed to Vercel and Render, fixing the build and module errors that only appear in production.',
+      'First server tests with Vitest.',
+    ],
+    screensLead: 'How the hand-built version looked, before the redesign:',
+  },
+
+  phaseTwo: {
+    heading: 'Phase 2: Claude Code writes, I review',
+    lead:
+      'From 20 October 2026 I stopped typing the code and started directing it. The skill ' +
+      'I wanted to build was planning, steering and judging changes. The rule: I must be ' +
+      'able to explain every line that merges.',
+    points: [
+      'CI with GitHub Actions. I proved it by deliberately breaking a test, watching it ' +
+        'go red, then reverting.',
+      'Logout that clears the query cache, so the next user never sees the previous ' +
+        "user's data.",
+      'Runtime validation: every API response is parsed with Zod at the boundary. It ' +
+        'immediately found a database row with a null that a hand-checked sample had missed.',
+      'Delete with a database migration. Deleting an application with interview rounds ' +
+        'would have failed (ON DELETE RESTRICT), so I added ON DELETE CASCADE. It had to ' +
+        'go onto the only database, which is production, so I created the migration ' +
+        'without running it, read the SQL, then applied it with a command that can never ' +
+        'reset data.',
+      'Bun workspaces: one install for the whole monorepo. I proved the existing deploy ' +
+        'commands still worked on the new layout before pushing, then changed the hosting ' +
+        'settings.',
+      'The full "Paper" redesign, next.',
+    ],
+  },
+
+  redesign: {
+    heading: 'The redesign',
+    goal: 'The goal: make it feel premium, with animation that means something.',
+    processHeading: 'How it went',
+    process: [
+      'I researched design skills and chose a small, deliberate set instead of stacking them.',
+      'With no reference sites, I used a prototyping skill to build three working login ' +
+        'page directions side by side, and picked by looking at them: "Paper", warm, calm ' +
+        'and Notion-like.',
+      'I wrote the direction down before building. PRODUCT.md says who it is for and what ' +
+        'it must never claim. DESIGN.md holds colour tokens for both themes with measured ' +
+        'contrast, type, spacing, components and motion rules.',
+      'I built in order: theme tokens and dark mode first, then login and register, the ' +
+        'top bar with a theme toggle, the board, the detail page and the dialogs.',
+      'I reviewed it with a code review skill, triaged the findings, filed the rest as ' +
+        'GitHub issues, and merged through a pull request.',
+    ],
+    decisionsHeading: 'Design decisions worth showing',
+    decisions: [
+      'Light by default, with a designed warm dark mode rather than an inversion.',
+      'No flash of the wrong theme: a small script applies the saved theme before the ' +
+        'page paints.',
+      'Motion means placement. Cards settle into their columns on first load, the ' +
+        'interview timeline draws itself in, and a newly added round gets a brief highlight.',
+      'Everything respects the reduced motion setting.',
+      'WCAG AA as the accessibility target: contrast measured for every text colour, and ' +
+        'keyboard-friendly controls.',
+    ],
+    iterationHeading: 'Looking at it in the browser',
+    iterationLead: 'The first pass got some things wrong, and I only saw them by looking.',
+    iteration: [
+      'The status dots were too faint. They got their own stronger colour tokens, since a ' +
+        'dot is a marker and the column heading already names the status.',
+      'The count chips vanished in light mode. The contrast had been measured against the ' +
+        'wrong background. They went neutral, so only the dot carries colour.',
+      'The dashed empty-state borders disappeared. One shared empty-state component fixed ' +
+        'it everywhere.',
+      "The login success animation went from 700ms to 300ms, because the board's own " +
+        'animation plays right after it.',
+    ],
+  },
+
+  practice: {
+    heading: 'How I work with Claude Code',
+    rows: [
+      {
+        label: 'Plan mode first',
+        text: 'Nothing changes until the plan is approved. Product decisions come back as questions.',
+      },
+      { label: 'Model routing', text: 'opusplan: Opus plans, Sonnet executes.' },
+      {
+        label: 'Project memory',
+        text:
+          'CLAUDE.md holds the commands, conventions, known pitfalls, git rules and four ' +
+          'working rules: think first, keep it simple, change only what is needed, and ' +
+          'define how success is checked.',
+      },
+      {
+        label: 'A definition of done',
+        text: 'Builds and tests pass, plus my own browser check in both themes.',
+      },
+      {
+        label: 'Enforced approvals',
+        text:
+          'Permission rules make Claude Code ask before every commit and push, even in ' +
+          'auto mode. I learned that instructions guide but do not guarantee.',
+      },
+      { label: 'Context hygiene', text: 'Clear the session between unrelated tasks.' },
+      {
+        label: 'Reviewing reviews',
+        text:
+          'I ran a code review skill, then verified each finding. Some were real, some ' +
+          'were deliberate decisions the reviewer did not know about, and some line ' +
+          'references were wrong.',
+      },
+      {
+        label: 'Tracking work',
+        text: 'Follow-ups are filed as GitHub issues with "done when" lists and triage labels.',
+      },
+    ],
+    skillsHeading: 'Skills and plugins used',
+    skills: [
+      "Matt Pocock's skills: /prototype for the three login directions, /code-review for " +
+        'the redesign pull request, and the GitHub issue setup.',
+      'Impeccable: init to write PRODUCT.md, and extract to turn the chosen prototype into DESIGN.md.',
+      'Taste: design direction, plus a headless Chrome inspector for desktop, tablet and ' +
+        'mobile screenshots.',
+    ],
+    dependenciesHeading: 'Third-party tools are dependencies too',
+    dependencies: [
+      "Read before installing. Before using Taste's scripts, I had Claude Code list every " +
+        'network call, file write and process, then checked the key claims myself.',
+      'Install the minimum: one tool, only for Claude Code, without hooks, with its skill ' +
+        'files kept out of git.',
+      'Audit what is installed. I removed a plugin whose hooks added instructions to every ' +
+        'prompt that conflicted with my own review rules.',
+    ],
+  },
+
+  judgement: {
+    heading: 'Where the obvious answer was wrong',
+    lead: 'Five decisions from the work, each one a place where I had to say no.',
+    moments: [
+      {
+        title: '"Consistent" is not always correct',
+        text:
+          'The agent made the register form clear its error when the password was edited, ' +
+          'to match login. I reverted it. "Email already in use" is only about the email, ' +
+          'while login\'s "Invalid credentials" is deliberately vague.',
+      },
+      {
+        title: 'Sorting needs a field and a tie-breaker',
+        text:
+          'The API had no ordering, so the client sorts a copy (sorting the cached data ' +
+          'in place would corrupt it) by date, then by id.',
+      },
+      {
+        title: "Reset what the user can't see",
+        text:
+          'Resetting a form when its dialog closed blanked the fields during the ' +
+          'fade-out. I remounted the form after the close animation finished instead, ' +
+          'which also removed code.',
+      },
+      {
+        title: 'Check the cheap causes first',
+        text:
+          '"The page isn\'t responsive" turned out to be browser zoom remembered for the ' +
+          'site. Earlier "bugs" were network throttling and a view-source: prefix.',
+      },
+      {
+        title: 'Fix the cause, not the symptom',
+        text:
+          'Compiled test files were shipping in the server build. I fixed where they were ' +
+          'created, not where they were noticed.',
+      },
+    ],
+  },
+
+  next: {
+    heading: 'What is next',
+    label: 'Planned',
+    lead: 'None of this is built yet. Applyd has no AI features today.',
+    items: [
+      'Edit applications in the UI (status and notes).',
+      'Status history with dates, so the time between stages can be measured.',
+      'A metrics dashboard built from my own real job search: applications per week, ' +
+        'where applications drop off, and how long responses take.',
+      'CV and job posting match: a fit score with strengths and gaps as structured output ' +
+        'validated by Zod, plus an evaluation set to check that the scores make sense.',
+      'An assistant with tools: server-side tool use (add a round, change a status), ' +
+        'scoped to the signed-in user and confirmed before any write, then an MCP integration.',
+    ],
+  },
+
   stack: [
     {
       label: 'Client',
