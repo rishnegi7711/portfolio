@@ -9,84 +9,14 @@
 // The viewport is 1437×776 at 2x, which is the 2874×1552 framing of the original dark-UI
 // screenshots, so old and new line up. The stills use reduced motion, so each one shows the
 // final state with nothing half-animated. The PNGs are gitignored; only exported WebPs ship.
-// CDP replies are untyped JSON, so `any` is the honest type here.
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
+import { boardReady, openDemo } from './lib/applyd-demo'
 
-const demo = 'https://job-tracker-steel-ten.vercel.app'
-// The public demo account, also shown on the portfolio.
-const email = 'testUser@test.com'
-const password = 'Password7711'
 const outDir = resolve(import.meta.dir, '../public/job-tracker')
-const COLD_START = 90_000 // ms; the free Render backend can take up to a minute to wake
-
-// Fresh port + profile per run, so a leftover browser can never be reused.
-const port = 9400 + Math.floor(Math.random() * 500)
-const profile = tmpdir() + '/capture-prof-' + port
-const chrome = Bun.spawn(
-  [
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-    '--headless=new', '--disable-gpu', '--hide-scrollbars', '--remote-debugging-port=' + port,
-    '--user-data-dir=' + profile, 'about:blank',
-  ],
-  { stderr: 'ignore' },
-)
-process.on('exit', () => chrome.kill()) // also on a crash, so no browser outlives its run
-let targets: any
-for (let i = 0; i < 40 && !targets; i++) {
-  await Bun.sleep(250)
-  targets = await fetch(`http://127.0.0.1:${port}/json`).then((r) => r.json()).catch(() => undefined)
-}
-if (!targets) throw new Error('chrome never came up on ' + port)
-const page = targets.find((t: { type: string }) => t.type === 'page')
-const ws = new WebSocket(page.webSocketDebuggerUrl)
-await new Promise((r) => (ws.onopen = r))
-let id = 0
-const pending = new Map<number, (v: any) => void>()
-ws.onmessage = (e) => {
-  const msg = JSON.parse(e.data as string)
-  pending.get(msg.id)?.(msg.result)
-}
-const send = (method: string, params = {}) =>
-  new Promise<any>((r) => { pending.set(++id, r); ws.send(JSON.stringify({ id, method, params })) })
-const evaluate = async (expression: string) =>
-  (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })).result.value
-
-/** Polls a page expression until it is truthy; throws with `what` if it never is. */
-async function waitFor(expression: string, what: string, timeout = 15_000) {
-  const start = Date.now()
-  while (Date.now() - start < timeout) {
-    if (await evaluate(expression)) return
-    await Bun.sleep(250)
-  }
-  const state = await evaluate(`location.pathname + ' | ' + document.body.innerText.slice(0, 300)`)
-  throw new Error(`timed out waiting for ${what}. Page: ${state}`)
-}
-
-await send('Emulation.setDeviceMetricsOverride', { width: 1437, height: 776, deviceScaleFactor: 2, mobile: false })
-await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] })
-await send('Page.enable')
-
-// The four status columns are h2s. (Not innerText: the app uppercases them with CSS.)
-const boardReady = `document.querySelectorAll('h2').length >= 4`
-
-/** Types into a field the way a visitor would, so the app's own form handling sees it. */
-async function type(selector: string, text: string) {
-  await evaluate(`document.querySelector(${JSON.stringify(selector)}).focus()`)
-  await send('Input.insertText', { text })
-}
-
-// Log in through the real form. Always load the root: the demo has no rewrite for deep
-// links, so /login 404s on a fresh load, but the app redirects there itself.
-await send('Page.navigate', { url: demo + '/' })
-await waitFor(`!!document.querySelector('#email')`, 'the login form')
-await type('#email', email)
-await type('#password', password)
-await evaluate(`document.querySelector('button[type=submit]').click()`)
-console.log('logging in; the backend may be waking up (up to a minute)...')
-await waitFor(`location.pathname !== '/login'`, 'login to finish', COLD_START)
-await waitFor(boardReady, 'the board', COLD_START)
+const { evaluate, waitFor, setTheme, openApplication, send, close } = await openDemo({
+  deviceScaleFactor: 2,
+  reducedMotion: true,
+})
 
 /** Saves the current viewport as a PNG, after letting the page settle. */
 async function shot(name: string) {
@@ -95,23 +25,6 @@ async function shot(name: string) {
   const file = join(outDir, name + '.png')
   await Bun.write(file, Buffer.from(img.data, 'base64'))
   console.log('saved', file)
-}
-
-/** Uses the app's own Light / Dark toggle, so what we capture is what a visitor gets. */
-async function setTheme(theme: 'light' | 'dark') {
-  await evaluate(`document.querySelector('label[title="${theme === 'light' ? 'Light' : 'Dark'}"]').click()`)
-  await waitFor(`document.documentElement.classList.contains('dark') === ${theme === 'dark'}`, theme + ' theme')
-  // A scripted click leaves the toggle focused, and its focus ring would show in the still.
-  await evaluate('document.activeElement?.blur()')
-}
-
-/** Opens an application from the board by its company name (client-side navigation). */
-async function openApplication(company: string) {
-  await evaluate(
-    `[...document.querySelectorAll('a')].find((a) => a.textContent.includes(${JSON.stringify(company)})).click()`,
-  )
-  await waitFor(`location.pathname !== '/'`, 'the detail page')
-  await Bun.sleep(500)
 }
 
 /** Bounding boxes in CSS px (the PNGs are 2x), for placing the case study's pen circles. */
@@ -164,6 +77,7 @@ if (process.env.PROBE) {
     themeToggle: 'fieldset',
   })))
   await openApplication('Fernleaf Studio')
+  await Bun.sleep(500)
   await shot('paper-detail-light')
   console.log('detail boxes (CSS px):', JSON.stringify(await measure({ emptyNotes: '[class*="border-dashed"]' })))
   await setTheme('dark')
@@ -177,10 +91,10 @@ if (process.env.PROBE) {
   // column is ~343px, which would shrink three columns to ~5px text, so there is also a
   // square crop of the header plus the first column. The old dark board gets identical
   // crops, so before and after line up. Crop edges sit in the gutters between columns in
-  // both layouts (x ≈ 1015-1032 after column 3, short of the theme toggle at 1021, x ≈ 405-415 after column 1). The values
-  // are CSS px x 2, because the PNGs are 2x.
+  // both layouts (x ≈ 1015-1032 after column 3, short of the theme toggle at 1021;
+  // x ≈ 405-415 after column 1). The values are CSS px x 2, because the PNGs are 2x.
   await send('Page.navigate', { url: 'about:blank' })
-  const WIDE: Crop = { x: 160, y: 0, w: 1876, h: 938 } // CSS px x 80-1018, y 0-469 (the theme toggle starts at 1021)
+  const WIDE: Crop = { x: 160, y: 0, w: 1876, h: 938 } // CSS px x 80-1018, y 0-469
   const NARROW: Crop = { x: 160, y: 0, w: 660, h: 660 } // CSS px x 80-410, y 0-330
   const SLIDER_WIDTH = 1792 // 2x the 896px content column
   const MOBILE_WIDTH = 686 // 2x a 343px column (a 375px screen less its gutters)
@@ -196,7 +110,4 @@ if (process.env.PROBE) {
   }
 }
 
-ws.close()
-chrome.kill()
-await chrome.exited
-await Bun.$`rm -rf ${profile}`.quiet()
+await close()
