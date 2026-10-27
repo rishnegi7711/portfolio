@@ -80,7 +80,7 @@ bun run lint
 - `src/content.ts` has all the copy and facts. Components read from it, so text isn't scattered through the JSX.
 - `src/components/` has one file per section, plus shared pieces like `PenMark` and `MarginNote`.
 - `src/lib/gsap.ts` registers the GSAP plugins and has the `playOnceInView` helper that most animations use.
-- `scripts/` has the headless Chrome measuring script.
+- `scripts/` has the headless Chrome measuring script (`cdp.ts`) and the generators for the link-preview image (`og-image.tsx`) and the LinkedIn banner.
 - `CLAUDE.md` and `PRODUCT.md` are the briefs the site was built from.
 
 The code is here to read. Please don't reuse the content or the photos.
