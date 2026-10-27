@@ -6,7 +6,8 @@ Claude invent anything.
 ## Identity
 
 - Name: Rishi Negi
-- Role headline: Frontend engineer (React + TypeScript), growing into full-stack
+- Role headline: Full-stack engineer, building with AI coding agents
+- Hero mark (the pen loop): "AI coding agents"
 - Location: London, UK
 - Right to work: Graduate Visa, valid until September 2027
 - Email: rishi@rishinegi.com
@@ -19,11 +20,22 @@ Claude invent anything.
 
 ## Positioning / story
 
-Production support engineer turned frontend developer. Likes understanding how things
-actually work under the hood, not just making them look like they do. Stepped outside the
-frontend comfort zone to self-teach a Node/Express backend and ship a full-stack app
-end-to-end. Looking for a high-autonomy, technically deep team in London.
-4+ years in software engineering (Coforge 2019–2022, RapinnoTech 2022–2023).
+Production support engineer turned frontend developer, now a full-stack engineer who
+builds with AI coding agents. Likes understanding how things actually work under the hood,
+not just making them look like they do. Stepped outside the frontend comfort zone to
+self-teach a Node/Express backend and ship a full-stack app end-to-end, then rebuilt and
+extended that app with Claude Code to learn how to plan, steer and review an AI coding
+agent. Learning and building, not claiming to be an AI engineer: Applyd has no AI
+features yet, they are planned. Looking for a high-autonomy, technically deep team in
+London. 4+ years in software engineering (Coforge 2019–2022, RapinnoTech 2022–2023).
+
+Writing rules for site copy (from the Applyd brief): no em dashes, no filler words
+("seamless", "robust", "leverage", "cutting-edge", "passionate"), short sentences,
+British English. Never "AI engineer", "expert" or "production AI system".
+
+Skills line: Building with AI coding agents: plan-first workflows, project memory,
+enforced permissions, agent code review, and reviewing third-party skills before
+trusting them.
 
 ## Featured projects
 
@@ -32,22 +44,128 @@ end-to-end. Looking for a high-autonomy, technically deep team in London.
 - Name: Applyd; descriptor "job application tracker"
 
 - Links: repo https://github.com/rishnegi7711/job-tracker · live https://job-tracker-steel-ten.vercel.app
+- Case study page: /work/applyd (on this site)
+- Demo login: testUser@test.com / Password7711. The backend is on a free Render instance
+  and can take up to a minute to wake up.
 - Status: live, in active development
+- One line: a job tracker I built by hand to learn full-stack development, then rebuilt
+  and extended with Claude Code to learn how to plan, steer and review an AI coding agent.
 - What: full-stack app to track job applications and interview rounds, replacing the
   spreadsheet most people use. Board view by status, per-application interview history,
   private multi-user accounts.
+- Features today: board grouped by status (Applied, Interviewing, Rejected, Offer);
+  interview rounds per application as a timeline (type, date, outcome); register, log in,
+  log out, with every query scoped to the signed-in user; create and delete applications
+  (deleting also deletes its rounds); light theme by default, a designed warm dark mode,
+  and a Light / Dark / System toggle.
 - Stack: React, TypeScript, Vite, TanStack Query, React Router, Tailwind, shadcn/ui,
   React Hook Form, Zod · Node.js, Express, TypeScript, Prisma, PostgreSQL (Neon), JWT, bcrypt ·
-  Vitest, ESLint, Prettier · Vercel (frontend), Render (backend)
-- Engineering story (case-study angles):
+  Vitest, ESLint, Prettier, GitHub Actions, Bun workspaces · Vercel (frontend), Render
+  (backend)
+- Engineering story, phase 1 (built by hand, to learn every layer):
   - Built the Express backend from scratch alongside the React frontend: a deliberate push
-    into unfamiliar territory.
-  - JWT auth with per-route access control; bcrypt password hashing.
-  - Full CRUD across applications, statuses and user accounts.
+    into unfamiliar territory. Monorepo with an Express API and a React client.
+  - Postgres schema with Prisma on Neon.
+  - JWT auth with bcrypt, plus middleware protecting every route.
+  - CRUD routes with ownership checks (find, check owner, then act).
   - Three shared Zod schemas: React Hook Form and the API validate against the same ones,
     so there's no duplicate client/server validation.
-  - TanStack Query for server state and client-side caching.
-- Assets: screenshots in /public/job-tracker/ (board, detail, validation; WebP)
+  - Board and detail views with TanStack Query (server state, client-side caching) and
+    React Hook Form.
+  - Deployed to Vercel and Render, fixing the build and module errors that only appear in
+    production. First server tests with Vitest.
+- Engineering story, phase 2 (Claude Code writes, Rishi reviews; from 20 October 2026).
+  The deliberate switch: the skill being built is planning, steering and judging changes
+  rather than typing them. Rule: he must be able to explain every line that merges.
+  - CI with GitHub Actions, proven by deliberately breaking a test and watching it go red,
+    then reverting.
+  - Logout that clears the query cache, so the next user never sees the previous user's data.
+  - Runtime validation: every API response parsed with Zod at the boundary. It immediately
+    found a database row with a `null` that a hand-checked sample had missed.
+  - Delete with a database migration: deleting an application with interview rounds would
+    fail (`ON DELETE RESTRICT`), so added `ON DELETE CASCADE`, and applied it safely to the
+    only (production) database: create the migration without running it, read the SQL, then
+    apply with a command that can never reset data.
+  - Bun workspaces: one install for the monorepo. Proved the existing deploy commands
+    still worked on the new layout before pushing, then changed the hosting settings.
+  - The full "Paper" UI redesign (below).
+- The redesign, a short case study. Goal: make it feel premium, with animation that means
+  something.
+  - Process: (1) researched design skills and chose a small, deliberate set instead of
+    stacking them; (2) with no reference sites, used a prototyping skill to build three
+    working login page directions side by side and picked by looking at them: "Paper"
+    (warm, calm, Notion-like); (3) wrote the direction down before building: `PRODUCT.md`
+    (who it's for, what it must never claim) and `DESIGN.md` (colour tokens for both themes
+    with measured contrast, type, spacing, components, motion rules); (4) built in order:
+    theme tokens and dark mode, login and register, the top bar with a theme toggle, the
+    board, the detail page, the dialogs; (5) reviewed with a code review skill, triaged the
+    findings, filed the rest as GitHub issues, merged through a pull request.
+  - Light by default with a designed warm dark mode, not an inversion.
+  - No flash of the wrong theme: a small script applies the saved theme before the page paints.
+  - Motion means placement: cards settle into their columns on first load, the interview
+    timeline draws itself in, a newly added round gets a brief highlight.
+  - Everything respects the reduced motion setting.
+  - WCAG AA as the accessibility target: contrast measured for every text colour,
+    keyboard-friendly controls.
+  - Iteration from looking at it in the browser: status dots too faint, so they got their
+    own stronger colour tokens; count chips vanished in light mode because the contrast had
+    been measured against the wrong background, so they went neutral and only the dot
+    carries colour; dashed empty-state borders disappeared, so one shared empty-state
+    component fixed it everywhere; login success animation shortened from 700ms to 300ms
+    because the board's own animation already plays right after.
+- How he works with Claude Code:
+  - Plan mode first: nothing changes until the plan is approved; product decisions come
+    back as questions.
+  - Model routing: `opusplan` (Opus plans, Sonnet executes).
+  - Project memory: `CLAUDE.md` with commands, conventions, known pitfalls, git rules and
+    four working rules (think first, keep it simple, change only what's needed, define how
+    success is checked).
+  - A definition of done: builds and tests pass, plus his own browser check in both themes.
+  - Enforced approvals: permission rules make Claude Code ask before every commit and push,
+    even in auto mode. Learned that instructions guide but don't guarantee.
+  - Context hygiene: clear the session between unrelated tasks.
+  - Reviewing reviews: ran a code review skill, then verified each finding. Some were real,
+    some were deliberate decisions the reviewer didn't know about, some line references
+    were wrong.
+  - Tracking work: follow-ups filed as GitHub issues with "done when" lists and triage labels.
+  - Skills and plugins used: Matt Pocock's skills (`/prototype`, `/code-review`, the GitHub
+    issue setup); Impeccable (`init` to write `PRODUCT.md`, `extract` to turn the chosen
+    prototype into `DESIGN.md`); Taste (design direction, plus a headless Chrome inspector
+    for desktop, tablet and mobile screenshots).
+  - Third-party tools are treated like dependencies: read before installing (had Claude
+    Code list every network call, file write and process in Taste's scripts, then checked
+    the key claims himself); installed the minimum (one tool, only for Claude Code, no
+    hooks, skill files kept out of git); audited what was installed and removed a plugin
+    whose hooks added instructions to every prompt that conflicted with his own review rules.
+- Judgement moments (each one a decision where the obvious answer was wrong):
+  1. "Consistent" isn't always correct. The agent made the register form clear its error
+     on password edits to match login. Reverted: "Email already in use" is only about the
+     email, while login's "Invalid credentials" is deliberately vague.
+  2. Sorting needs a field and a tie-breaker. The API had no ordering, so the client sorts
+     a copy (sorting the cached data in place would corrupt it) by date, then by id.
+  3. Reset what the user can't see. Resetting a form when its dialog closed blanked the
+     fields during the fade-out. Fixed by remounting the form after the close animation
+     finished, which also removed code.
+  4. Check cheap causes first. "The page isn't responsive" turned out to be browser zoom
+     remembered for the site. Earlier "bugs" were network throttling and a `view-source:`
+     prefix.
+  5. A missing import, not a missing feature. Dialog animations had never run, because the
+     animation library was never imported.
+  6. Prove it fails. CI only counted once it had been seen going red.
+  7. Fix the cause, not the symptom. Compiled test files were shipping in the server
+     build; fixed where they were created, not where they were noticed.
+- Planned (not built, and the site must label it "Planned"):
+  1. Edit applications in the UI (status and notes).
+  2. Status history with dates, so the time between stages can be measured.
+  3. A metrics dashboard built from his own real job search: applications per week, where
+     applications drop off, how long responses take.
+  4. CV and job posting match: a fit score with strengths and gaps as structured output
+     validated by Zod, plus an evaluation set to check the scores make sense.
+  5. An assistant with tools: server-side tool use (add a round, change a status), scoped
+     to the signed-in user, confirmed before any write, then an MCP integration.
+- Assets: old dark-UI screenshots in /public/job-tracker/ (board, detail, validation; WebP),
+  kept as the "before". New Paper UI screenshots (light and dark) to be captured from the
+  live demo.
 
 ### 2. CleanDeps CLI
 
