@@ -131,6 +131,20 @@ export type Compare = {
   after: CompareImage
 }
 
+/** A short muted video of the app, with a still for people who ask for reduced motion. */
+export type MotionFigure = {
+  /** shown after an auto-numbered "Fig. n —" */
+  caption: string
+  /** what the clip shows, for assistive technology */
+  alt: string
+  webm: string
+  mp4: string
+  /** the first frame: shown before the video plays, and instead of it with reduced motion */
+  poster: string
+  width: number
+  height: number
+}
+
 /** A screenshot with numbered pen circles drawn over parts of it, and a note for each. */
 export type AnnotatedFigure = {
   src: string
@@ -435,6 +449,19 @@ export const applydCaseStudy = {
       'WCAG AA as the accessibility target: contrast measured for every text colour, and ' +
         'keyboard-friendly controls.',
     ],
+    // Filmed from the live demo by scripts/record-applyd.ts: about 7s, muted, looping.
+    motion: {
+      caption: 'Applyd\'s own animations: cards settling in, a timeline drawing itself, the theme switch',
+      alt:
+        'A short loop of Applyd. The board loads and its cards settle into their columns. ' +
+        'An application opens and its interview timeline draws itself in. The theme switches ' +
+        'to dark and back to light.',
+      webm: '/job-tracker/applyd-motion.webm',
+      mp4: '/job-tracker/applyd-motion.mp4',
+      poster: '/job-tracker/applyd-motion-poster.webp',
+      width: 1000,
+      height: 540,
+    } satisfies MotionFigure,
     iterationHeading: 'Looking at it in the browser',
     iterationLead:
       'The first pass got some things wrong, and I only saw them by looking. The board ' +
