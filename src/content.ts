@@ -131,6 +131,25 @@ export type Compare = {
   after: CompareImage
 }
 
+/** A screenshot with numbered pen circles drawn over parts of it, and a note for each. */
+export type AnnotatedFigure = {
+  src: string
+  width: number
+  height: number
+  alt: string
+  /** shown after an auto-numbered "Fig. n —" */
+  caption: string
+  /** the screenshot's size in CSS px (what the capture saw): marks are placed in these units */
+  view: { width: number; height: number }
+  marks: {
+    /** the pen circle's bounding box */
+    circle: { x: number; y: number; w: number; h: number }
+    /** where the mark's number sits, centred on this point */
+    number: { x: number; y: number }
+    note: string
+  }[]
+}
+
 /** The same screen in the redesign's two themes, switched by a Light / Dark control. */
 export type ThemeFigure = {
   /** shown after an auto-numbered "Fig. n —" */
@@ -417,12 +436,48 @@ export const applydCaseStudy = {
         'keyboard-friendly controls.',
     ],
     iterationHeading: 'Looking at it in the browser',
-    iterationLead: 'The first pass got some things wrong, and I only saw them by looking.',
+    iterationLead:
+      'The first pass got some things wrong, and I only saw them by looking. The board ' +
+      'below marks two of them, and the theme toggle.',
+    // Positions are CSS px in the capture's 1437×776 viewport, minus the crop's x offset of
+    // 80 (scripts/capture-applyd.ts prints the measured boxes). The circles are those boxes
+    // plus 8-12px of padding.
+    annotated: {
+      src: '/job-tracker/board-paper-light-annotated.webp',
+      width: 1792,
+      height: 593,
+      view: { width: 1270, height: 420 },
+      alt:
+        'The Paper board in its light theme, with three parts circled in pen and numbered: ' +
+        '1, the coloured status dot beside the Applied column heading; 2, its count chip; ' +
+        '3, the Light, Dark and System toggle in the top bar.',
+      caption: 'Three details on the Paper board',
+      marks: [
+        {
+          circle: { x: 30, y: 194, w: 83, h: 33 },
+          number: { x: 13, y: 210 },
+          note:
+            'Each status has its own colour token. A dot is a marker, and the column ' +
+            'heading already names the status, so the dot only needs to be seen.',
+        },
+        {
+          circle: { x: 291, y: 194, w: 40, h: 32 },
+          number: { x: 311, y: 178 },
+          note:
+            'Count chips are neutral. Their contrast had been measured against the wrong ' +
+            'background and they vanished in light mode. Now only the dot carries colour.',
+        },
+        {
+          circle: { x: 929, y: 6, w: 118, h: 52 },
+          number: { x: 914, y: 32 },
+          note:
+            'Light, Dark or System. The saved theme is applied before the page paints, so ' +
+            'there is no flash of the wrong one.',
+        },
+      ],
+    } satisfies AnnotatedFigure,
+    iterationMore: 'Two more changes came out of looking:',
     iteration: [
-      'The status dots were too faint. They got their own stronger colour tokens, since a ' +
-        'dot is a marker and the column heading already names the status.',
-      'The count chips vanished in light mode. The contrast had been measured against the ' +
-        'wrong background. They went neutral, so only the dot carries colour.',
       'The dashed empty-state borders disappeared. One shared empty-state component fixed ' +
         'it everywhere.',
       "The login success animation went from 700ms to 300ms, because the board's own " +

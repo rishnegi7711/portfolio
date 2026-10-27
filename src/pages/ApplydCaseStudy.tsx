@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import AnnotatedScreenshot from '../components/AnnotatedScreenshot'
 import Container from '../components/Container'
 import MarginNote from '../components/MarginNote'
 import ProjectFigure from '../components/ProjectFigure'
@@ -132,6 +133,10 @@ function ApplydCaseStudy() {
             </div>
             <SubHeading>{cs.redesign.iterationHeading}</SubHeading>
             <p className="mt-3 max-w-[65ch] leading-relaxed text-ink">{cs.redesign.iterationLead}</p>
+            <div className="mt-8">
+              <AnnotatedScreenshot figure={cs.redesign.annotated} number={4} />
+            </div>
+            <p className="mt-10 max-w-[65ch] leading-relaxed text-ink">{cs.redesign.iterationMore}</p>
             <Bullets items={cs.redesign.iteration} />
           </Section>
 

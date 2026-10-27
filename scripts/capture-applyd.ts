@@ -100,6 +100,10 @@ if (process.env.PROBE) {
   const MOBILE_WIDTH = 686 // 2x a 343px column (a 375px screen less its gutters)
   await exportWebp('board.png', 'board-before.webp', SLIDER_WIDTH, WIDE)
   await exportWebp('board.png', 'board-before-mobile.webp', MOBILE_WIDTH, NARROW)
+  // The case study's annotated board: the header (with the theme toggle) and all four
+  // columns, CSS px x 80-1350, y 0-420, scaled to 2x the 896px column. The pen circles are
+  // placed in these CSS px, from the boxes printed above, so keep them in step.
+  await exportWebp('paper-board-light.png', 'board-paper-light-annotated.webp', SLIDER_WIDTH, { x: 160, y: 0, w: 2540, h: 840 })
   for (const theme of ['light', 'dark']) {
     await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}.webp`, SLIDER_WIDTH, WIDE)
     await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}-mobile.webp`, MOBILE_WIDTH, NARROW)

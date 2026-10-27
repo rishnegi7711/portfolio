@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { identity } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
+import { LOOP_PATH } from '../lib/penLoop'
 import Container from './Container'
 
 type ArrowGeometry = {
@@ -32,15 +33,7 @@ const NOTE_DROP = 8 // px the note's top sits below the loop's top: level enough
 const NOTE_LINE_MID = 10 // px from the note's top to the middle of its first line (14px text, 1.375 leading)
 const BOW = 14 // px the arrow sags below the straight line between its ends, so it reads as drawn
 
-// One authored pen loop around the marked phrase (identity.heroMark), drawn in a 200×60
-// box that's stretched over it (preserveAspectRatio="none"). Starts top-right, runs anticlockwise, comes back
-// round and overshoots past its start with a short tail. Lopsided (fuller on the right),
-// and tilted about -2° (left side lower, right side higher). The left side sits closer
-// in (~5px at x-height) since normal word spacing leaves only ~7px to the "h" of "with".
-const LOOP_PATH =
-  'M 170 5 C 128 0, 60 3, 24 8 C 10 11, 9 26, 11 41 C 14 55, 46 60, 100 58 ' +
-  'C 152 57, 192 52, 197 34 C 201 18, 193 4, 158 2 C 142 1, 126 2, 110 5'
-// The point on that stroke the md+ arrow aims at, in the same 200×60 box: lower right.
+// The point on LOOP_PATH's stroke the md+ arrow aims at, in the same 200×60 box: lower right.
 const LOOP_TARGET = { x: 197, y: 34 }
 
 /** Measures the live position of the headline's marked-phrase span and places the note
