@@ -58,3 +58,32 @@ h3 {
     }
   }
 }
+
+/* The before/after slider's range input is invisible and covers the whole image, so you can
+   click or drag anywhere on it. A zero-width thumb makes its value match the pointer's
+   position exactly (a default thumb would shift it by up to half its width at each end). */
+.compare-range {
+  appearance: none;
+  background: transparent;
+}
+
+.compare-range::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+
+.compare-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 100%;
+}
+
+.compare-range::-moz-range-track {
+  background: transparent;
+}
+
+.compare-range::-moz-range-thumb {
+  width: 0;
+  height: 100%;
+  border: 0;
+}

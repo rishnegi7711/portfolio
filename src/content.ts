@@ -111,6 +111,23 @@ export type Figure = {
   full: { src: string; width: number; height: number }
 }
 
+/** One side of the before/after slider: the same crop of the same screen, in two sizes. */
+export type CompareImage = {
+  /** header plus three columns, 2:1 (sm and up) */
+  src: string
+  /** header plus the first column, square (below sm, where three columns would be unreadable) */
+  mobileSrc: string
+  alt: string
+}
+
+export type Compare = {
+  /** shown after an auto-numbered "Fig. n —" */
+  caption: string
+  /** the old design is on the left of the divider, the new one on the right */
+  before: CompareImage
+  after: CompareImage
+}
+
 export type ArchitectureNode = {
   label: string
   /** one per line */
