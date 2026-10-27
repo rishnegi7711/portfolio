@@ -57,6 +57,7 @@ function ApplydCaseStudy() {
   usePageMeta(
     'Applyd case study | Rishi Negi',
     'How I built Applyd, a job application tracker, by hand and then with Claude Code.',
+    '/work/applyd',
   )
   const project = projects.find((p) => p.id === 'job-tracker')!
 
