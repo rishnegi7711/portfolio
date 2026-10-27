@@ -8,6 +8,8 @@ export type Identity = {
   roleHeadline: string
   /** short role line sized for the hero's large display type */
   heroRole: string
+  /** the phrase inside heroRole that the pen loop circles; must appear in it verbatim */
+  heroMark: string
   location: string
   /** shown after the city in the hero's fact line */
   heroFact: string
@@ -24,8 +26,9 @@ export type Identity = {
 
 export const identity: Identity = {
   name: 'Rishi Negi',
-  roleHeadline: 'Frontend engineer (React + TypeScript), growing into full-stack',
-  heroRole: 'Frontend engineer, growing into full-stack',
+  roleHeadline: 'Full-stack engineer, building with AI coding agents',
+  heroRole: 'Full-stack engineer, building with AI coding agents',
+  heroMark: 'AI coding agents',
   location: 'London, UK',
   heroFact: '4+ years in software engineering',
   email: 'rishi@rishinegi.com',
@@ -41,8 +44,8 @@ export const identity: Identity = {
     caption: 'the person who reads the error messages',
   },
   heroAnnotation:
-    'Taught myself Node + Express to see the other side of the API, then shipped an ' +
-    'app with it, end to end.',
+    'Built Applyd by hand to learn every layer. Then rebuilt it directing Claude Code, ' +
+    'and reviewed every change.',
 }
 
 /** Page sections, in order. The header nav and the page both render from this list,
@@ -85,6 +88,10 @@ export const story = [
   'In 2022 I moved into frontend work, building React apps used by field and sales ' +
     'agents. In 2023 I came to London for an MSc in Software Engineering and used the ' +
     'time to learn the backend: Node, Express and PostgreSQL. Applyd is what came out of that.',
+  'I built Applyd by hand first, so I understood every layer. Then I switched to ' +
+    'directing Claude Code. It writes the code. I plan the work, review every change and ' +
+    "set the rules it works within. I'm still learning, and Applyd's AI features are " +
+    'planned, not built.',
   "Now I'm looking for a junior frontend or full-stack role in London, on a team that " +
     'goes deep technically and gives people room to own their work.',
 ]
