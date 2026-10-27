@@ -128,21 +128,24 @@ async function measure(selectors: Record<string, string>) {
   })()`)
 }
 
-/** Re-encodes a PNG as WebP, optionally cropped to its top `cropHeight` px and scaled to
+/** A region of a screenshot, in the PNG's own pixels. */
+type Crop = { x: number; y: number; w: number; h: number }
+
+/** Re-encodes a PNG as WebP, cropped to `crop` (default: the whole image) and scaled to
  *  `width`. Done in the page with a canvas, because no WebP encoder is installed. */
-async function exportWebp(png: string, webp: string, width: number, cropHeight?: number) {
+async function exportWebp(png: string, webp: string, width: number, crop?: Crop) {
   const b64 = Buffer.from(await Bun.file(join(outDir, png)).arrayBuffer()).toString('base64')
   const data = await evaluate(`(async () => {
     const img = new Image()
     img.src = 'data:image/png;base64,${b64}'
     await img.decode()
-    const h = ${cropHeight ?? 0} || img.height
+    const c = ${JSON.stringify(crop ?? null)} ?? { x: 0, y: 0, w: img.width, h: img.height }
     const canvas = document.createElement('canvas')
     canvas.width = ${width}
-    canvas.height = Math.round((h * ${width}) / img.width)
+    canvas.height = Math.round((c.h * ${width}) / c.w)
     const ctx = canvas.getContext('2d')
     ctx.imageSmoothingQuality = 'high'
-    ctx.drawImage(img, 0, 0, img.width, h, 0, 0, canvas.width, canvas.height)
+    ctx.drawImage(img, c.x, c.y, c.w, c.h, 0, 0, canvas.width, canvas.height)
     return canvas.toDataURL('image/webp', 0.82).split(',')[1]
   })()`)
   await Bun.write(join(outDir, webp), Buffer.from(data, 'base64'))
@@ -169,16 +172,25 @@ if (process.env.PROBE) {
   await waitFor(boardReady, 'the board again')
   await shot('paper-board-dark')
 
-  // WebPs. The boards are cropped to their top 880px (440 CSS px of the 776 viewport is
-  // empty below the columns), and the old dark board gets the identical crop, so the
-  // before/after slider lines up exactly.
+  // WebPs. The slider and the theme figure need text readable at column width, so the board
+  // is cropped tight: the header plus the first three columns at exactly 2:1. Below sm the
+  // column is ~343px, which would shrink three columns to ~5px text, so there is also a
+  // square crop of the header plus the first column. The old dark board gets identical
+  // crops, so before and after line up. Crop edges sit in the gutters between columns in
+  // both layouts (x ≈ 1015-1032 after column 3, short of the theme toggle at 1021, x ≈ 405-415 after column 1). The values
+  // are CSS px x 2, because the PNGs are 2x.
   await send('Page.navigate', { url: 'about:blank' })
-  const BOARD_CROP = 880
+  const WIDE: Crop = { x: 160, y: 0, w: 1876, h: 938 } // CSS px x 80-1018, y 0-469 (the theme toggle starts at 1021)
+  const NARROW: Crop = { x: 160, y: 0, w: 660, h: 660 } // CSS px x 80-410, y 0-330
   const SLIDER_WIDTH = 1792 // 2x the 896px content column
-  await exportWebp('board.png', 'board-before.webp', SLIDER_WIDTH, BOARD_CROP)
+  const MOBILE_WIDTH = 686 // 2x a 343px column (a 375px screen less its gutters)
+  await exportWebp('board.png', 'board-before.webp', SLIDER_WIDTH, WIDE)
+  await exportWebp('board.png', 'board-before-mobile.webp', MOBILE_WIDTH, NARROW)
   for (const theme of ['light', 'dark']) {
-    await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}.webp`, SLIDER_WIDTH, BOARD_CROP)
-    await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}-full.webp`, 2874, BOARD_CROP)
+    await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}.webp`, SLIDER_WIDTH, WIDE)
+    await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}-mobile.webp`, MOBILE_WIDTH, NARROW)
+    // The enlarged view: the full-width board, without the empty space below the columns.
+    await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}-full.webp`, 2874, { x: 0, y: 0, w: 2874, h: 880 })
     await exportWebp(`paper-detail-${theme}.png`, `detail-paper-${theme}.webp`, SLIDER_WIDTH)
     await exportWebp(`paper-detail-${theme}.png`, `detail-paper-${theme}-full.webp`, 2874)
   }
