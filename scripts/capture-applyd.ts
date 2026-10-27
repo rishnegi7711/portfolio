@@ -89,13 +89,13 @@ if (process.env.PROBE) {
   // WebPs. The slider and the theme figure need text readable at column width, so the board
   // is cropped tight: the header plus the first three columns at exactly 2:1. Below sm the
   // column is ~343px, which would shrink three columns to ~5px text, so there is also a
-  // square crop of the header plus the first column. The old dark board gets identical
+  // tall crop of the header plus the first column. The old dark board gets identical
   // crops, so before and after line up. Crop edges sit in the gutters between columns in
   // both layouts (x ≈ 1015-1032 after column 3, short of the theme toggle at 1021;
   // x ≈ 405-415 after column 1). The values are CSS px x 2, because the PNGs are 2x.
   await send('Page.navigate', { url: 'about:blank' })
   const WIDE: Crop = { x: 160, y: 0, w: 1876, h: 938 } // CSS px x 80-1018, y 0-469
-  const NARROW: Crop = { x: 160, y: 0, w: 660, h: 660 } // CSS px x 80-410, y 0-330
+  const NARROW: Crop = { x: 160, y: 0, w: 660, h: 760 } // CSS px x 80-410, y 0-380 (the old second card ends at 329, so this leaves room for the label)
   const SLIDER_WIDTH = 1792 // 2x the 896px content column
   const MOBILE_WIDTH = 686 // 2x a 343px column (a 375px screen less its gutters)
   await exportWebp('board.png', 'board-before.webp', SLIDER_WIDTH, WIDE)

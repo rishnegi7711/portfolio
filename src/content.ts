@@ -72,6 +72,9 @@ export const clipboard = {
 /** After each screenshot's caption: the figure opens full size. */
 export const figureEnlargeHint = 'Tap or click to enlarge'
 
+/** After the before/after slider's caption: how to move it. */
+export const compareHint = 'Drag, or use the arrow keys'
+
 /** The footer colophon: what the site is built with, each linking to its site. */
 export const colophon = [
   { label: 'React', url: 'https://react.dev' },
@@ -115,7 +118,7 @@ export type Figure = {
 export type CompareImage = {
   /** header plus three columns, 2:1 (sm and up) */
   src: string
-  /** header plus the first column, square (below sm, where three columns would be unreadable) */
+  /** header plus the first column, 33:38 (below sm, where three columns would be unreadable) */
   mobileSrc: string
   alt: string
 }
@@ -155,12 +158,20 @@ export type Project = {
   descriptor: string
   status: string
   summary: string
-  /** margin note, for the annotation-arrow motif */
+  /** margin note under the project's figure (the slider or the terminal), with its arrow */
   annotation: string
-  stack: ToolkitGroup[]
+  /** the details list under the project; Applyd's lives on its case study page */
+  stack?: ToolkitGroup[]
+  /** heading above engineeringStory */
+  storyHeading: string
   engineeringStory: string[]
   links: ProjectLink[]
-  figures?: Figure[]
+  /** a link to the project's own page on this site (a router link, not an external one) */
+  caseStudy?: { label: string; to: string }
+  /** a line under the links, e.g. how to try the live demo */
+  demoNote?: string
+  /** old design and new, as a draggable before/after slider */
+  compare?: Compare
   architecture?: Architecture
   /** real CLI output for the terminal replay, one scenario per run */
   terminal?: {
@@ -186,75 +197,43 @@ export const projects: Project[] = [
     descriptor: 'Job application tracker',
     status: 'Live, in active development',
     summary: 'A job application tracker: board view, interview timelines, and light and dark themes.',
-    annotation:
-      'These errors come from the same Zod schema the API validates against.',
-    stack: [
-      {
-        label: 'Client',
-        items: [
-          'React',
-          'TypeScript',
-          'Vite',
-          'TanStack Query',
-          'React Router',
-          'Tailwind',
-          'shadcn/ui',
-          'React Hook Form',
-          'Zod',
-        ],
-      },
-      {
-        label: 'Server',
-        items: ['Node.js', 'Express', 'TypeScript', 'Prisma', 'PostgreSQL (Neon)', 'JWT', 'bcrypt'],
-      },
-      { label: 'Testing & tooling', items: ['Vitest', 'ESLint', 'Prettier'] },
-      { label: 'Hosting', items: ['Vercel (frontend)', 'Render (backend)'] },
-    ],
+    annotation: 'The same board before and after the redesign.',
+    demoNote:
+      'Demo login: testUser@test.com / Password7711. The server is on a free plan and can ' +
+      'take up to a minute to wake up.',
+    storyHeading: 'How it was built',
     engineeringStory: [
-      'Built the Express backend from scratch alongside the React frontend: a deliberate ' +
-        'push into unfamiliar territory.',
-      'JWT auth with per-route access control; bcrypt password hashing.',
-      'Full CRUD across applications, statuses and user accounts.',
-      'Three shared Zod schemas: React Hook Form and the API validate against the same ' +
-        "ones, so there's no duplicate client/server validation.",
-      'TanStack Query for server state and client-side caching.',
+      'Built by hand first: an Express API and a React client, Postgres through Prisma, ' +
+        'JWT auth, and Zod schemas shared by both sides.',
+      'Then switched to Claude Code. It writes, I plan and review, and I must be able to ' +
+        'explain every line that merges.',
+      'Since then: CI with GitHub Actions, Zod checks on every API response, and a safe ' +
+        'migration on the production database.',
+      'A full redesign, "Paper", with a written design system and a designed warm dark mode.',
     ],
     links: [
-      { label: 'Repo', url: 'https://github.com/rishnegi7711/job-tracker' },
       { label: 'Live', url: 'https://job-tracker-steel-ten.vercel.app' },
+      { label: 'Repo', url: 'https://github.com/rishnegi7711/job-tracker' },
     ],
-    figures: [
-      {
-        src: '/job-tracker/board.webp',
-        width: 872,
-        height: 176,
+    caseStudy: { label: 'Read the case study', to: '/work/applyd' },
+    // The same crop of the same screen, old and new; see scripts/capture-applyd.ts.
+    compare: {
+      caption: "Applyd's board, old design and new design",
+      before: {
+        src: '/job-tracker/board-before.webp',
+        mobileSrc: '/job-tracker/board-before-mobile.webp',
         alt:
-          'Applyd board with four status columns (Applied, Interviewing, Rejected, Offer), ' +
-          'each holding application cards with company, role and date.',
-        caption: 'Board view by status',
-        full: { src: '/job-tracker/board-full.webp', width: 2874, height: 760 },
+          "The original dark design of Applyd's board: a black page with Applied, " +
+          'Interviewing and Rejected columns of plain company cards.',
       },
-      {
-        src: '/job-tracker/detail.webp',
-        width: 872,
-        height: 389,
+      after: {
+        src: '/job-tracker/board-paper-light.webp',
+        mobileSrc: '/job-tracker/board-paper-light-mobile.webp',
         alt:
-          'Application detail for Fernleaf Studio: a timeline of four interview rounds, ' +
-          'three passed and the final round pending.',
-        caption: 'Per-application interview history',
-        full: { src: '/job-tracker/detail-full.webp', width: 2872, height: 1558 },
+          'The Paper redesign of the same board: a warm off-white page with a serif ' +
+          'Applications heading, and coloured status dots and count chips on each column.',
       },
-      {
-        src: '/job-tracker/validation.webp',
-        width: 768,
-        height: 1296,
-        alt:
-          'Add Application form with inline errors: "Company name is required", ' +
-          '"Please select a status" and "Please select a date".',
-        caption: 'Form validation from the shared Zod schema',
-        full: { src: '/job-tracker/validation-full.webp', width: 2874, height: 1556 },
-      },
-    ],
+    },
     architecture: {
       caption: 'Architecture: the request path, with Zod schemas imported by client and API',
       description:
@@ -285,6 +264,7 @@ export const projects: Project[] = [
       'Got tired of typing rm\u00A0-rf node_modules && npm i several times a week, so made ' +
       'it one command — and used it as a reason to learn how Node CLIs work from scratch.',
     stack: [{ label: 'Built with', items: ['Node.js', 'npm'] }],
+    storyHeading: 'How it works',
     engineeringStory: [
       'Detects the package manager from the lockfile: package-lock.json, bun.lock, ' +
         'bun.lockb, then yarn.lock; first match wins. With no lockfile it stops instead of guessing.',
@@ -329,6 +309,58 @@ export const projects: Project[] = [
     },
   },
 ]
+
+/** What the home entry no longer shows, parked here for the case study page: the screens
+ *  from the hand-built phase, and the stack. */
+export const applydCaseStudy = {
+  stack: [
+    {
+      label: 'Client',
+      items: [
+        'React',
+        'TypeScript',
+        'Vite',
+        'TanStack Query',
+        'React Router',
+        'Tailwind',
+        'shadcn/ui',
+        'React Hook Form',
+        'Zod',
+      ],
+    },
+    {
+      label: 'Server',
+      items: ['Node.js', 'Express', 'TypeScript', 'Prisma', 'PostgreSQL (Neon)', 'JWT', 'bcrypt'],
+    },
+    {
+      label: 'Testing & tooling',
+      items: ['Vitest', 'ESLint', 'Prettier', 'GitHub Actions', 'Bun workspaces'],
+    },
+    { label: 'Hosting', items: ['Vercel (frontend)', 'Render (backend)'] },
+  ] satisfies ToolkitGroup[],
+  /** the old dark design's screens, from the hand-built phase */
+  detail: {
+    src: '/job-tracker/detail.webp',
+    width: 872,
+    height: 389,
+    alt:
+      'Application detail for Fernleaf Studio: a timeline of four interview rounds, ' +
+      'three passed and the final round pending.',
+    caption: 'Per-application interview history',
+    full: { src: '/job-tracker/detail-full.webp', width: 2872, height: 1558 },
+  } satisfies Figure,
+  validation: {
+    src: '/job-tracker/validation.webp',
+    width: 768,
+    height: 1296,
+    alt:
+      'Add Application form with inline errors: "Company name is required", ' +
+      '"Please select a status" and "Please select a date".',
+    caption: 'Form validation from the shared Zod schema',
+    full: { src: '/job-tracker/validation-full.webp', width: 2874, height: 1556 },
+  } satisfies Figure,
+  validationNote: 'These errors come from the same Zod schema the API validates against.',
+}
 
 /** A bullet; a tuple marks its key metric, which gets a pen underline. */
 export type Point = string | [before: string, metric: string, after: string]

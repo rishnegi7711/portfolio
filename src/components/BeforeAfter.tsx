@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import type { Compare, CompareImage } from '../content'
+import { compareHint, type Compare, type CompareImage } from '../content'
 import { gsap, playOnceInView, useGSAP } from '../lib/gsap'
 
 const START = 50 // % of the width showing the old design; also where the sweep ends
@@ -57,12 +57,12 @@ function BeforeAfter({ compare, number }: BeforeAfterProps) {
 
   return (
     <figure>
-      {/* Square below sm (matching the mobile crop), 2:1 from sm up. The outline appears
+      {/* 33:38 below sm (matching the mobile crop), 2:1 from sm up. The outline appears
           when the range input inside has keyboard focus. */}
       <div
         ref={frameRef}
         className={
-          'relative aspect-square select-none overflow-hidden border border-ink/15 ' +
+          'relative aspect-[33/38] select-none overflow-hidden border border-ink/15 ' +
           'bg-paper-raised sm:aspect-[2/1] has-focus-visible:outline-2 ' +
           'has-focus-visible:outline-offset-2 has-focus-visible:outline-accent'
         }
@@ -101,7 +101,7 @@ function BeforeAfter({ compare, number }: BeforeAfterProps) {
       </div>
       <figcaption className="mt-2 font-mono text-xs text-ink-muted">
         Fig. {number} — {compare.caption}
-        <span aria-hidden="true"> · Drag the handle, or use the arrow keys</span>
+        <span aria-hidden="true"> · {compareHint}</span>
       </figcaption>
     </figure>
   )
