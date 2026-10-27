@@ -153,6 +153,8 @@ export type AnnotatedFigure = {
   alt: string
   /** shown after an auto-numbered "Fig. n —" */
   caption: string
+  /** the same crop at twice the size, for the enlarged view (the pen circles are drawn over it too) */
+  full: { src: string; width: number; height: number }
   /** the screenshot's size in CSS px (what the capture saw): marks are placed in these units */
   view: { width: number; height: number }
   marks: {
@@ -473,6 +475,7 @@ export const applydCaseStudy = {
       src: '/job-tracker/board-paper-light-annotated.webp',
       width: 1792,
       height: 593,
+      full: { src: '/job-tracker/board-paper-light-annotated-full.webp', width: 2540, height: 840 },
       view: { width: 1270, height: 420 },
       alt:
         'The Paper board in its light theme, with three parts circled in pen and numbered: ' +

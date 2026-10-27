@@ -104,6 +104,8 @@ if (process.env.PROBE) {
   // columns, CSS px x 80-1350, y 0-420, scaled to 2x the 896px column. The pen circles are
   // placed in these CSS px, from the boxes printed above, so keep them in step.
   await exportWebp('paper-board-light.png', 'board-paper-light-annotated.webp', SLIDER_WIDTH, { x: 160, y: 0, w: 2540, h: 840 })
+  // Its enlarged view: the same crop at the screenshot's own 2x, with the circles drawn over it too.
+  await exportWebp('paper-board-light.png', 'board-paper-light-annotated-full.webp', 2540, { x: 160, y: 0, w: 2540, h: 840 })
   for (const theme of ['light', 'dark']) {
     await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}.webp`, SLIDER_WIDTH, WIDE)
     await exportWebp(`paper-board-${theme}.png`, `board-paper-${theme}-mobile.webp`, MOBILE_WIDTH, NARROW)
