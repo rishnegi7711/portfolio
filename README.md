@@ -65,14 +65,14 @@ I built it with Claude Code. I wanted to learn how to work with an AI coding too
 - The case study's video plays only while it's on screen, has a pause button that stays paused, and with reduced motion isn't loaded at all: you get a still instead.
 - Screen readers get text versions of the diagram, the terminal and the margin notes.
 - Tap targets are at least 44px, and nothing scrolls sideways down to 320px wide.
-- Lighthouse, mobile preset, run locally against the production build served with gzip (median of three runs):
+- Lighthouse, mobile preset, run against the deployed site (median of three runs):
 
   | Page | Performance | Accessibility | Best practices | SEO |
   | --- | --- | --- | --- | --- |
-  | `/` | 92 | 100 | 100 | 100 |
-  | `/work/applyd` | 91 | 100 | 100 | 100 |
+  | `/` | 95 | 100 | 100 | 100 |
+  | `/work/applyd` | 96 | 100 | 100 | 100 |
 
-  These are lab numbers, so PageSpeed Insights on the deployed site can differ a little.
+  These are lab numbers. An occasional run lands around 90, usually on a cold first load, so treat them as a range of about 90 to 97.
 
 ## Running locally
 
