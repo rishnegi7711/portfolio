@@ -1,23 +1,19 @@
-import About from './components/About'
-import Contact from './components/Contact'
-import Experience from './components/Experience'
+import { Outlet, ScrollRestoration } from 'react-router'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import Hero from './components/Hero'
-import Work from './components/Work'
 
+/** The shell every page shares: the header, the page itself, the footer. Which page is
+ *  decided in router.tsx. ScrollRestoration puts the home page back where you were when
+ *  you return from the case study with the browser's Back button. */
 function App() {
   return (
     <>
       <Header />
       <main id="main">
-        <Hero />
-        <Work />
-        <Experience />
-        <About />
-        <Contact />
+        <Outlet />
       </main>
       <Footer />
+      <ScrollRestoration />
     </>
   )
 }

@@ -1,7 +1,13 @@
+import { useLocation } from 'react-router'
 import { identity, sections } from '../content'
 import Container from './Container'
 
 function Header() {
+  // The section ids only exist on the home page. Elsewhere, these anchors point back to it
+  // ("/#work"), as plain links: loading home fresh lets its scroll animations measure
+  // from scratch.
+  const home = useLocation().pathname === '/' ? '' : '/'
+
   return (
     <>
       <a
@@ -23,8 +29,8 @@ function Header() {
             max-[374px]:tracking-tight sm:gap-4"
         >
           <a
-            href="#"
-            aria-label="Back to top"
+            href={home || '#'}
+            aria-label={home ? 'Home' : 'Back to top'}
             className="inline-block shrink-0 py-3 -my-3 font-mono text-sm text-ink
               whitespace-nowrap focus-visible:outline focus-visible:outline-2
               focus-visible:outline-accent"
@@ -38,7 +44,7 @@ function Header() {
               {sections.map((section) => (
                 <li key={section.id}>
                   <a
-                    href={`#${section.id}`}
+                    href={`${home}#${section.id}`}
                     className="inline-block py-3.5 -my-3.5 text-ink-muted underline
                       decoration-accent-muted underline-offset-4 transition-colors
                       hover:text-ink hover:decoration-accent focus-visible:outline
