@@ -28,7 +28,7 @@ The site is styled like an engineer's notebook: warm paper, ink, one teal pen, a
 - GSAP for animation: `useGSAP`, ScrollTrigger, DrawSVG, SplitText and MotionPath
 - Self-hosted fonts through Fontsource: Newsreader, Source Sans 3 and Fragment Mono
 - `react-icons` (Simple Icons) for the tech logos
-- React Router, for the one extra page (`/work/applyd`). `vercel.json` sends every path to `index.html`, so a link straight to the case study loads.
+- React Router, for the one extra page (`/work/applyd`). `vercel.json` sends every path to `index.html`, so a link straight to the case study loads. A small Vite plugin also writes a copy of `index.html` for that page at build time, with its own title, description and preview image, so a shared link previews as the case study (see below).
 - Hosted on Vercel at [rishinegi.com](https://www.rishinegi.com)
 
 ## How I built this
@@ -53,6 +53,8 @@ I built it with Claude Code. I wanted to learn how to work with an AI coding too
 **The pen loop popped in instead of drawing.** The loop around "AI coding agents" draws by animating `stroke-dashoffset` from 1 to 0. GSAP rounds pixel values to whole numbers by default, so it jumped straight from 1 to 0. Setting `autoRound: false` fixed it.
 
 **Keeping the CleanDeps replay honest.** The terminal replay only shows output the CLI really prints. The normal run has the path anonymised and the package list visibly shortened, and nothing is made up. When I noticed the CLI's error messages had typos, I fixed them in CleanDeps itself and published a new version, rather than tidying the text only on the website.
+
+**Link previews showed the wrong page.** Slack, LinkedIn and X build a preview from the raw HTML and don't run JavaScript. Every address on the site returns the same `index.html`, so a shared link to the case study previewed as the home page, with the home page's title, image and canonical. Setting the tags from React fixed the browser tab and Google, but not those scrapers. The fix is a small Vite plugin (in `vite.config.ts`) that, at the end of `vite build`, writes `dist/work/applyd/index.html`: the same file with ten tags swapped. Vercel serves a real file before it applies the catch-all rewrite, so that file answers for `/work/applyd` and everything else is unchanged. It is not a prerender: the page body is still empty until JavaScript runs, and the plugin fails the build if a tag goes missing or the home page's tags drift from `src/content.ts`. When I first rendered the preview image, the screenshot in it looked choppy, because it was a small WebP scaled down. The script now crops the full-resolution capture and renders the card at 2x before downscaling.
 
 **iCloud and git.** The project started on my Desktop, which iCloud was syncing. iCloud started making duplicate files inside `node_modules`, and later renamed git's branch file, so git said the repository had no commits at all. The history was fine. I renamed the file back and moved my projects to `~/Developer`, where nothing syncs them.
 
@@ -96,7 +98,8 @@ bun run lint
 - `src/pages/` has the home page, the Applyd case study and the 404, and `src/router.tsx` says which address shows which.
 - `src/components/` has one file per section, plus shared pieces like `PenMark`, `MarginNote`, `BeforeAfter` and `MotionLoop`.
 - `src/lib/gsap.ts` registers the GSAP plugins and has the `playOnceInView` helper that most animations use.
-- `scripts/` is for development only, and needs Google Chrome. `cdp.ts` measures the live page. `capture-applyd.ts` screenshots Applyd's live demo (read-only, through its public demo login) and exports the images, and `record-applyd.ts` films the loop from it; both use `lib/applyd-demo.ts`. `og-image.tsx` and `linkedin-banner.tsx` render the link-preview image and the LinkedIn banner.
+- `vite.config.ts` has the page-previews plugin described above. `pageMeta` in `src/content.ts` holds each page's title and description.
+- `scripts/` is for development only, and needs Google Chrome. `cdp.ts` measures the live page. `capture-applyd.ts` screenshots Applyd's live demo (read-only, through its public demo login) and exports the images, and `record-applyd.ts` films the loop from it; both use `lib/applyd-demo.ts`. `og-image.tsx` and `og-applyd.tsx` render the two link-preview images in `public/` (they share `lib/render-card.ts`, and re-run them when the text they show changes), and `linkedin-banner.tsx` renders the LinkedIn banner.
 - `CLAUDE.md` and `PRODUCT.md` are the briefs the site was built from.
 
 The code is here to read. Please don't reuse the content or the photos.
