@@ -48,6 +48,32 @@ export const identity: Identity = {
     'and reviewed every change.',
 }
 
+/** What each page tells browsers, search engines and link previews about itself. The pages
+ *  call usePageMeta with these. Home's are also written into index.html (crawlers that don't
+ *  run JavaScript read that), and vite.config.ts checks the two agree. The case study's go
+ *  into its own generated copy of index.html (dist/work/applyd/index.html) at build time,
+ *  which is what lets Slack, LinkedIn and the like preview it. */
+export const pageMeta = {
+  home: {
+    title: 'Rishi Negi, full-stack engineer in London',
+    description:
+      'Full-stack engineer in London, building with AI coding agents. Former production ' +
+      'support engineer who likes understanding how things work.',
+  },
+  applyd: {
+    path: '/work/applyd',
+    title: 'Applyd case study | Rishi Negi',
+    description:
+      'How I built Applyd, a job application tracker, by hand and then with Claude Code.',
+    /** the link-preview image, made by scripts/og-applyd.tsx */
+    ogImage: '/og-applyd.png',
+    ogImageAlt:
+      'Applyd, a job application tracker. A case study: one job tracker, built by hand ' +
+      'and then with Claude Code. Beside the title, a screenshot of its Paper redesign. ' +
+      'rishinegi.com/work/applyd',
+  },
+}
+
 /** Page sections, in order. The header nav and the page both render from this list,
  *  so a nav link can never point at a section that doesn't exist. */
 export const sections = [

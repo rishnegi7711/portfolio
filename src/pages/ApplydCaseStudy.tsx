@@ -5,7 +5,7 @@ import MarginNote from '../components/MarginNote'
 import MotionLoop from '../components/MotionLoop'
 import ProjectFigure from '../components/ProjectFigure'
 import ThemeToggleFigure from '../components/ThemeToggleFigure'
-import { applydCaseStudy as cs, projects } from '../content'
+import { applydCaseStudy as cs, pageMeta, projects } from '../content'
 import { noBreakHyphens } from '../lib/noBreakHyphens'
 import { usePageMeta } from '../lib/usePageMeta'
 
@@ -54,11 +54,7 @@ function Lead({ children }: { children: string }) {
 /** The Applyd case study: the same job tracker built two ways, what changed, and how the
  *  second way works. Copy lives in content.ts (applydCaseStudy). */
 function ApplydCaseStudy() {
-  usePageMeta(
-    'Applyd case study | Rishi Negi',
-    'How I built Applyd, a job application tracker, by hand and then with Claude Code.',
-    '/work/applyd',
-  )
+  usePageMeta(pageMeta.applyd.title, pageMeta.applyd.description, pageMeta.applyd.path)
   const project = projects.find((p) => p.id === 'job-tracker')!
 
   return (
