@@ -6,6 +6,7 @@
 //
 // The role line, the circled phrase and the name come from src/content.ts, so the image
 // can't drift from the hero. Re-run it whenever identity.heroRole or heroMark changes.
+// Rendered at 2x and downscaled (see lib/render-card.ts), so the text edges stay clean.
 import { join, resolve } from 'node:path'
 import { identity } from '../src/content'
 import { LOOP_PATH } from '../src/lib/penLoop'
@@ -37,4 +38,4 @@ const html = `<!doctype html><meta charset="utf-8">${fontLinks}
 </main>
 <div class="site">rishinegi.com</div>`
 
-await renderCard(html, out, 1200, 630)
+await renderCard(html, out, 1200, 630, { supersample: 2 })

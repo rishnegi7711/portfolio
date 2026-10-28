@@ -71,8 +71,10 @@ function pagePreviews(): Plugin {
       ).origin
 
       for (const page of [pageMeta.applyd]) {
-        if (publicDir && !existsSync(join(publicDir, page.ogImage))) {
-          throw new Error(`page-previews: ${page.ogImage} is missing from public/ (run its script)`)
+        // ogImage may carry a ?v= cache-buster; the file on disk doesn't.
+        const imageFile = page.ogImage.split('?')[0]
+        if (publicDir && !existsSync(join(publicDir, imageFile))) {
+          throw new Error(`page-previews: ${imageFile} is missing from public/ (run its script)`)
         }
         const url = origin + page.path
         let out = html

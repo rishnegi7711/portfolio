@@ -65,8 +65,9 @@ export const pageMeta = {
     title: 'Applyd case study | Rishi Negi',
     description:
       'How I built Applyd, a job application tracker, by hand and then with Claude Code.',
-    /** the link-preview image, made by scripts/og-applyd.tsx */
-    ogImage: '/og-applyd.png',
+    /** the link-preview image, made by scripts/og-applyd.tsx. The ?v= is a cache-buster:
+     *  scrapers cache an image by its URL, so bump it whenever the image changes. */
+    ogImage: '/og-applyd.png?v=2',
     ogImageAlt:
       'Applyd, a job application tracker. A case study: one job tracker, built by hand ' +
       'and then with Claude Code. Beside the title, a screenshot of its Paper redesign. ' +
